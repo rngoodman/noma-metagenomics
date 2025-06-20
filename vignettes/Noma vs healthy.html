@@ -154,8 +154,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <section id="load-taxonomic-data" class="level2">
 <h2 class="anchored" data-anchor-id="load-taxonomic-data">2.1 Load taxonomic data</h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>file_path <span class="ot">=</span>  <span class="st">"data/noma_HMP_saliva_bracken_MetaPhlan_style_report_bacteria_noma_v_healthy_saliva_A1_A19_corrGB.txt"</span></span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>sample_data_path <span class="ot">=</span> <span class="st">"data/Samples_healthy_v_noma_saliva_A1_A19_corrGB.csv"</span></span>
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>file_path <span class="ot">=</span>  <span class="st">"../data/noma_HMP_saliva_bracken_MetaPhlan_style_report_bacteria_noma_v_healthy_saliva_A1_A19_corrGB.txt"</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>sample_data_path <span class="ot">=</span> <span class="st">"../data/Samples_healthy_v_noma_saliva_A1_A19_corrGB.csv"</span></span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Import data</span></span>
 <span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>tse_metaphlan_noma <span class="ot">=</span> <span class="fu">loadFromMetaphlan</span>(file_path)</span>
@@ -167,8 +167,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <section id="add-metadata" class="level2">
 <h2 class="anchored" data-anchor-id="add-metadata">2.2 Add metadata</h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>patient_metadata <span class="ot">=</span> <span class="fu">read_excel</span>(<span class="st">"data/micro_study_metadata.xlsx"</span>)</span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>sample_to_patient <span class="ot">=</span> <span class="fu">read_excel</span>(<span class="st">"data/sample_to_patient_A1_A40.xlsx"</span>)</span>
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>patient_metadata <span class="ot">=</span> <span class="fu">read_excel</span>(<span class="st">"../data/micro_study_metadata.xlsx"</span>)</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>sample_to_patient <span class="ot">=</span> <span class="fu">read_excel</span>(<span class="st">"../data/sample_to_patient_A1_A40.xlsx"</span>)</span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>metadata <span class="ot">=</span> dplyr<span class="sc">::</span><span class="fu">inner_join</span>(patient_metadata, sample_to_patient, <span class="at">by =</span> <span class="st">"respondent_id"</span>)</span>
 <span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a></span>
@@ -611,7 +611,7 @@ Number of permutations: 999</code></pre>
 <pre><code>    Variable permanova. anosim. mrpp.
 1 condition.      0.001   0.001 0.001</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb43"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb43-1"><a href="#cb43-1" aria-hidden="true" tabindex="-1"></a><span class="fu">write.csv</span>(final_results_table, <span class="at">file =</span><span class="st">"tbls/Table_1A.csv"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb43"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb43-1"><a href="#cb43-1" aria-hidden="true" tabindex="-1"></a><span class="fu">write.csv</span>(final_results_table, <span class="at">file =</span><span class="st">"../tbls/Table_1A.csv"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="permanova-function-for-specific-taxa" class="level2">
@@ -782,7 +782,7 @@ Adding another scale for fill, which will replace the existing scale.</code></pr
 </figure>
 </div>
 </div>
-<div class="sourceCode cell-code" id="cb53"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb53-1"><a href="#cb53-1" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggsave</span>(<span class="st">"imgs/Figure_1B.png"</span>, <span class="at">plot =</span>  Genus_plot_cols, <span class="at">width =</span> <span class="dv">28</span>, <span class="at">height =</span> <span class="dv">16</span>, <span class="at">dpi =</span> <span class="dv">400</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb53"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb53-1"><a href="#cb53-1" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggsave</span>(<span class="st">"../imgs/Figure_1B.png"</span>, <span class="at">plot =</span>  Genus_plot_cols, <span class="at">width =</span> <span class="dv">28</span>, <span class="at">height =</span> <span class="dv">16</span>, <span class="at">dpi =</span> <span class="dv">400</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="creating-a-table-of-average-relative-abundance" class="level2">
@@ -833,7 +833,7 @@ Adding another scale for fill, which will replace the existing scale.</code></pr
 </figure>
 </div>
 </div>
-<div class="sourceCode cell-code" id="cb59"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb59-1"><a href="#cb59-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggsave</span>(<span class="st">"imgs/Supplementary_Figure_4.png"</span>, <span class="at">plot =</span>  p, <span class="at">width =</span> <span class="dv">28</span>, <span class="at">height =</span> <span class="dv">16</span>, <span class="at">dpi =</span> <span class="dv">400</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb59"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb59-1"><a href="#cb59-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggsave</span>(<span class="st">"../imgs/Supplementary_Figure_4.png"</span>, <span class="at">plot =</span>  p, <span class="at">width =</span> <span class="dv">28</span>, <span class="at">height =</span> <span class="dv">16</span>, <span class="at">dpi =</span> <span class="dv">400</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="statistical-differences-in-relative-abundance-of-top-20-genera" class="level2">
@@ -1096,7 +1096,7 @@ Adding another scale for fill, which will replace the existing scale.</code></pr
 </figure>
 </div>
 </div>
-<div class="sourceCode cell-code" id="cb83"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb83-1"><a href="#cb83-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggsave</span>(<span class="st">"imgs/Supplementary_Figure_3.png"</span>, </span>
+<div class="sourceCode cell-code" id="cb83"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb83-1"><a href="#cb83-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggsave</span>(<span class="st">"../imgs/Supplementary_Figure_3.png"</span>, </span>
 <span id="cb83-2"><a href="#cb83-2" aria-hidden="true" tabindex="-1"></a><span class="fu">arrangeGrob</span>(Actinomyces_rel_bp, Gemella_rel_bp, Rothia_rel_bp, Schaalia_rel_bp, Streptococcus_rel_bp,</span>
 <span id="cb83-3"><a href="#cb83-3" aria-hidden="true" tabindex="-1"></a>Veillonella_rel_bp,</span>
 <span id="cb83-4"><a href="#cb83-4" aria-hidden="true" tabindex="-1"></a>               Aggregatibacter_rel_bp,Bacteroides_rel_bp, Capnocytophaga_rel_bp, Dialister_rel_bp, Escherichia_rel_bp, Filifactor_rel_bp, </span>
@@ -1286,7 +1286,7 @@ increasing max.overlaps</code></pre>
 </figure>
 </div>
 </div>
-<div class="sourceCode cell-code" id="cb100"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb100-1"><a href="#cb100-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggsave</span>(<span class="st">"imgs/Figure_2A.png"</span>, <span class="at">plot =</span>  deseq_volcano_g, <span class="at">width =</span> <span class="dv">28</span>, <span class="at">height =</span> <span class="dv">16</span>, <span class="at">dpi =</span> <span class="dv">400</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb100"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb100-1"><a href="#cb100-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggsave</span>(<span class="st">"../imgs/Figure_2A.png"</span>, <span class="at">plot =</span>  deseq_volcano_g, <span class="at">width =</span> <span class="dv">28</span>, <span class="at">height =</span> <span class="dv">16</span>, <span class="at">dpi =</span> <span class="dv">400</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stderr">
 <pre><code>Warning: ggrepel: 648 unlabeled data points (too many overlaps). Consider
 increasing max.overlaps</code></pre>
@@ -1861,7 +1861,7 @@ g__Bradyrhizobium                                                               
 </figure>
 </div>
 </div>
-<div class="sourceCode cell-code" id="cb133"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb133-1"><a href="#cb133-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggsave</span>(<span class="st">"imgs/Figure_2E.png"</span>, <span class="at">plot =</span>  padj_plot_noma, <span class="at">width =</span> <span class="dv">28</span>, <span class="at">height =</span> <span class="dv">16</span>, <span class="at">dpi =</span> <span class="dv">400</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb133"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb133-1"><a href="#cb133-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggsave</span>(<span class="st">"../imgs/Figure_2E.png"</span>, <span class="at">plot =</span>  padj_plot_noma, <span class="at">width =</span> <span class="dv">28</span>, <span class="at">height =</span> <span class="dv">16</span>, <span class="at">dpi =</span> <span class="dv">400</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Plotting for healthy</p>
 <div class="cell">
@@ -1897,7 +1897,7 @@ g__Bradyrhizobium                                                               
 </figure>
 </div>
 </div>
-<div class="sourceCode cell-code" id="cb135"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb135-1"><a href="#cb135-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggsave</span>(<span class="st">"imgs/Figure_2D.png"</span>, <span class="at">plot =</span>  padj_plot_healthy, <span class="at">width =</span> <span class="dv">28</span>, <span class="at">height =</span> <span class="dv">16</span>, <span class="at">dpi =</span> <span class="dv">400</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb135"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb135-1"><a href="#cb135-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggsave</span>(<span class="st">"../imgs/Figure_2D.png"</span>, <span class="at">plot =</span>  padj_plot_healthy, <span class="at">width =</span> <span class="dv">28</span>, <span class="at">height =</span> <span class="dv">16</span>, <span class="at">dpi =</span> <span class="dv">400</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="plotting-normalised-counts-as-boxplots" class="level2">
@@ -2054,7 +2054,7 @@ g__Bradyrhizobium                                                               
 </figure>
 </div>
 </div>
-<div class="sourceCode cell-code" id="cb142"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb142-1"><a href="#cb142-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggsave</span>(<span class="st">"imgs/Figure_2C.png"</span>, </span>
+<div class="sourceCode cell-code" id="cb142"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb142-1"><a href="#cb142-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggsave</span>(<span class="st">"../imgs/Figure_2C.png"</span>, </span>
 <span id="cb142-2"><a href="#cb142-2" aria-hidden="true" tabindex="-1"></a>       <span class="fu">arrangeGrob</span>(plot_1, plot_2, plot_3, plot_4, <span class="at">ncol=</span><span class="dv">2</span>),</span>
 <span id="cb142-3"><a href="#cb142-3" aria-hidden="true" tabindex="-1"></a>       <span class="at">width =</span> <span class="dv">10</span>,</span>
 <span id="cb142-4"><a href="#cb142-4" aria-hidden="true" tabindex="-1"></a>       <span class="at">height =</span> <span class="dv">20</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -2127,7 +2127,7 @@ g__Bradyrhizobium                                                               
 </figure>
 </div>
 </div>
-<div class="sourceCode cell-code" id="cb151"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb151-1"><a href="#cb151-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggsave</span>(<span class="st">"imgs/Figure_2B.png"</span>, </span>
+<div class="sourceCode cell-code" id="cb151"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb151-1"><a href="#cb151-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggsave</span>(<span class="st">"../imgs/Figure_2B.png"</span>, </span>
 <span id="cb151-2"><a href="#cb151-2" aria-hidden="true" tabindex="-1"></a>       <span class="fu">arrangeGrob</span>(plot_1, plot_2, plot_3, plot_4,</span>
 <span id="cb151-3"><a href="#cb151-3" aria-hidden="true" tabindex="-1"></a>             plot_5, plot_6, plot_7, <span class="at">ncol=</span><span class="dv">2</span>),</span>
 <span id="cb151-4"><a href="#cb151-4" aria-hidden="true" tabindex="-1"></a>       <span class="at">width =</span> <span class="dv">10</span>,</span>
@@ -2660,7 +2660,7 @@ The following aesthetics were dropped during statistical transformation: label.
 </figure>
 </div>
 </div>
-<div class="sourceCode cell-code" id="cb192"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb192-1"><a href="#cb192-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggsave</span>(<span class="st">"imgs/Supplementary_Figure_2.png"</span>, </span>
+<div class="sourceCode cell-code" id="cb192"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb192-1"><a href="#cb192-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggsave</span>(<span class="st">"../imgs/Supplementary_Figure_2.png"</span>, </span>
 <span id="cb192-2"><a href="#cb192-2" aria-hidden="true" tabindex="-1"></a><span class="fu">arrangeGrob</span>(plot_1, plot_2, plot_3, plot_4, plot_5,</span>
 <span id="cb192-3"><a href="#cb192-3" aria-hidden="true" tabindex="-1"></a>             plot_6, plot_7, plot_8, plot_9, plot_10,</span>
 <span id="cb192-4"><a href="#cb192-4" aria-hidden="true" tabindex="-1"></a>             plot_11, plot_12, <span class="at">ncol=</span><span class="dv">3</span>),</span>
@@ -3034,7 +3034,7 @@ g__Dictyoglomus       1.001002 1.001002             1.001002       0.03294723</c
 </figure>
 </div>
 </div>
-<div class="sourceCode cell-code" id="cb213"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb213-1"><a href="#cb213-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggsave</span>(<span class="st">"imgs/Figure_3A.png"</span>, <span class="at">plot =</span> gp2, <span class="at">width =</span> <span class="dv">28</span>, <span class="at">height =</span> <span class="dv">16</span>, <span class="at">dpi =</span> <span class="dv">400</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb213"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb213-1"><a href="#cb213-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggsave</span>(<span class="st">"../imgs/Figure_3A.png"</span>, <span class="at">plot =</span> gp2, <span class="at">width =</span> <span class="dv">28</span>, <span class="at">height =</span> <span class="dv">16</span>, <span class="at">dpi =</span> <span class="dv">400</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="cross-validation" class="level2">
@@ -3308,7 +3308,7 @@ Prediction diseased healthy
 </div>
 <div class="sourceCode cell-code" id="cb246"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb246-1"><a href="#cb246-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Save as pnf file</span></span>
 <span id="cb246-2"><a href="#cb246-2" aria-hidden="true" tabindex="-1"></a><span class="co"># 1. Open png file</span></span>
-<span id="cb246-3"><a href="#cb246-3" aria-hidden="true" tabindex="-1"></a><span class="fu">png</span>(<span class="st">"imgs/Figure_3B.png"</span>, <span class="at">width =</span> <span class="dv">256</span>, <span class="at">height =</span> <span class="dv">256</span>, <span class="at">units =</span> <span class="st">"px"</span>)</span>
+<span id="cb246-3"><a href="#cb246-3" aria-hidden="true" tabindex="-1"></a><span class="fu">png</span>(<span class="st">"../imgs/Figure_3B.png"</span>, <span class="at">width =</span> <span class="dv">256</span>, <span class="at">height =</span> <span class="dv">256</span>, <span class="at">units =</span> <span class="st">"px"</span>)</span>
 <span id="cb246-4"><a href="#cb246-4" aria-hidden="true" tabindex="-1"></a><span class="co"># 2. Create the plot</span></span>
 <span id="cb246-5"><a href="#cb246-5" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(roc_curve, <span class="at">main =</span> <span class="st">"ROC Curve using pROC"</span>)</span>
 <span id="cb246-6"><a href="#cb246-6" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(<span class="fu">paste</span>(<span class="st">"AUC (pROC):"</span>, <span class="fu">round</span>(<span class="fu">auc</span>(roc_curve), <span class="dv">4</span>)))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -3397,7 +3397,7 @@ Levels: diseased healthy</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb263"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb263-1"><a href="#cb263-1" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Save as pnf file</span></span>
 <span id="cb263-2"><a href="#cb263-2" aria-hidden="true" tabindex="-1"></a><span class="co"># 1. Open png file</span></span>
-<span id="cb263-3"><a href="#cb263-3" aria-hidden="true" tabindex="-1"></a><span class="fu">png</span>(<span class="st">"imgs/Figure_3C.png"</span>, <span class="at">width =</span> <span class="dv">2560</span>, <span class="at">height =</span> <span class="dv">2560</span>, <span class="at">units =</span> <span class="st">"px"</span>)</span>
+<span id="cb263-3"><a href="#cb263-3" aria-hidden="true" tabindex="-1"></a><span class="fu">png</span>(<span class="st">"../imgs/Figure_3C.png"</span>, <span class="at">width =</span> <span class="dv">2560</span>, <span class="at">height =</span> <span class="dv">2560</span>, <span class="at">units =</span> <span class="st">"px"</span>)</span>
 <span id="cb263-4"><a href="#cb263-4" aria-hidden="true" tabindex="-1"></a><span class="co"># 2. Create the plot</span></span>
 <span id="cb263-5"><a href="#cb263-5" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>(null_accuracies, <span class="at">main =</span> <span class="st">"Null Distribution of Accuracy"</span>, <span class="at">xlab =</span> <span class="st">"Accuracy"</span>)</span>
 <span id="cb263-6"><a href="#cb263-6" aria-hidden="true" tabindex="-1"></a><span class="fu">abline</span>(<span class="at">v =</span> observed_accuracy, <span class="at">col =</span> <span class="st">"red"</span>, <span class="at">lwd =</span> <span class="dv">2</span>) </span>
@@ -3673,7 +3673,7 @@ A17  diseased          A17</code></pre>
 </figure>
 </div>
 </div>
-<div class="sourceCode cell-code" id="cb282"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb282-1"><a href="#cb282-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggsave</span>(<span class="st">"imgs/Figure_3D.png"</span>, </span>
+<div class="sourceCode cell-code" id="cb282"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb282-1"><a href="#cb282-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggsave</span>(<span class="st">"../imgs/Figure_3D.png"</span>, </span>
 <span id="cb282-2"><a href="#cb282-2" aria-hidden="true" tabindex="-1"></a>       <span class="fu">arrangeGrob</span>(PCoA_plot, NMDS_plot, RDA_plot, <span class="at">ncol=</span><span class="dv">3</span>),</span>
 <span id="cb282-3"><a href="#cb282-3" aria-hidden="true" tabindex="-1"></a>       <span class="at">width =</span> <span class="dv">20</span>,</span>
 <span id="cb282-4"><a href="#cb282-4" aria-hidden="true" tabindex="-1"></a>       <span class="at">height =</span> <span class="dv">10</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -3760,7 +3760,7 @@ A17  diseased          A17</code></pre>
 </figure>
 </div>
 </div>
-<div class="sourceCode cell-code" id="cb289"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb289-1"><a href="#cb289-1" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggsave</span>(<span class="st">"imgs/Figure_3E.png"</span>, </span>
+<div class="sourceCode cell-code" id="cb289"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb289-1"><a href="#cb289-1" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggsave</span>(<span class="st">"../imgs/Figure_3E.png"</span>, </span>
 <span id="cb289-2"><a href="#cb289-2" aria-hidden="true" tabindex="-1"></a>       genus_clusters,</span>
 <span id="cb289-3"><a href="#cb289-3" aria-hidden="true" tabindex="-1"></a>       <span class="at">width =</span> <span class="dv">20</span>,</span>
 <span id="cb289-4"><a href="#cb289-4" aria-hidden="true" tabindex="-1"></a>       <span class="at">height =</span> <span class="dv">12</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -3834,7 +3834,7 @@ A17  diseased          A17</code></pre>
 </figure>
 </div>
 </div>
-<div class="sourceCode cell-code" id="cb295"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb295-1"><a href="#cb295-1" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggsave</span>(<span class="st">"imgs/Figure_3F.png"</span>, </span>
+<div class="sourceCode cell-code" id="cb295"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb295-1"><a href="#cb295-1" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggsave</span>(<span class="st">"../imgs/Figure_3F.png"</span>, </span>
 <span id="cb295-2"><a href="#cb295-2" aria-hidden="true" tabindex="-1"></a>       Mean_CLR_Z_Score,</span>
 <span id="cb295-3"><a href="#cb295-3" aria-hidden="true" tabindex="-1"></a>       <span class="at">width =</span> <span class="dv">10</span>,</span>
 <span id="cb295-4"><a href="#cb295-4" aria-hidden="true" tabindex="-1"></a>       <span class="at">height =</span> <span class="dv">20</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>

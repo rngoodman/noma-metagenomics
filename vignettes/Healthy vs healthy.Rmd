@@ -49,7 +49,7 @@ First we'll write a function to import MetaPhlan style bracken data
 
 ```{r, message=FALSE}
 
-file_path =  "data/noma_HMP_saliva_bracken_MetaPhlan_style_report_bacteria_20_health_controls_only.txt"
+file_path =  "../data/noma_HMP_saliva_bracken_MetaPhlan_style_report_bacteria_20_health_controls_only.txt"
 
 # Import data
 tse_metaphlan_healthy = loadFromMetaphlan(file_path)

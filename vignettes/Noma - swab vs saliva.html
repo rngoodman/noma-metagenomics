@@ -148,7 +148,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <section id="load-taxonomic-data" class="level2">
 <h2 class="anchored" data-anchor-id="load-taxonomic-data">2.2 Load taxonomic data</h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>file_path <span class="ot">=</span>  <span class="st">"data/noma_HMP_saliva_bracken_MetaPhlan_style_report_bacteria_only_A1_A40_plus_A14.txt"</span></span>
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>file_path <span class="ot">=</span>  <span class="st">"../data/noma_HMP_saliva_bracken_MetaPhlan_style_report_bacteria_only_A1_A40_plus_A14.txt"</span></span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Import data</span></span>
 <span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>tse_metaphlan_sal_swb <span class="ot">=</span> <span class="fu">loadFromMetaphlan</span>(file_path)</span>
@@ -179,8 +179,8 @@ colTree: NULL</code></pre>
 <section id="add-metadata" class="level2">
 <h2 class="anchored" data-anchor-id="add-metadata">2.2 Add metadata</h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>patient_metadata <span class="ot">=</span> <span class="fu">read_excel</span>(<span class="st">"data/micro_study_metadata.xlsx"</span>)</span>
-<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>sample_to_patient <span class="ot">=</span> <span class="fu">read_excel</span>(<span class="st">"data/sample_to_patient_A1_A40.xlsx"</span>)</span>
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>patient_metadata <span class="ot">=</span> <span class="fu">read_excel</span>(<span class="st">"../data/micro_study_metadata.xlsx"</span>)</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>sample_to_patient <span class="ot">=</span> <span class="fu">read_excel</span>(<span class="st">"../data/sample_to_patient_A1_A40.xlsx"</span>)</span>
 <span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>metadata <span class="ot">=</span> dplyr<span class="sc">::</span><span class="fu">inner_join</span>(patient_metadata, sample_to_patient, <span class="at">by =</span> <span class="st">"respondent_id"</span>)</span>
 <span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a></span>
@@ -603,7 +603,7 @@ Number of permutations: 999</code></pre>
 4           respondent_id.      0.001   0.001 0.001
 5             sample_type.      0.932   0.438 0.928</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb57"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb57-1"><a href="#cb57-1" aria-hidden="true" tabindex="-1"></a><span class="fu">write.csv</span>(final_results_table, <span class="at">file =</span><span class="st">"tbls/Table_1B.csv"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb57"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb57-1"><a href="#cb57-1" aria-hidden="true" tabindex="-1"></a><span class="fu">write.csv</span>(final_results_table, <span class="at">file =</span><span class="st">"../tbls/Table_1B.csv"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="permanova-function-for-specific-taxa" class="level2">
@@ -826,7 +826,7 @@ Adding another scale for fill, which will replace the existing scale.</code></pr
 </div>
 <div class="sourceCode cell-code" id="cb75"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb75-1"><a href="#cb75-1" aria-hidden="true" tabindex="-1"></a>  Ordered_Genus_plot <span class="ot">=</span> Genus_plot_sal_swb_cols <span class="sc">+</span> <span class="fu">scale_x_discrete</span>(<span class="at">limits =</span> metadata_ID_order<span class="sc">$</span>sample_name)</span>
 <span id="cb75-2"><a href="#cb75-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb75-3"><a href="#cb75-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggsave</span>(<span class="st">"imgs/Figure_1A.png"</span>, <span class="at">plot =</span>  Ordered_Genus_plot, <span class="at">width =</span> <span class="dv">28</span>, <span class="at">height =</span> <span class="dv">16</span>, <span class="at">dpi =</span> <span class="dv">400</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb75-3"><a href="#cb75-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggsave</span>(<span class="st">"../imgs/Figure_1A.png"</span>, <span class="at">plot =</span>  Ordered_Genus_plot, <span class="at">width =</span> <span class="dv">28</span>, <span class="at">height =</span> <span class="dv">16</span>, <span class="at">dpi =</span> <span class="dv">400</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 </section>
@@ -2151,7 +2151,7 @@ g__Dictyoglomus 0.001599713 g__Dictyoglomus</code></pre>
 </figure>
 </div>
 </div>
-<div class="sourceCode cell-code" id="cb192"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb192-1"><a href="#cb192-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggsave</span>(<span class="st">"imgs/Supplementary_Figure_1.png"</span>, <span class="at">plot =</span>  Trep_stage, <span class="at">width =</span> <span class="dv">28</span>, <span class="at">height =</span> <span class="dv">16</span>, <span class="at">dpi =</span> <span class="dv">400</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb192"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb192-1"><a href="#cb192-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggsave</span>(<span class="st">"../imgs/Supplementary_Figure_1.png"</span>, <span class="at">plot =</span>  Trep_stage, <span class="at">width =</span> <span class="dv">28</span>, <span class="at">height =</span> <span class="dv">16</span>, <span class="at">dpi =</span> <span class="dv">400</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 </section>

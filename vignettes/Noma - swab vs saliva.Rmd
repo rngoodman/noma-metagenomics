@@ -53,7 +53,7 @@ First we'll write a function to import MetaPhlan style bracken data
 
 ```{r, message=FALSE}
 
-file_path =  "data/noma_HMP_saliva_bracken_MetaPhlan_style_report_bacteria_only_A1_A40_plus_A14.txt"
+file_path =  "../data/noma_HMP_saliva_bracken_MetaPhlan_style_report_bacteria_only_A1_A40_plus_A14.txt"
 
 # Import data
 tse_metaphlan_sal_swb = loadFromMetaphlan(file_path)
@@ -68,8 +68,8 @@ tse_metaphlan_sal_swb
 
 ```{r}
 
-patient_metadata = read_excel("data/micro_study_metadata.xlsx")
-sample_to_patient = read_excel("data/sample_to_patient_A1_A40.xlsx")
+patient_metadata = read_excel("../data/micro_study_metadata.xlsx")
+sample_to_patient = read_excel("../data/sample_to_patient_A1_A40.xlsx")
 
 metadata = dplyr::inner_join(patient_metadata, sample_to_patient, by = "respondent_id")
 
@@ -305,7 +305,7 @@ rownames(final_results_table) <- NULL
 # Print the final, consolidated table to the console
 print(final_results_table)
 
-write.csv(final_results_table, file ="tbls/Table_1B.csv")
+write.csv(final_results_table, file ="../tbls/Table_1B.csv")
 ```
 
 
@@ -457,7 +457,7 @@ The top 20 most abundant genera were selected from across the entire dataset and
   
   Ordered_Genus_plot = Genus_plot_sal_swb_cols + scale_x_discrete(limits = metadata_ID_order$sample_name)
 
-  ggsave("imgs/Figure_1A.png", plot =  Ordered_Genus_plot, width = 28, height = 16, dpi = 400)
+  ggsave("../imgs/Figure_1A.png", plot =  Ordered_Genus_plot, width = 28, height = 16, dpi = 400)
   
   
 ```
@@ -860,7 +860,7 @@ Next we use the function to plot any highly abundant significantly different acr
 Trep_stage = plotCountsGGanysig(dds_stage, gene= "g__Treponema", intgroup = "noma_stage_on_admission", plot = "violin", text = FALSE, showSignificance = TRUE)
 
 
-ggsave("imgs/Supplementary_Figure_1.png", plot =  Trep_stage, width = 28, height = 16, dpi = 400)
+ggsave("../imgs/Supplementary_Figure_1.png", plot =  Trep_stage, width = 28, height = 16, dpi = 400)
 
 ```
 
