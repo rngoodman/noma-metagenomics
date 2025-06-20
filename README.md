@@ -1,3 +1,5 @@
+# Noma Metagenomics
+
 This repository includes the code used to run the analysis in a recent study currently posted as a preprint on bioRxiv:
 
 Shotgun metagenomic analysis of the oral microbiomes of noma patients reveals a novel disease-associated organism and potential avenues for disease prevention
