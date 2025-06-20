@@ -1,0 +1,371 @@
+---
+title: "Healthy Global Dataset Metagenomics: Short-read taxonomic based metagenomic analysis of healthy human saliva samples in R"
+author: "Richard Goodman"
+date: "`r Sys.Date()`"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## 1. Getting Started in R 
+
+# 1.1  Installing and Loading Packages
+
+Install all necessary packages into R.
+
+```{r, message=FALSE, warning=FALSE}
+
+# Make sure these are all installed as packages first 
+# Load necessary libraries
+library(readxl)
+library(pheatmap)
+library(dplyr)
+library(tidyr)
+library(tibble)
+library(RColorBrewer)
+library(miaViz)
+library(scater)
+library(mia)
+library(TreeSummarizedExperiment)
+library(here)
+library(readr)
+library(phyloseq)
+library(DESeq2)
+library(ggrepel)
+library(gridExtra)
+library(vegan)
+
+```
+
+## 2. Import and Clean Data
+
+We will be importing MetaPhlan style Bracken data 
+
+First we'll write a function to import MetaPhlan style bracken data 
+
+# 2.2 Load taxonomic data
+
+```{r, message=FALSE}
+
+file_path =  "data/noma_HMP_saliva_bracken_MetaPhlan_style_report_bacteria_20_health_controls_only.txt"
+
+# Import data
+tse_metaphlan_healthy = loadFromMetaphlan(file_path)
+
+# Defining the TSE for the rest of the script
+tse_metaphlan = tse_metaphlan_healthy
+
+# Use makePhyloseqFromTreeSE from Miaverse
+
+phyloseq_metaphlan = makePhyloseqFromTreeSE(tse_metaphlan)
+
+```
+
+
+# 2.2 Add metadata
+
+```{r}
+
+# Define the function to update metadata
+update_sample_metadata <- function(tse_object) {
+  # Extract sample names (column names)
+  sample_names <- colnames(tse_object)
+  
+  # Create the "accession" column based on sample name prefix
+  accession <- ifelse(grepl("^SRS", sample_names), "SRS",
+                      ifelse(grepl("^SRR", sample_names), "SRR",
+                             ifelse(grepl("^DRR", sample_names), "DRR", NA)))
+  
+  # Create the "location" column based on sample name prefix
+  location <- ifelse(grepl("^SRS", sample_names), "USA",
+                     ifelse(grepl("^SRR", sample_names), "Denmark",
+                            ifelse(grepl("^DRR", sample_names), "Japan", NA)))
+  
+  # Create a DataFrame with the new metadata columns
+  sample_metadata <- DataFrame(accession = accession, location = location)
+  rownames(sample_metadata) <- sample_names
+  
+  # Add the metadata as colData to the TreeSummarizedExperiment object
+  colData(tse_object) <- sample_metadata
+  
+  # Return the updated object
+  return(tse_object)
+}
+
+# Example usage:
+tse_metaphlan <- update_sample_metadata(tse_metaphlan)
+tse_metaphlan_genus = altExp(tse_metaphlan, "Genus") 
+tse_metaphlan_genus = update_sample_metadata(tse_metaphlan_genus)
+
+head(as.data.frame(colData(tse_metaphlan)))
+head(as.data.frame(colData(tse_metaphlan_genus)))
+```
+
+
+# 2.3 Inspecting the Data
+
+
+```{r echo=FALSE, eval=FALSE}
+
+(count <- assays(tse_metaphlan)[[1]])
+
+rowData(tse_metaphlan)
+
+colData(tse_metaphlan)
+
+metadata(tse_metaphlan)
+
+```
+
+## 3. Non-parametric statistical tests 
+
+# 3.1 Preparing the data
+
+```{r}
+# See above "Converting TSE to other common data formats e.g. Phyloseq"
+# Use makePhyloseqFromTreeSE from Miaverse
+
+tse_metaphlan_healthy = tse_metaphlan
+tse_metaphlan_healthy_genus = tse_metaphlan_genus
+
+# make an assay for abundance
+tse_metaphlan_healthy <- transformAssay(tse_metaphlan_healthy, assay.type="counts", method="relabundance")
+
+taxonomyRanks(tse_metaphlan_healthy)
+
+# Check that colData was added successfully
+colData(tse_metaphlan_healthy_genus)
+
+metadata_df = colData(tse_metaphlan_healthy_genus)
+
+metadata_healthy_genus = as.data.frame(colData(tse_metaphlan_healthy_genus))
+metadata_healthy_genus
+
+# species
+phyloseq_healthy = makePhyloseqFromTreeSE(tse_metaphlan_healthy)
+# genus
+phyloseq_healthy = makePhyloseqFromTreeSE(tse_metaphlan_genus)
+
+phyloseq_healthy_esd = transform_sample_counts(phyloseq_healthy, function(x) 1E6 * x/sum(x))
+
+ntaxa(phyloseq_healthy_esd) 
+nsamples(phyloseq_healthy_esd) 
+```
+
+
+# 3.1 Permanova across entire dataset
+
+```{r}
+library(vegan)
+
+set.seed(123456)
+
+# Calculate bray curtis distance matrix on main variables 
+olp.bray <- phyloseq::distance(phyloseq_healthy_esd, method = "bray")
+sample.olp.df <- data.frame(sample_data(phyloseq_healthy_esd))
+permanova_all = vegan::adonis2(olp.bray ~ accession , data = sample.olp.df)
+permanova_all
+```
+
+Next we will test the beta dispersion 
+
+```{r}
+# All together now
+vegan::adonis2(olp.bray ~ accession, data = sample.olp.df)
+beta <- betadisper(olp.bray, sample.olp.df$accession)
+permutest(beta)
+# we don't want this to be significant 
+```
+
+
+# 3.2 Anosim across entire dataset
+
+```{r}
+condition_group = get_variable(phyloseq_healthy_esd, "accession")
+set.seed (123456)
+anosim(distance(phyloseq_healthy_esd, "bray"), condition_group)
+condition_ano = anosim(distance(phyloseq_healthy_esd, "bray"), condition_group)
+condition_ano
+```
+
+
+# 3.3 MRPP across entire dataset
+
+```{r}
+#condition
+olp.bray <- phyloseq::distance(phyloseq_healthy_esd, method = "bray") # Calculate bray curtis distance matrix
+condition_group = get_variable(phyloseq_healthy_esd, "accession") # Make condition Grouping
+# Run MRPP
+set.seed(123456)
+vegan::mrpp(olp.bray, condition_group, permutations = 999, 
+            weight.type = 1, strata = NULL, parallel = getOption("mc.cores"))
+
+```
+
+
+# 3.4 Permanova function for specific taxa
+
+```{r}
+
+
+# Extract the counts and taxonomic table
+counts <- assay(tse_metaphlan_genus, "counts")
+tax_table <- rowData(tse_metaphlan_genus)$Genus  # Replace "Genus" with your taxonomic level of interest
+sample_data <- colData(tse_metaphlan_genus)
+
+groups = as.data.frame(sample_data)
+
+# Aggregate counts by Genus
+aggregated_counts <- rowsum(counts, tax_table)
+
+# Create a new aggregated TreeSummarizedExperiment object
+tse_aggregated <- TreeSummarizedExperiment(assays = list(counts = aggregated_counts), 
+                                           colData = sample_data)
+
+# Calculate relative abundances
+relative_abundances <- sweep(assay(tse_aggregated, "counts"), 2, colSums(assay(tse_aggregated, "counts")), FUN = "/") * 100
+
+# Convert to a data frame and group by Treatment
+relative_df <- as.data.frame(t(relative_abundances))
+
+set.seed (123456)
+
+# Define the vector of genera names (without the "g__" prefix)
+genera <- c("Prevotella", "Treponema", "Neisseria", "Bacteroides", 
+            "Filifactor", "Porphyromonas", "Fusobacterium", "Escherichia",
+            "Selenomonas", "Aggregatibacter", "Capnocytophaga",
+            "Streptococcus", "Actinomyces", "Campylobacter", "Dialister", "Gemella",
+            "Haemophilus", "Leptotrichia", "Rothia", "Schaalia", "Tannerella", "Veillonella")
+
+# Initialize an empty data frame to store the results
+permanova_taxa_results <- data.frame(Genus = character(), pvalue = numeric(), stringsAsFactors = FALSE)
+
+# Loop over each genus
+for (genus in genera) {
+  set.seed (123456)
+  # Subset the data for the genus; adjust column selection as needed
+  subset_data <- relative_df %>% select(paste0("g__", genus))
+  
+  # Calculate the Bray-Curtis distance
+  bray_dist <- vegdist(subset_data, method = "bray")
+  
+  # Run PERMANOVA using adonis2
+  adonis_result <- adonis2(bray_dist ~ accession, data = groups)
+  
+  # Extract the p-value for the sample_type factor (usually in the first row)
+  pval <- adonis_result$`Pr(>F)`[1]
+  
+  # Append the result to the results data frame
+  permanova_taxa_results <- rbind(permanova_taxa_results, data.frame(Genus = genus, pvalue = pval))
+}
+
+print(permanova_taxa_results)
+
+ptr = print(permanova_taxa_results)
+
+```
+
+## 4. Principal Components analysis  
+
+# 4.1 PCA with prcomp 
+
+```{r}
+# Assume `tse` is your TreeSummarizedExperiment object
+# Extract the assay data (e.g., expression matrix)
+
+expr_data <- assay(tse_metaphlan_genus)
+
+colnames(tse_metaphlan)
+
+expr_data_df <- as.data.frame(expr_data)
+ncol(expr_data_df)
+
+t_expr_data_df = t(expr_data_df)
+
+# Identify constant columns (zero variance)
+zero_var_cols <- apply(t_expr_data_df, 2, function(col) var(col) == 0)
+# Display columns with zero variance
+names(t_expr_data_df)[zero_var_cols]
+# Remove constant columns
+t_expr_data_df_filtered <- t_expr_data_df[, !zero_var_cols]
+
+colnames(t_expr_data_df_filtered) <- gsub(".*(g__*)", "\\1", colnames(t_expr_data_df_filtered))
+
+# Optionally scale and center the data (depends on your data)
+#expr_data_scaled <- scale(t_expr_data_df)
+
+# Run PCA using the prcomp function
+pca_result <- prcomp(t_expr_data_df_filtered, center = TRUE, scale. = TRUE)
+
+
+# View the summary of the PCA result
+summary(pca_result)
+
+#dev.off()
+
+
+```
+# 4.2 plot PCA with base R
+
+```{r}
+# Plot the PCA results (e.g., using ggplot2 or base R plotting)
+plot(pca_result$x[,1], pca_result$x[,2], 
+     xlab = "PC1", ylab = "PC2", main = "PCA Plot")
+```
+
+# 4.3 plot PCA with ggplot
+
+```{r}
+# Optionally, visualize PCA with ggplot2 for more customized plotting
+library(ggplot2)
+pca_df <- as.data.frame(pca_result$x)
+pca_df$sample <- rownames(pca_result$x)
+pca_df$sample2 <- colnames(expr_data)
+
+ggplot(pca_df, aes(x = PC1, y = PC2, label = sample, col = sample)) +
+  geom_point() +
+  geom_text(vjust = -0.5) +
+  ggtitle("PCA of TreeSummarizedExperiment Data")
+
+```
+
+# 4.3 plot PCA without DRR accessions 
+
+Now we will remove the DRR accession 
+
+```{r}
+
+drops = c("DRR214959", "DRR214960", "DRR214961", "DRR214962", "DRR241310")
+expr_data_df <-  expr_data_df[ , !(names(expr_data_df) %in% drops)]
+ncol(expr_data_df)
+
+t_expr_data_df = t(expr_data_df)
+
+# Identify constant columns (zero variance)
+zero_var_cols <- apply(t_expr_data_df, 2, function(col) var(col) == 0)
+# Display columns with zero variance
+names(t_expr_data_df)[zero_var_cols]
+# Remove constant columns
+t_expr_data_df_filtered <- t_expr_data_df[, !zero_var_cols]
+
+colnames(t_expr_data_df_filtered) <- gsub(".*(g__*)", "\\1", colnames(t_expr_data_df_filtered))
+
+# Run PCA using the prcomp function
+pca_result <- prcomp(t_expr_data_df_filtered, center = TRUE, scale. = TRUE)
+
+#dev.off()
+
+# Optionally, visualize PCA with ggplot2 for more customized plotting
+library(ggplot2)
+pca_df <- as.data.frame(pca_result$x)
+pca_df$sample <- rownames(pca_result$x)
+
+ggplot(pca_df, aes(x = PC1, y = PC2, label = sample, col = sample)) +
+  geom_point() +
+  geom_text(vjust = -0.5) +
+  ggtitle("PCA of TreeSummarizedExperiment Data")
+
+```
+
