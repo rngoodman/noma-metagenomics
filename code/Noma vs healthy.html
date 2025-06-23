@@ -3139,9 +3139,8 @@ Prediction diseased healthy
 <h2 class="anchored" data-anchor-id="permutation-testing-for-rf-accuracy">6.5 Permutation testing for RF accuracy</h2>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb242"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb242-1"><a href="#cb242-1" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Ensure column names are correctly referenced</span></span>
-<span id="cb242-2"><a href="#cb242-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">set.seed</span>(<span class="dv">123456</span>)</span>
-<span id="cb242-3"><a href="#cb242-3" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb242-4"><a href="#cb242-4" aria-hidden="true" tabindex="-1"></a>  train_data<span class="sc">$</span><span class="st">`</span><span class="at">metadata$condition</span><span class="st">`</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb242-2"><a href="#cb242-2" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb242-3"><a href="#cb242-3" aria-hidden="true" tabindex="-1"></a>  train_data<span class="sc">$</span><span class="st">`</span><span class="at">metadata$condition</span><span class="st">`</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>NULL</code></pre>
 </div>
@@ -3161,27 +3160,36 @@ Levels: diseased healthy</code></pre>
 Levels: diseased healthy</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb248"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb248-1"><a href="#cb248-1" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Permutation testing</span></span>
-<span id="cb248-2"><a href="#cb248-2" aria-hidden="true" tabindex="-1"></a>  null_accuracies <span class="ot">&lt;-</span> <span class="fu">replicate</span>(<span class="dv">1000</span>, {</span>
-<span id="cb248-3"><a href="#cb248-3" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Shuffle the labels</span></span>
-<span id="cb248-4"><a href="#cb248-4" aria-hidden="true" tabindex="-1"></a>    perm_labels <span class="ot">&lt;-</span> <span class="fu">sample</span>(train_data<span class="sc">$</span>condition)  <span class="co"># Use the actual column name for condition</span></span>
-<span id="cb248-5"><a href="#cb248-5" aria-hidden="true" tabindex="-1"></a>    train_data_perm <span class="ot">&lt;-</span> train_data</span>
-<span id="cb248-6"><a href="#cb248-6" aria-hidden="true" tabindex="-1"></a>    train_data_perm<span class="sc">$</span>condition <span class="ot">&lt;-</span> perm_labels  <span class="co"># Replace condition labels with permuted ones</span></span>
-<span id="cb248-7"><a href="#cb248-7" aria-hidden="true" tabindex="-1"></a>    </span>
-<span id="cb248-8"><a href="#cb248-8" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Train random forest on permuted data</span></span>
-<span id="cb248-9"><a href="#cb248-9" aria-hidden="true" tabindex="-1"></a>    rf_perm <span class="ot">&lt;-</span> <span class="fu">randomForest</span>(condition <span class="sc">~</span> ., <span class="at">data =</span> train_data_perm, <span class="at">importance =</span> <span class="cn">TRUE</span>)</span>
-<span id="cb248-10"><a href="#cb248-10" aria-hidden="true" tabindex="-1"></a>    </span>
-<span id="cb248-11"><a href="#cb248-11" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Test on test_data</span></span>
-<span id="cb248-12"><a href="#cb248-12" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mean</span>(<span class="fu">predict</span>(rf_perm, test_data) <span class="sc">==</span> test_data<span class="sc">$</span>condition)  <span class="co"># Ensure test_data$condition matches</span></span>
-<span id="cb248-13"><a href="#cb248-13" aria-hidden="true" tabindex="-1"></a>  })</span>
-<span id="cb248-14"><a href="#cb248-14" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb248-15"><a href="#cb248-15" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Compare observed accuracy to null distribution</span></span>
-<span id="cb248-16"><a href="#cb248-16" aria-hidden="true" tabindex="-1"></a>  observed_accuracy <span class="ot">&lt;-</span> <span class="fu">mean</span>(<span class="fu">predict</span>(rf_model_cv, test_data) <span class="sc">==</span> test_data<span class="sc">$</span>condition)</span>
-<span id="cb248-17"><a href="#cb248-17" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb248-18"><a href="#cb248-18" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Visualize and interpret</span></span>
-<span id="cb248-19"><a href="#cb248-19" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb248-20"><a href="#cb248-20" aria-hidden="true" tabindex="-1"></a>  <span class="co"># 2. Create the plot</span></span>
-<span id="cb248-21"><a href="#cb248-21" aria-hidden="true" tabindex="-1"></a>  <span class="fu">hist</span>(null_accuracies, <span class="at">main =</span> <span class="st">"Null Distribution of Accuracy"</span>, <span class="at">xlab =</span> <span class="st">"Accuracy"</span>)</span>
-<span id="cb248-22"><a href="#cb248-22" aria-hidden="true" tabindex="-1"></a>  <span class="fu">abline</span>(<span class="at">v =</span> observed_accuracy, <span class="at">col =</span> <span class="st">"red"</span>, <span class="at">lwd =</span> <span class="dv">2</span>)  </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb248-2"><a href="#cb248-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">set.seed</span>(<span class="dv">1234</span>)</span>
+<span id="cb248-3"><a href="#cb248-3" aria-hidden="true" tabindex="-1"></a>  null_accuracies <span class="ot">&lt;-</span> <span class="fu">replicate</span>(<span class="dv">1000</span>, {</span>
+<span id="cb248-4"><a href="#cb248-4" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Shuffle the labels</span></span>
+<span id="cb248-5"><a href="#cb248-5" aria-hidden="true" tabindex="-1"></a>    perm_labels <span class="ot">&lt;-</span> <span class="fu">sample</span>(train_data<span class="sc">$</span>condition)  <span class="co"># Use the actual column name for condition</span></span>
+<span id="cb248-6"><a href="#cb248-6" aria-hidden="true" tabindex="-1"></a>    train_data_perm <span class="ot">&lt;-</span> train_data</span>
+<span id="cb248-7"><a href="#cb248-7" aria-hidden="true" tabindex="-1"></a>    train_data_perm<span class="sc">$</span>condition <span class="ot">&lt;-</span> perm_labels  <span class="co"># Replace condition labels with permuted ones</span></span>
+<span id="cb248-8"><a href="#cb248-8" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb248-9"><a href="#cb248-9" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Train random forest on permuted data</span></span>
+<span id="cb248-10"><a href="#cb248-10" aria-hidden="true" tabindex="-1"></a>    rf_perm <span class="ot">&lt;-</span> <span class="fu">randomForest</span>(condition <span class="sc">~</span> ., <span class="at">data =</span> train_data_perm, <span class="at">importance =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb248-11"><a href="#cb248-11" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb248-12"><a href="#cb248-12" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Test on test_data</span></span>
+<span id="cb248-13"><a href="#cb248-13" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mean</span>(<span class="fu">predict</span>(rf_perm, test_data) <span class="sc">==</span> test_data<span class="sc">$</span>condition)  <span class="co"># Ensure test_data$condition matches</span></span>
+<span id="cb248-14"><a href="#cb248-14" aria-hidden="true" tabindex="-1"></a>  })</span>
+<span id="cb248-15"><a href="#cb248-15" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb248-16"><a href="#cb248-16" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Compare observed accuracy to null distribution</span></span>
+<span id="cb248-17"><a href="#cb248-17" aria-hidden="true" tabindex="-1"></a>  observed_accuracy <span class="ot">&lt;-</span> <span class="fu">mean</span>(<span class="fu">predict</span>(rf_model_cv, test_data) <span class="sc">==</span> test_data<span class="sc">$</span>condition)</span>
+<span id="cb248-18"><a href="#cb248-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb248-19"><a href="#cb248-19" aria-hidden="true" tabindex="-1"></a><span class="co"># Calculate the p-value</span></span>
+<span id="cb248-20"><a href="#cb248-20" aria-hidden="true" tabindex="-1"></a>p_value <span class="ot">&lt;-</span> <span class="fu">sum</span>(null_accuracies <span class="sc">&gt;=</span> observed_accuracy) <span class="sc">/</span> <span class="fu">length</span>(null_accuracies)</span>
+<span id="cb248-21"><a href="#cb248-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb248-22"><a href="#cb248-22" aria-hidden="true" tabindex="-1"></a><span class="co"># Print the p-value</span></span>
+<span id="cb248-23"><a href="#cb248-23" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(p_value)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.15</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb250"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb250-1"><a href="#cb250-1" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Visualize and interpret</span></span>
+<span id="cb250-2"><a href="#cb250-2" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb250-3"><a href="#cb250-3" aria-hidden="true" tabindex="-1"></a>  <span class="co"># 2. Create the plot</span></span>
+<span id="cb250-4"><a href="#cb250-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">hist</span>(null_accuracies, <span class="at">main =</span><span class="fu">paste</span>(<span class="st">"Null Distribution of Accuracy</span><span class="sc">\n</span><span class="st">p-value ="</span>, <span class="fu">round</span>(p_value, <span class="dv">4</span>)), <span class="at">xlab =</span> <span class="st">"Accuracy"</span>)</span>
+<span id="cb250-5"><a href="#cb250-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">abline</span>(<span class="at">v =</span> observed_accuracy, <span class="at">col =</span> <span class="st">"red"</span>, <span class="at">lwd =</span> <span class="dv">2</span>)  </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
@@ -3189,14 +3197,14 @@ Levels: diseased healthy</code></pre>
 </figure>
 </div>
 </div>
-<div class="sourceCode cell-code" id="cb249"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb249-1"><a href="#cb249-1" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Save as pnf file</span></span>
-<span id="cb249-2"><a href="#cb249-2" aria-hidden="true" tabindex="-1"></a><span class="co"># 1. Open png file</span></span>
-<span id="cb249-3"><a href="#cb249-3" aria-hidden="true" tabindex="-1"></a><span class="fu">png</span>(<span class="st">"../imgs/Figure_3C.png"</span>, <span class="at">width =</span> <span class="dv">2560</span>, <span class="at">height =</span> <span class="dv">2560</span>, <span class="at">units =</span> <span class="st">"px"</span>)</span>
-<span id="cb249-4"><a href="#cb249-4" aria-hidden="true" tabindex="-1"></a><span class="co"># 2. Create the plot</span></span>
-<span id="cb249-5"><a href="#cb249-5" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>(null_accuracies, <span class="at">main =</span> <span class="st">"Null Distribution of Accuracy"</span>, <span class="at">xlab =</span> <span class="st">"Accuracy"</span>)</span>
-<span id="cb249-6"><a href="#cb249-6" aria-hidden="true" tabindex="-1"></a><span class="fu">abline</span>(<span class="at">v =</span> observed_accuracy, <span class="at">col =</span> <span class="st">"red"</span>, <span class="at">lwd =</span> <span class="dv">2</span>) </span>
-<span id="cb249-7"><a href="#cb249-7" aria-hidden="true" tabindex="-1"></a><span class="co"># 3. Close the file</span></span>
-<span id="cb249-8"><a href="#cb249-8" aria-hidden="true" tabindex="-1"></a><span class="fu">dev.off</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb251"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb251-1"><a href="#cb251-1" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Save as pnf file</span></span>
+<span id="cb251-2"><a href="#cb251-2" aria-hidden="true" tabindex="-1"></a><span class="co"># 1. Open png file</span></span>
+<span id="cb251-3"><a href="#cb251-3" aria-hidden="true" tabindex="-1"></a><span class="fu">png</span>(<span class="st">"../imgs/Figure_3C.png"</span>, <span class="at">width =</span> <span class="dv">256</span>, <span class="at">height =</span> <span class="dv">256</span>, <span class="at">units =</span> <span class="st">"px"</span>)</span>
+<span id="cb251-4"><a href="#cb251-4" aria-hidden="true" tabindex="-1"></a><span class="co"># 2. Create the plot</span></span>
+<span id="cb251-5"><a href="#cb251-5" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>(null_accuracies, <span class="at">main =</span><span class="fu">paste</span>(<span class="st">"Null Distribution of Accuracy</span><span class="sc">\n</span><span class="st">p-value ="</span>, <span class="fu">round</span>(p_value, <span class="dv">4</span>)), <span class="at">xlab =</span> <span class="st">"Accuracy"</span>)</span>
+<span id="cb251-6"><a href="#cb251-6" aria-hidden="true" tabindex="-1"></a><span class="fu">abline</span>(<span class="at">v =</span> observed_accuracy, <span class="at">col =</span> <span class="st">"red"</span>, <span class="at">lwd =</span> <span class="dv">2</span>) </span>
+<span id="cb251-7"><a href="#cb251-7" aria-hidden="true" tabindex="-1"></a><span class="co"># 3. Close the file</span></span>
+<span id="cb251-8"><a href="#cb251-8" aria-hidden="true" tabindex="-1"></a><span class="fu">dev.off</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>quartz_off_screen 
                 2 </code></pre>
@@ -3210,24 +3218,24 @@ Levels: diseased healthy</code></pre>
 <section id="calculating-bray-curtis-dissimilarity" class="level2">
 <h2 class="anchored" data-anchor-id="calculating-bray-curtis-dissimilarity">7.1 Calculating Bray-Curtis dissimilarity</h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb251"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb251-1"><a href="#cb251-1" aria-hidden="true" tabindex="-1"></a>  phyloseq_obj</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb253"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb253-1"><a href="#cb253-1" aria-hidden="true" tabindex="-1"></a>  phyloseq_obj</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>phyloseq-class experiment-level object
 otu_table()   OTU Table:         [ 1757 taxa and 37 samples ]
 sample_data() Sample Data:       [ 37 samples by 1 sample variables ]
 tax_table()   Taxonomy Table:    [ 1757 taxa by 7 taxonomic ranks ]</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb253"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb253-1"><a href="#cb253-1" aria-hidden="true" tabindex="-1"></a>  phyloseq_obj<span class="sc">@</span>sam_data[[<span class="st">"condition"</span>]] <span class="ot">=</span> <span class="fu">as.factor</span>(phyloseq_obj<span class="sc">@</span>sam_data[[<span class="st">"condition"</span>]])</span>
-<span id="cb253-2"><a href="#cb253-2" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb253-3"><a href="#cb253-3" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Calculate Bray-Curtis dissimilarity</span></span>
-<span id="cb253-4"><a href="#cb253-4" aria-hidden="true" tabindex="-1"></a>  dist_bc <span class="ot">&lt;-</span> phyloseq<span class="sc">::</span><span class="fu">distance</span>(phyloseq_obj, <span class="at">method =</span> <span class="st">"bray"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb255"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb255-1"><a href="#cb255-1" aria-hidden="true" tabindex="-1"></a>  phyloseq_obj<span class="sc">@</span>sam_data[[<span class="st">"condition"</span>]] <span class="ot">=</span> <span class="fu">as.factor</span>(phyloseq_obj<span class="sc">@</span>sam_data[[<span class="st">"condition"</span>]])</span>
+<span id="cb255-2"><a href="#cb255-2" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb255-3"><a href="#cb255-3" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Calculate Bray-Curtis dissimilarity</span></span>
+<span id="cb255-4"><a href="#cb255-4" aria-hidden="true" tabindex="-1"></a>  dist_bc <span class="ot">&lt;-</span> phyloseq<span class="sc">::</span><span class="fu">distance</span>(phyloseq_obj, <span class="at">method =</span> <span class="st">"bray"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="permanova" class="level2">
 <h2 class="anchored" data-anchor-id="permanova">7.1 PERMANOVA</h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb254"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb254-1"><a href="#cb254-1" aria-hidden="true" tabindex="-1"></a>  dist_bc <span class="ot">&lt;-</span> phyloseq<span class="sc">::</span><span class="fu">distance</span>(phyloseq_obj, <span class="at">method =</span> <span class="st">"bray"</span>)</span>
-<span id="cb254-2"><a href="#cb254-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">adonis2</span>(dist_bc <span class="sc">~</span> condition, <span class="at">data =</span> <span class="fu">as</span>(<span class="fu">sample_data</span>(phyloseq_obj), <span class="st">"data.frame"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb256"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb256-1"><a href="#cb256-1" aria-hidden="true" tabindex="-1"></a>  dist_bc <span class="ot">&lt;-</span> phyloseq<span class="sc">::</span><span class="fu">distance</span>(phyloseq_obj, <span class="at">method =</span> <span class="st">"bray"</span>)</span>
+<span id="cb256-2"><a href="#cb256-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">adonis2</span>(dist_bc <span class="sc">~</span> condition, <span class="at">data =</span> <span class="fu">as</span>(<span class="fu">sample_data</span>(phyloseq_obj), <span class="st">"data.frame"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>Permutation test for adonis under reduced model
 Permutation: free
@@ -3246,14 +3254,14 @@ Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</code></pre>
 <section id="pcoa" class="level2">
 <h2 class="anchored" data-anchor-id="pcoa">7.3 PCoA</h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb256"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb256-1"><a href="#cb256-1" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Visualize PCoA</span></span>
-<span id="cb256-2"><a href="#cb256-2" aria-hidden="true" tabindex="-1"></a>  ordination_results <span class="ot">&lt;-</span> <span class="fu">ordinate</span>(phyloseq_obj, <span class="at">method =</span> <span class="st">"PCoA"</span>, <span class="at">distance =</span> <span class="st">"bray"</span>)</span>
-<span id="cb256-3"><a href="#cb256-3" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb256-4"><a href="#cb256-4" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Convert ordination to a data frame</span></span>
-<span id="cb256-5"><a href="#cb256-5" aria-hidden="true" tabindex="-1"></a>  ordination_df <span class="ot">&lt;-</span> <span class="fu">as.data.frame</span>(ordination_results<span class="sc">$</span>vectors)</span>
-<span id="cb256-6"><a href="#cb256-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rownames</span>(ordination_df) <span class="ot">=</span> <span class="fu">rownames</span>(ordination_results<span class="sc">$</span>vectors)</span>
-<span id="cb256-7"><a href="#cb256-7" aria-hidden="true" tabindex="-1"></a>  ordination_df<span class="sc">$</span>condition <span class="ot">&lt;-</span> <span class="fu">sample_data</span>(phyloseq_obj)<span class="sc">$</span>condition</span>
-<span id="cb256-8"><a href="#cb256-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">head</span>(ordination_df)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb258"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb258-1"><a href="#cb258-1" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Visualize PCoA</span></span>
+<span id="cb258-2"><a href="#cb258-2" aria-hidden="true" tabindex="-1"></a>  ordination_results <span class="ot">&lt;-</span> <span class="fu">ordinate</span>(phyloseq_obj, <span class="at">method =</span> <span class="st">"PCoA"</span>, <span class="at">distance =</span> <span class="st">"bray"</span>)</span>
+<span id="cb258-3"><a href="#cb258-3" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb258-4"><a href="#cb258-4" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Convert ordination to a data frame</span></span>
+<span id="cb258-5"><a href="#cb258-5" aria-hidden="true" tabindex="-1"></a>  ordination_df <span class="ot">&lt;-</span> <span class="fu">as.data.frame</span>(ordination_results<span class="sc">$</span>vectors)</span>
+<span id="cb258-6"><a href="#cb258-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rownames</span>(ordination_df) <span class="ot">=</span> <span class="fu">rownames</span>(ordination_results<span class="sc">$</span>vectors)</span>
+<span id="cb258-7"><a href="#cb258-7" aria-hidden="true" tabindex="-1"></a>  ordination_df<span class="sc">$</span>condition <span class="ot">&lt;-</span> <span class="fu">sample_data</span>(phyloseq_obj)<span class="sc">$</span>condition</span>
+<span id="cb258-8"><a href="#cb258-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">head</span>(ordination_df)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>        Axis.1     Axis.2      Axis.3      Axis.4       Axis.5        Axis.6
 A10 -0.3990528 -0.2763281 -0.02763561  0.01750740 -0.138888422  0.0500316957
@@ -3284,15 +3292,15 @@ A14  0.0251298650  0.012571149 -0.001016701  0.001364480  0.007975996  diseased
 A16 -0.0009390817 -0.001842882  0.004423927  0.005939336 -0.004796995  diseased
 A17  0.0006735671 -0.001796595  0.001398673 -0.001108894 -0.001930982  diseased</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb258"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb258-1"><a href="#cb258-1" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Plot using ggplot2</span></span>
-<span id="cb258-2"><a href="#cb258-2" aria-hidden="true" tabindex="-1"></a>  PCoA_plot <span class="ot">=</span> <span class="fu">ggplot</span>(ordination_df, <span class="fu">aes</span>(<span class="at">x =</span> Axis<span class="fl">.1</span>, <span class="at">y =</span> Axis<span class="fl">.2</span>, <span class="at">color =</span> condition)) <span class="sc">+</span></span>
-<span id="cb258-3"><a href="#cb258-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_point</span>(<span class="at">size =</span> <span class="dv">4</span>) <span class="sc">+</span></span>
-<span id="cb258-4"><a href="#cb258-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">theme_minimal</span>() <span class="sc">+</span></span>
-<span id="cb258-5"><a href="#cb258-5" aria-hidden="true" tabindex="-1"></a>    <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"PCoA1"</span>, <span class="at">y =</span> <span class="st">"PCoA2"</span>)  <span class="sc">+</span></span>
-<span id="cb258-6"><a href="#cb258-6" aria-hidden="true" tabindex="-1"></a>    <span class="fu">ggtitle</span>(<span class="st">"PCoA"</span>) <span class="sc">+</span></span>
-<span id="cb258-7"><a href="#cb258-7" aria-hidden="true" tabindex="-1"></a>    <span class="fu">theme_minimal</span>(<span class="at">base_size =</span> <span class="dv">10</span>)</span>
-<span id="cb258-8"><a href="#cb258-8" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb258-9"><a href="#cb258-9" aria-hidden="true" tabindex="-1"></a>  PCoA_plot</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb260"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb260-1"><a href="#cb260-1" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Plot using ggplot2</span></span>
+<span id="cb260-2"><a href="#cb260-2" aria-hidden="true" tabindex="-1"></a>  PCoA_plot <span class="ot">=</span> <span class="fu">ggplot</span>(ordination_df, <span class="fu">aes</span>(<span class="at">x =</span> Axis<span class="fl">.1</span>, <span class="at">y =</span> Axis<span class="fl">.2</span>, <span class="at">color =</span> condition)) <span class="sc">+</span></span>
+<span id="cb260-3"><a href="#cb260-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_point</span>(<span class="at">size =</span> <span class="dv">4</span>) <span class="sc">+</span></span>
+<span id="cb260-4"><a href="#cb260-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">theme_minimal</span>() <span class="sc">+</span></span>
+<span id="cb260-5"><a href="#cb260-5" aria-hidden="true" tabindex="-1"></a>    <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"PCoA1"</span>, <span class="at">y =</span> <span class="st">"PCoA2"</span>)  <span class="sc">+</span></span>
+<span id="cb260-6"><a href="#cb260-6" aria-hidden="true" tabindex="-1"></a>    <span class="fu">ggtitle</span>(<span class="st">"PCoA"</span>) <span class="sc">+</span></span>
+<span id="cb260-7"><a href="#cb260-7" aria-hidden="true" tabindex="-1"></a>    <span class="fu">theme_minimal</span>(<span class="at">base_size =</span> <span class="dv">10</span>)</span>
+<span id="cb260-8"><a href="#cb260-8" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb260-9"><a href="#cb260-9" aria-hidden="true" tabindex="-1"></a>  PCoA_plot</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
@@ -3305,61 +3313,67 @@ A17  0.0006735671 -0.001796595  0.001398673 -0.001108894 -0.001930982  diseased<
 <section id="nmds" class="level2">
 <h2 class="anchored" data-anchor-id="nmds">7.4 NMDS</h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb259"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb259-1"><a href="#cb259-1" aria-hidden="true" tabindex="-1"></a>  ordination_results <span class="ot">&lt;-</span> <span class="fu">ordinate</span>(phyloseq_obj, <span class="at">method =</span> <span class="st">"NMDS"</span>, <span class="at">distance =</span> <span class="st">"bray"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb261"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb261-1"><a href="#cb261-1" aria-hidden="true" tabindex="-1"></a>  ordination_results <span class="ot">&lt;-</span> <span class="fu">ordinate</span>(phyloseq_obj, <span class="at">method =</span> <span class="st">"NMDS"</span>, <span class="at">distance =</span> <span class="st">"bray"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>Square root transformation
 Wisconsin double standardization
 Run 0 stress 0.102349 
-Run 1 stress 0.1218075 
-Run 2 stress 0.1315931 
-Run 3 stress 0.1310318 
-Run 4 stress 0.1197667 
+Run 1 stress 0.1536039 
+Run 2 stress 0.1219459 
+Run 3 stress 0.1307239 
+Run 4 stress 0.121654 
 Run 5 stress 0.1197667 
-Run 6 stress 0.1218075 
-Run 7 stress 0.1554904 
-Run 8 stress 0.121654 
-Run 9 stress 0.102349 
+Run 6 stress 0.102349 
 ... New best solution
-... Procrustes: rmse 8.955781e-05  max resid 0.0004576909 
+... Procrustes: rmse 4.346727e-05  max resid 0.000176017 
 ... Similar to previous best
-Run 10 stress 0.1480067 
-Run 11 stress 0.102349 
+Run 7 stress 0.1317782 
+Run 8 stress 0.1216512 
+Run 9 stress 0.1023491 
+... Procrustes: rmse 4.119255e-05  max resid 0.0001544526 
+... Similar to previous best
+Run 10 stress 0.147803 
+Run 11 stress 0.1585405 
+Run 12 stress 0.1360336 
+Run 13 stress 0.102349 
+... Procrustes: rmse 4.114667e-05  max resid 0.0001516911 
+... Similar to previous best
+Run 14 stress 0.160337 
+Run 15 stress 0.148772 
+Run 16 stress 0.102349 
 ... New best solution
-... Procrustes: rmse 3.02852e-05  max resid 0.0001557963 
+... Procrustes: rmse 1.63724e-05  max resid 7.877397e-05 
 ... Similar to previous best
-Run 12 stress 0.1391863 
-Run 13 stress 0.1493607 
-Run 14 stress 0.1519286 
-Run 15 stress 0.1216513 
-Run 16 stress 0.119767 
-Run 17 stress 0.1351228 
-Run 18 stress 0.1533793 
-Run 19 stress 0.1219459 
-Run 20 stress 0.164871 
-*** Best solution repeated 1 times</code></pre>
+Run 17 stress 0.1023491 
+... Procrustes: rmse 7.873733e-05  max resid 0.000406184 
+... Similar to previous best
+Run 18 stress 0.1478047 
+Run 19 stress 0.1399987 
+Run 20 stress 0.1545941 
+*** Best solution repeated 2 times</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb261"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb261-1"><a href="#cb261-1" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Convert ordination to a data frame</span></span>
-<span id="cb261-2"><a href="#cb261-2" aria-hidden="true" tabindex="-1"></a>  ordination_df <span class="ot">&lt;-</span> <span class="fu">as.data.frame</span>(ordination_results<span class="sc">$</span>points)</span>
-<span id="cb261-3"><a href="#cb261-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rownames</span>(ordination_df) <span class="ot">=</span> <span class="fu">rownames</span>(ordination_results<span class="sc">$</span>points)</span>
-<span id="cb261-4"><a href="#cb261-4" aria-hidden="true" tabindex="-1"></a>  ordination_df<span class="sc">$</span>condition <span class="ot">&lt;-</span> <span class="fu">sample_data</span>(phyloseq_obj)<span class="sc">$</span>condition</span>
-<span id="cb261-5"><a href="#cb261-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">head</span>(ordination_df)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb263"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb263-1"><a href="#cb263-1" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Convert ordination to a data frame</span></span>
+<span id="cb263-2"><a href="#cb263-2" aria-hidden="true" tabindex="-1"></a>  ordination_df <span class="ot">&lt;-</span> <span class="fu">as.data.frame</span>(ordination_results<span class="sc">$</span>points)</span>
+<span id="cb263-3"><a href="#cb263-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rownames</span>(ordination_df) <span class="ot">=</span> <span class="fu">rownames</span>(ordination_results<span class="sc">$</span>points)</span>
+<span id="cb263-4"><a href="#cb263-4" aria-hidden="true" tabindex="-1"></a>  ordination_df<span class="sc">$</span>condition <span class="ot">&lt;-</span> <span class="fu">sample_data</span>(phyloseq_obj)<span class="sc">$</span>condition</span>
+<span id="cb263-5"><a href="#cb263-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">head</span>(ordination_df)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>           MDS1         MDS2 condition
-A10 -0.06261973  0.105929749  diseased
-A11 -0.07493586  0.005846920  diseased
-A13 -0.05958990  0.074260809  diseased
-A14 -0.12131814  0.035254193  diseased
-A16 -0.11959980 -0.006427136  diseased
-A17 -0.25741924  0.112216550  diseased</code></pre>
+A10 -0.06261862  0.105929805  diseased
+A11 -0.07493832  0.005846346  diseased
+A13 -0.05959023  0.074259421  diseased
+A14 -0.12131934  0.035256520  diseased
+A16 -0.11960248 -0.006424105  diseased
+A17 -0.25740845  0.112225307  diseased</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb263"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb263-1"><a href="#cb263-1" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Plot using ggplot2</span></span>
-<span id="cb263-2"><a href="#cb263-2" aria-hidden="true" tabindex="-1"></a>  NMDS_plot <span class="ot">=</span> <span class="fu">ggplot</span>(ordination_df, <span class="fu">aes</span>(<span class="at">x =</span> MDS1, <span class="at">y =</span> MDS2, <span class="at">color =</span> condition)) <span class="sc">+</span></span>
-<span id="cb263-3"><a href="#cb263-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_point</span>(<span class="at">size =</span> <span class="dv">4</span>) <span class="sc">+</span></span>
-<span id="cb263-4"><a href="#cb263-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"MDS1"</span>, <span class="at">y =</span> <span class="st">"MDS2"</span>)  <span class="sc">+</span></span>
-<span id="cb263-5"><a href="#cb263-5" aria-hidden="true" tabindex="-1"></a>    <span class="fu">ggtitle</span>(<span class="st">"NMDS"</span>) <span class="sc">+</span></span>
-<span id="cb263-6"><a href="#cb263-6" aria-hidden="true" tabindex="-1"></a>    <span class="fu">theme_minimal</span>(<span class="at">base_size =</span> <span class="dv">10</span>)</span>
-<span id="cb263-7"><a href="#cb263-7" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb263-8"><a href="#cb263-8" aria-hidden="true" tabindex="-1"></a>  NMDS_plot</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb265"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb265-1"><a href="#cb265-1" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Plot using ggplot2</span></span>
+<span id="cb265-2"><a href="#cb265-2" aria-hidden="true" tabindex="-1"></a>  NMDS_plot <span class="ot">=</span> <span class="fu">ggplot</span>(ordination_df, <span class="fu">aes</span>(<span class="at">x =</span> MDS1, <span class="at">y =</span> MDS2, <span class="at">color =</span> condition)) <span class="sc">+</span></span>
+<span id="cb265-3"><a href="#cb265-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_point</span>(<span class="at">size =</span> <span class="dv">4</span>) <span class="sc">+</span></span>
+<span id="cb265-4"><a href="#cb265-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"MDS1"</span>, <span class="at">y =</span> <span class="st">"MDS2"</span>)  <span class="sc">+</span></span>
+<span id="cb265-5"><a href="#cb265-5" aria-hidden="true" tabindex="-1"></a>    <span class="fu">ggtitle</span>(<span class="st">"NMDS"</span>) <span class="sc">+</span></span>
+<span id="cb265-6"><a href="#cb265-6" aria-hidden="true" tabindex="-1"></a>    <span class="fu">theme_minimal</span>(<span class="at">base_size =</span> <span class="dv">10</span>)</span>
+<span id="cb265-7"><a href="#cb265-7" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb265-8"><a href="#cb265-8" aria-hidden="true" tabindex="-1"></a>  NMDS_plot</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
@@ -3372,15 +3386,15 @@ A17 -0.25741924  0.112216550  diseased</code></pre>
 <section id="rda" class="level2">
 <h2 class="anchored" data-anchor-id="rda">7.5 RDA</h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb264"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb264-1"><a href="#cb264-1" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Visualize PCoA</span></span>
-<span id="cb264-2"><a href="#cb264-2" aria-hidden="true" tabindex="-1"></a>  ordination_results <span class="ot">&lt;-</span> <span class="fu">ordinate</span>(phyloseq_obj, <span class="at">method =</span> <span class="st">"RDA"</span>, <span class="at">distance =</span> <span class="st">"bray"</span>)</span>
-<span id="cb264-3"><a href="#cb264-3" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb264-4"><a href="#cb264-4" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Convert ordination to a data frame</span></span>
-<span id="cb264-5"><a href="#cb264-5" aria-hidden="true" tabindex="-1"></a>  ordination_df <span class="ot">&lt;-</span> <span class="fu">as.data.frame</span>(ordination_results[[<span class="st">"CA"</span>]][[<span class="st">"u"</span>]])</span>
-<span id="cb264-6"><a href="#cb264-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rownames</span>(ordination_df) <span class="ot">=</span> <span class="fu">rownames</span>(ordination_results[[<span class="st">"CA"</span>]][[<span class="st">"u"</span>]])</span>
-<span id="cb264-7"><a href="#cb264-7" aria-hidden="true" tabindex="-1"></a>  ordination_df<span class="sc">$</span>condition <span class="ot">&lt;-</span> <span class="fu">sample_data</span>(phyloseq_obj)<span class="sc">$</span>condition</span>
-<span id="cb264-8"><a href="#cb264-8" aria-hidden="true" tabindex="-1"></a>  ordination_df<span class="sc">$</span>sample_names <span class="ot">=</span> <span class="fu">rownames</span>(ordination_df)</span>
-<span id="cb264-9"><a href="#cb264-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">head</span>(ordination_df)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb266"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb266-1"><a href="#cb266-1" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Visualize PCoA</span></span>
+<span id="cb266-2"><a href="#cb266-2" aria-hidden="true" tabindex="-1"></a>  ordination_results <span class="ot">&lt;-</span> <span class="fu">ordinate</span>(phyloseq_obj, <span class="at">method =</span> <span class="st">"RDA"</span>, <span class="at">distance =</span> <span class="st">"bray"</span>)</span>
+<span id="cb266-3"><a href="#cb266-3" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb266-4"><a href="#cb266-4" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Convert ordination to a data frame</span></span>
+<span id="cb266-5"><a href="#cb266-5" aria-hidden="true" tabindex="-1"></a>  ordination_df <span class="ot">&lt;-</span> <span class="fu">as.data.frame</span>(ordination_results[[<span class="st">"CA"</span>]][[<span class="st">"u"</span>]])</span>
+<span id="cb266-6"><a href="#cb266-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rownames</span>(ordination_df) <span class="ot">=</span> <span class="fu">rownames</span>(ordination_results[[<span class="st">"CA"</span>]][[<span class="st">"u"</span>]])</span>
+<span id="cb266-7"><a href="#cb266-7" aria-hidden="true" tabindex="-1"></a>  ordination_df<span class="sc">$</span>condition <span class="ot">&lt;-</span> <span class="fu">sample_data</span>(phyloseq_obj)<span class="sc">$</span>condition</span>
+<span id="cb266-8"><a href="#cb266-8" aria-hidden="true" tabindex="-1"></a>  ordination_df<span class="sc">$</span>sample_names <span class="ot">=</span> <span class="fu">rownames</span>(ordination_df)</span>
+<span id="cb266-9"><a href="#cb266-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">head</span>(ordination_df)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>            PC1         PC2          PC3         PC4         PC5         PC6
 A10 -0.33204284  0.20912012 -0.144253041 -0.03059961  0.23588105 -0.03713143
@@ -3432,15 +3446,15 @@ A14  diseased          A14
 A16  diseased          A16
 A17  diseased          A17</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb266"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb266-1"><a href="#cb266-1" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Plot using ggplot2</span></span>
-<span id="cb266-2"><a href="#cb266-2" aria-hidden="true" tabindex="-1"></a>  RDA_plot <span class="ot">=</span> <span class="fu">ggplot</span>(ordination_df, <span class="fu">aes</span>(<span class="at">x =</span> PC1, <span class="at">y =</span> PC2, <span class="at">color =</span> condition)) <span class="sc">+</span></span>
-<span id="cb266-3"><a href="#cb266-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_point</span>(<span class="at">size =</span> <span class="dv">4</span>) <span class="sc">+</span></span>
-<span id="cb266-4"><a href="#cb266-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"PC1"</span>, <span class="at">y =</span> <span class="st">"PC2"</span>)  <span class="sc">+</span></span>
-<span id="cb266-5"><a href="#cb266-5" aria-hidden="true" tabindex="-1"></a>    <span class="fu">ggtitle</span>(<span class="st">"RDA"</span>) <span class="sc">+</span></span>
-<span id="cb266-6"><a href="#cb266-6" aria-hidden="true" tabindex="-1"></a>    <span class="fu">theme_minimal</span>(<span class="at">base_size =</span> <span class="dv">10</span>)</span>
-<span id="cb266-7"><a href="#cb266-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb266-8"><a href="#cb266-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb266-9"><a href="#cb266-9" aria-hidden="true" tabindex="-1"></a>   RDA_plot </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb268"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb268-1"><a href="#cb268-1" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Plot using ggplot2</span></span>
+<span id="cb268-2"><a href="#cb268-2" aria-hidden="true" tabindex="-1"></a>  RDA_plot <span class="ot">=</span> <span class="fu">ggplot</span>(ordination_df, <span class="fu">aes</span>(<span class="at">x =</span> PC1, <span class="at">y =</span> PC2, <span class="at">color =</span> condition)) <span class="sc">+</span></span>
+<span id="cb268-3"><a href="#cb268-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_point</span>(<span class="at">size =</span> <span class="dv">4</span>) <span class="sc">+</span></span>
+<span id="cb268-4"><a href="#cb268-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"PC1"</span>, <span class="at">y =</span> <span class="st">"PC2"</span>)  <span class="sc">+</span></span>
+<span id="cb268-5"><a href="#cb268-5" aria-hidden="true" tabindex="-1"></a>    <span class="fu">ggtitle</span>(<span class="st">"RDA"</span>) <span class="sc">+</span></span>
+<span id="cb268-6"><a href="#cb268-6" aria-hidden="true" tabindex="-1"></a>    <span class="fu">theme_minimal</span>(<span class="at">base_size =</span> <span class="dv">10</span>)</span>
+<span id="cb268-7"><a href="#cb268-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb268-8"><a href="#cb268-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb268-9"><a href="#cb268-9" aria-hidden="true" tabindex="-1"></a>   RDA_plot </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
@@ -3451,7 +3465,7 @@ A17  diseased          A17</code></pre>
 </div>
 <p>Now we will save all the plots together</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb267"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb267-1"><a href="#cb267-1" aria-hidden="true" tabindex="-1"></a><span class="fu">grid.arrange</span>(PCoA_plot, NMDS_plot, RDA_plot, <span class="at">ncol=</span><span class="dv">3</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb269"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb269-1"><a href="#cb269-1" aria-hidden="true" tabindex="-1"></a><span class="fu">grid.arrange</span>(PCoA_plot, NMDS_plot, RDA_plot, <span class="at">ncol=</span><span class="dv">3</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
@@ -3459,10 +3473,10 @@ A17  diseased          A17</code></pre>
 </figure>
 </div>
 </div>
-<div class="sourceCode cell-code" id="cb268"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb268-1"><a href="#cb268-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggsave</span>(<span class="st">"../imgs/Figure_3D.png"</span>, </span>
-<span id="cb268-2"><a href="#cb268-2" aria-hidden="true" tabindex="-1"></a>       <span class="fu">arrangeGrob</span>(PCoA_plot, NMDS_plot, RDA_plot, <span class="at">ncol=</span><span class="dv">3</span>),</span>
-<span id="cb268-3"><a href="#cb268-3" aria-hidden="true" tabindex="-1"></a>       <span class="at">width =</span> <span class="dv">20</span>,</span>
-<span id="cb268-4"><a href="#cb268-4" aria-hidden="true" tabindex="-1"></a>       <span class="at">height =</span> <span class="dv">10</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb270"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb270-1"><a href="#cb270-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggsave</span>(<span class="st">"../imgs/Figure_3D.png"</span>, </span>
+<span id="cb270-2"><a href="#cb270-2" aria-hidden="true" tabindex="-1"></a>       <span class="fu">arrangeGrob</span>(PCoA_plot, NMDS_plot, RDA_plot, <span class="at">ncol=</span><span class="dv">3</span>),</span>
+<span id="cb270-3"><a href="#cb270-3" aria-hidden="true" tabindex="-1"></a>       <span class="at">width =</span> <span class="dv">20</span>,</span>
+<span id="cb270-4"><a href="#cb270-4" aria-hidden="true" tabindex="-1"></a>       <span class="at">height =</span> <span class="dv">10</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 </section>
@@ -3472,73 +3486,73 @@ A17  diseased          A17</code></pre>
 <section id="preparing-the-data-3" class="level2">
 <h2 class="anchored" data-anchor-id="preparing-the-data-3">7.1 Preparing the data</h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb269"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb269-1"><a href="#cb269-1" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Ensure Genus </span></span>
-<span id="cb269-2"><a href="#cb269-2" aria-hidden="true" tabindex="-1"></a>  tse_genus <span class="ot">&lt;-</span> <span class="fu">altExp</span>(tse_metaphlan, <span class="st">"Genus"</span>)</span>
-<span id="cb269-3"><a href="#cb269-3" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb269-4"><a href="#cb269-4" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Add clr-transformation (centred-lofg ratio)</span></span>
-<span id="cb269-5"><a href="#cb269-5" aria-hidden="true" tabindex="-1"></a>  tse_genus <span class="ot">&lt;-</span> <span class="fu">transformAssay</span>(tse_genus, <span class="at">assay.type =</span> <span class="st">"counts"</span>, <span class="at">method =</span> <span class="st">"relabundance"</span>)</span>
-<span id="cb269-6"><a href="#cb269-6" aria-hidden="true" tabindex="-1"></a>  tse_genus <span class="ot">&lt;-</span> <span class="fu">transformAssay</span>(tse_genus, <span class="at">assay.type =</span> <span class="st">"relabundance"</span>,</span>
-<span id="cb269-7"><a href="#cb269-7" aria-hidden="true" tabindex="-1"></a>                              <span class="at">method =</span> <span class="st">"clr"</span>, <span class="at">pseudocount =</span> <span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb271"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb271-1"><a href="#cb271-1" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Ensure Genus </span></span>
+<span id="cb271-2"><a href="#cb271-2" aria-hidden="true" tabindex="-1"></a>  tse_genus <span class="ot">&lt;-</span> <span class="fu">altExp</span>(tse_metaphlan, <span class="st">"Genus"</span>)</span>
+<span id="cb271-3"><a href="#cb271-3" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb271-4"><a href="#cb271-4" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Add clr-transformation (centred-lofg ratio)</span></span>
+<span id="cb271-5"><a href="#cb271-5" aria-hidden="true" tabindex="-1"></a>  tse_genus <span class="ot">&lt;-</span> <span class="fu">transformAssay</span>(tse_genus, <span class="at">assay.type =</span> <span class="st">"counts"</span>, <span class="at">method =</span> <span class="st">"relabundance"</span>)</span>
+<span id="cb271-6"><a href="#cb271-6" aria-hidden="true" tabindex="-1"></a>  tse_genus <span class="ot">&lt;-</span> <span class="fu">transformAssay</span>(tse_genus, <span class="at">assay.type =</span> <span class="st">"relabundance"</span>,</span>
+<span id="cb271-7"><a href="#cb271-7" aria-hidden="true" tabindex="-1"></a>                              <span class="at">method =</span> <span class="st">"clr"</span>, <span class="at">pseudocount =</span> <span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stderr">
 <pre><code>A pseudocount of 7.6187051401118e-09 was applied.</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb271"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb271-1"><a href="#cb271-1" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Apply a z-transformation across rows (taxa)</span></span>
-<span id="cb271-2"><a href="#cb271-2" aria-hidden="true" tabindex="-1"></a>  tse_genus <span class="ot">&lt;-</span> <span class="fu">transformAssay</span>(tse_genus, <span class="at">assay.type =</span> <span class="st">"clr"</span>, </span>
-<span id="cb271-3"><a href="#cb271-3" aria-hidden="true" tabindex="-1"></a>                              <span class="at">MARGIN =</span> <span class="st">"features"</span>,</span>
-<span id="cb271-4"><a href="#cb271-4" aria-hidden="true" tabindex="-1"></a>                              <span class="at">method =</span> <span class="st">"standardize"</span>, <span class="at">name =</span> <span class="st">"clr_z"</span>)</span>
-<span id="cb271-5"><a href="#cb271-5" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb271-6"><a href="#cb271-6" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Get 20 most abundant genera, and subsets the data by them</span></span>
-<span id="cb271-7"><a href="#cb271-7" aria-hidden="true" tabindex="-1"></a>  top_20_genus <span class="ot">&lt;-</span> <span class="fu">names</span>(<span class="fu">sort</span>(total_relabundance_Genus, <span class="at">decreasing =</span> <span class="cn">TRUE</span>)[<span class="dv">1</span><span class="sc">:</span><span class="dv">20</span>])</span>
-<span id="cb271-8"><a href="#cb271-8" aria-hidden="true" tabindex="-1"></a>  tse_genus_subset <span class="ot">&lt;-</span> tse_genus[top_20_genus, ]</span>
-<span id="cb271-9"><a href="#cb271-9" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb271-10"><a href="#cb271-10" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Calculate the proportion of bacteria accounted for in the top 20 Genera</span></span>
-<span id="cb271-11"><a href="#cb271-11" aria-hidden="true" tabindex="-1"></a>  (<span class="fu">sum</span>(<span class="fu">assay</span>(tse_genus_subset, <span class="st">"relabundance"</span>))) <span class="sc">/</span> <span class="dv">15</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb273"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb273-1"><a href="#cb273-1" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Apply a z-transformation across rows (taxa)</span></span>
+<span id="cb273-2"><a href="#cb273-2" aria-hidden="true" tabindex="-1"></a>  tse_genus <span class="ot">&lt;-</span> <span class="fu">transformAssay</span>(tse_genus, <span class="at">assay.type =</span> <span class="st">"clr"</span>, </span>
+<span id="cb273-3"><a href="#cb273-3" aria-hidden="true" tabindex="-1"></a>                              <span class="at">MARGIN =</span> <span class="st">"features"</span>,</span>
+<span id="cb273-4"><a href="#cb273-4" aria-hidden="true" tabindex="-1"></a>                              <span class="at">method =</span> <span class="st">"standardize"</span>, <span class="at">name =</span> <span class="st">"clr_z"</span>)</span>
+<span id="cb273-5"><a href="#cb273-5" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb273-6"><a href="#cb273-6" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Get 20 most abundant genera, and subsets the data by them</span></span>
+<span id="cb273-7"><a href="#cb273-7" aria-hidden="true" tabindex="-1"></a>  top_20_genus <span class="ot">&lt;-</span> <span class="fu">names</span>(<span class="fu">sort</span>(total_relabundance_Genus, <span class="at">decreasing =</span> <span class="cn">TRUE</span>)[<span class="dv">1</span><span class="sc">:</span><span class="dv">20</span>])</span>
+<span id="cb273-8"><a href="#cb273-8" aria-hidden="true" tabindex="-1"></a>  tse_genus_subset <span class="ot">&lt;-</span> tse_genus[top_20_genus, ]</span>
+<span id="cb273-9"><a href="#cb273-9" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb273-10"><a href="#cb273-10" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Calculate the proportion of bacteria accounted for in the top 20 Genera</span></span>
+<span id="cb273-11"><a href="#cb273-11" aria-hidden="true" tabindex="-1"></a>  (<span class="fu">sum</span>(<span class="fu">assay</span>(tse_genus_subset, <span class="st">"relabundance"</span>))) <span class="sc">/</span> <span class="dv">15</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 2.226121</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb273"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb273-1"><a href="#cb273-1" aria-hidden="true" tabindex="-1"></a>  <span class="co"># delete to _g__</span></span>
-<span id="cb273-2"><a href="#cb273-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rownames</span>(tse_genus_subset) <span class="ot">&lt;-</span> <span class="fu">gsub</span>(<span class="st">".*(g__*)"</span>, <span class="st">"</span><span class="sc">\\</span><span class="st">1"</span>, <span class="fu">rownames</span>(tse_genus_subset))</span>
-<span id="cb273-3"><a href="#cb273-3" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb273-4"><a href="#cb273-4" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Gets the assay table</span></span>
-<span id="cb273-5"><a href="#cb273-5" aria-hidden="true" tabindex="-1"></a>  mat <span class="ot">&lt;-</span> <span class="fu">assay</span>(tse_genus_subset, <span class="st">"clr_z"</span>)</span>
-<span id="cb273-6"><a href="#cb273-6" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb273-7"><a href="#cb273-7" aria-hidden="true" tabindex="-1"></a>  <span class="co"># make a dataframe for sample information</span></span>
-<span id="cb273-8"><a href="#cb273-8" aria-hidden="true" tabindex="-1"></a>  sample_data <span class="ot">&lt;-</span> <span class="fu">as.data.frame</span>(<span class="fu">colData</span>(tse_genus_subset))</span>
-<span id="cb273-9"><a href="#cb273-9" aria-hidden="true" tabindex="-1"></a>  sample_data <span class="ot">&lt;-</span> sample_data[, <span class="fu">c</span>(<span class="st">"condition"</span>), drop <span class="ot">=</span> <span class="cn">FALSE</span>]</span>
-<span id="cb273-10"><a href="#cb273-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb273-11"><a href="#cb273-11" aria-hidden="true" tabindex="-1"></a>  <span class="co"># make a dataframe for taxonomic information</span></span>
-<span id="cb273-12"><a href="#cb273-12" aria-hidden="true" tabindex="-1"></a>  taxonomic_data <span class="ot">&lt;-</span> <span class="fu">as.data.frame</span>(<span class="fu">rowData</span>(tse_genus_subset))</span>
-<span id="cb273-13"><a href="#cb273-13" aria-hidden="true" tabindex="-1"></a>  taxonomic_data <span class="ot">&lt;-</span> taxonomic_data[, <span class="st">"Phylum"</span>, drop <span class="ot">=</span> <span class="cn">FALSE</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb275"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb275-1"><a href="#cb275-1" aria-hidden="true" tabindex="-1"></a>  <span class="co"># delete to _g__</span></span>
+<span id="cb275-2"><a href="#cb275-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rownames</span>(tse_genus_subset) <span class="ot">&lt;-</span> <span class="fu">gsub</span>(<span class="st">".*(g__*)"</span>, <span class="st">"</span><span class="sc">\\</span><span class="st">1"</span>, <span class="fu">rownames</span>(tse_genus_subset))</span>
+<span id="cb275-3"><a href="#cb275-3" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb275-4"><a href="#cb275-4" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Gets the assay table</span></span>
+<span id="cb275-5"><a href="#cb275-5" aria-hidden="true" tabindex="-1"></a>  mat <span class="ot">&lt;-</span> <span class="fu">assay</span>(tse_genus_subset, <span class="st">"clr_z"</span>)</span>
+<span id="cb275-6"><a href="#cb275-6" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb275-7"><a href="#cb275-7" aria-hidden="true" tabindex="-1"></a>  <span class="co"># make a dataframe for sample information</span></span>
+<span id="cb275-8"><a href="#cb275-8" aria-hidden="true" tabindex="-1"></a>  sample_data <span class="ot">&lt;-</span> <span class="fu">as.data.frame</span>(<span class="fu">colData</span>(tse_genus_subset))</span>
+<span id="cb275-9"><a href="#cb275-9" aria-hidden="true" tabindex="-1"></a>  sample_data <span class="ot">&lt;-</span> sample_data[, <span class="fu">c</span>(<span class="st">"condition"</span>), drop <span class="ot">=</span> <span class="cn">FALSE</span>]</span>
+<span id="cb275-10"><a href="#cb275-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb275-11"><a href="#cb275-11" aria-hidden="true" tabindex="-1"></a>  <span class="co"># make a dataframe for taxonomic information</span></span>
+<span id="cb275-12"><a href="#cb275-12" aria-hidden="true" tabindex="-1"></a>  taxonomic_data <span class="ot">&lt;-</span> <span class="fu">as.data.frame</span>(<span class="fu">rowData</span>(tse_genus_subset))</span>
+<span id="cb275-13"><a href="#cb275-13" aria-hidden="true" tabindex="-1"></a>  taxonomic_data <span class="ot">&lt;-</span> taxonomic_data[, <span class="st">"Phylum"</span>, drop <span class="ot">=</span> <span class="cn">FALSE</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="plotting-heatmap-of-centred-log-ratios" class="level2">
 <h2 class="anchored" data-anchor-id="plotting-heatmap-of-centred-log-ratios">7.2 Plotting heatmap of centred log ratios</h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb274"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb274-1"><a href="#cb274-1" aria-hidden="true" tabindex="-1"></a>  <span class="co"># set heatmap scaling and colors</span></span>
-<span id="cb274-2"><a href="#cb274-2" aria-hidden="true" tabindex="-1"></a>  breaks <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="sc">-</span><span class="fu">ceiling</span>(<span class="fu">max</span>(<span class="fu">abs</span>(mat))), <span class="fu">ceiling</span>(<span class="fu">max</span>(<span class="fu">abs</span>(mat))), </span>
-<span id="cb274-3"><a href="#cb274-3" aria-hidden="true" tabindex="-1"></a>                <span class="at">length.out =</span> <span class="fu">ifelse</span>( <span class="fu">max</span>(<span class="fu">abs</span>(mat))<span class="sc">&gt;</span><span class="dv">5</span>, <span class="dv">2</span><span class="sc">*</span><span class="fu">ceiling</span>(<span class="fu">max</span>(<span class="fu">abs</span>(mat))), <span class="dv">10</span> ) )</span>
-<span id="cb274-4"><a href="#cb274-4" aria-hidden="true" tabindex="-1"></a>  colors <span class="ot">&lt;-</span> <span class="fu">colorRampPalette</span>(<span class="fu">c</span>(<span class="st">"darkblue"</span>, <span class="st">"blue"</span>, <span class="st">"white"</span>, <span class="st">"red"</span>, <span class="st">"darkred"</span>))(<span class="fu">length</span>(breaks)<span class="sc">-</span><span class="dv">1</span>)</span>
-<span id="cb274-5"><a href="#cb274-5" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb274-6"><a href="#cb274-6" aria-hidden="true" tabindex="-1"></a>  colors <span class="ot">&lt;-</span> <span class="fu">colorRampPalette</span>(<span class="fu">c</span>(<span class="st">"#1E3A5F"</span>, <span class="st">"#4682B4"</span>, <span class="st">"#FFFFFF"</span>, <span class="st">"#E41A1C"</span>, <span class="st">"#A11618"</span>))(<span class="fu">length</span>(breaks) <span class="sc">-</span> <span class="dv">1</span>)</span>
-<span id="cb274-7"><a href="#cb274-7" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb274-8"><a href="#cb274-8" aria-hidden="true" tabindex="-1"></a>  <span class="co"># set column annotation colors</span></span>
-<span id="cb274-9"><a href="#cb274-9" aria-hidden="true" tabindex="-1"></a>  ann_colors <span class="ot">&lt;-</span> <span class="fu">list</span>(</span>
-<span id="cb274-10"><a href="#cb274-10" aria-hidden="true" tabindex="-1"></a>    <span class="at">condition =</span> <span class="fu">c</span>(<span class="st">"healthy"</span> <span class="ot">=</span> <span class="st">"#4682B4"</span>, <span class="st">"diseased"</span> <span class="ot">=</span> <span class="st">"#E41A1C"</span>),</span>
-<span id="cb274-11"><a href="#cb274-11" aria-hidden="true" tabindex="-1"></a>    <span class="at">taxonomic_data =</span> <span class="fu">c</span>(<span class="fu">brewer.pal</span>(<span class="dv">6</span>, <span class="st">"Dark2"</span>))</span>
-<span id="cb274-12"><a href="#cb274-12" aria-hidden="true" tabindex="-1"></a>  )</span>
-<span id="cb274-13"><a href="#cb274-13" aria-hidden="true" tabindex="-1"></a> </span>
-<span id="cb274-14"><a href="#cb274-14" aria-hidden="true" tabindex="-1"></a>  <span class="co"># create the heatmap</span></span>
-<span id="cb274-15"><a href="#cb274-15" aria-hidden="true" tabindex="-1"></a>  genus_clusters <span class="ot">=</span> <span class="fu">pheatmap</span>(mat, </span>
-<span id="cb274-16"><a href="#cb274-16" aria-hidden="true" tabindex="-1"></a>                             <span class="at">annotation_col =</span> sample_data, </span>
-<span id="cb274-17"><a href="#cb274-17" aria-hidden="true" tabindex="-1"></a>                             <span class="at">annotation_row =</span> taxonomic_data, </span>
-<span id="cb274-18"><a href="#cb274-18" aria-hidden="true" tabindex="-1"></a>                             <span class="at">annotation_colors =</span> ann_colors, </span>
-<span id="cb274-19"><a href="#cb274-19" aria-hidden="true" tabindex="-1"></a>                             <span class="at">color =</span> colors, </span>
-<span id="cb274-20"><a href="#cb274-20" aria-hidden="true" tabindex="-1"></a>                             <span class="at">breaks =</span> breaks,</span>
-<span id="cb274-21"><a href="#cb274-21" aria-hidden="true" tabindex="-1"></a>                             <span class="at">clustering_distance_cols =</span> <span class="st">"euclidean"</span>, </span>
-<span id="cb274-22"><a href="#cb274-22" aria-hidden="true" tabindex="-1"></a>                             <span class="at">clustering_method =</span> <span class="st">"complete"</span>)</span>
-<span id="cb274-23"><a href="#cb274-23" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb274-24"><a href="#cb274-24" aria-hidden="true" tabindex="-1"></a>  <span class="co"># print plot</span></span>
-<span id="cb274-25"><a href="#cb274-25" aria-hidden="true" tabindex="-1"></a>  genus_clusters</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb276"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb276-1"><a href="#cb276-1" aria-hidden="true" tabindex="-1"></a>  <span class="co"># set heatmap scaling and colors</span></span>
+<span id="cb276-2"><a href="#cb276-2" aria-hidden="true" tabindex="-1"></a>  breaks <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="sc">-</span><span class="fu">ceiling</span>(<span class="fu">max</span>(<span class="fu">abs</span>(mat))), <span class="fu">ceiling</span>(<span class="fu">max</span>(<span class="fu">abs</span>(mat))), </span>
+<span id="cb276-3"><a href="#cb276-3" aria-hidden="true" tabindex="-1"></a>                <span class="at">length.out =</span> <span class="fu">ifelse</span>( <span class="fu">max</span>(<span class="fu">abs</span>(mat))<span class="sc">&gt;</span><span class="dv">5</span>, <span class="dv">2</span><span class="sc">*</span><span class="fu">ceiling</span>(<span class="fu">max</span>(<span class="fu">abs</span>(mat))), <span class="dv">10</span> ) )</span>
+<span id="cb276-4"><a href="#cb276-4" aria-hidden="true" tabindex="-1"></a>  colors <span class="ot">&lt;-</span> <span class="fu">colorRampPalette</span>(<span class="fu">c</span>(<span class="st">"darkblue"</span>, <span class="st">"blue"</span>, <span class="st">"white"</span>, <span class="st">"red"</span>, <span class="st">"darkred"</span>))(<span class="fu">length</span>(breaks)<span class="sc">-</span><span class="dv">1</span>)</span>
+<span id="cb276-5"><a href="#cb276-5" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb276-6"><a href="#cb276-6" aria-hidden="true" tabindex="-1"></a>  colors <span class="ot">&lt;-</span> <span class="fu">colorRampPalette</span>(<span class="fu">c</span>(<span class="st">"#1E3A5F"</span>, <span class="st">"#4682B4"</span>, <span class="st">"#FFFFFF"</span>, <span class="st">"#E41A1C"</span>, <span class="st">"#A11618"</span>))(<span class="fu">length</span>(breaks) <span class="sc">-</span> <span class="dv">1</span>)</span>
+<span id="cb276-7"><a href="#cb276-7" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb276-8"><a href="#cb276-8" aria-hidden="true" tabindex="-1"></a>  <span class="co"># set column annotation colors</span></span>
+<span id="cb276-9"><a href="#cb276-9" aria-hidden="true" tabindex="-1"></a>  ann_colors <span class="ot">&lt;-</span> <span class="fu">list</span>(</span>
+<span id="cb276-10"><a href="#cb276-10" aria-hidden="true" tabindex="-1"></a>    <span class="at">condition =</span> <span class="fu">c</span>(<span class="st">"healthy"</span> <span class="ot">=</span> <span class="st">"#4682B4"</span>, <span class="st">"diseased"</span> <span class="ot">=</span> <span class="st">"#E41A1C"</span>),</span>
+<span id="cb276-11"><a href="#cb276-11" aria-hidden="true" tabindex="-1"></a>    <span class="at">taxonomic_data =</span> <span class="fu">c</span>(<span class="fu">brewer.pal</span>(<span class="dv">6</span>, <span class="st">"Dark2"</span>))</span>
+<span id="cb276-12"><a href="#cb276-12" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb276-13"><a href="#cb276-13" aria-hidden="true" tabindex="-1"></a> </span>
+<span id="cb276-14"><a href="#cb276-14" aria-hidden="true" tabindex="-1"></a>  <span class="co"># create the heatmap</span></span>
+<span id="cb276-15"><a href="#cb276-15" aria-hidden="true" tabindex="-1"></a>  genus_clusters <span class="ot">=</span> <span class="fu">pheatmap</span>(mat, </span>
+<span id="cb276-16"><a href="#cb276-16" aria-hidden="true" tabindex="-1"></a>                             <span class="at">annotation_col =</span> sample_data, </span>
+<span id="cb276-17"><a href="#cb276-17" aria-hidden="true" tabindex="-1"></a>                             <span class="at">annotation_row =</span> taxonomic_data, </span>
+<span id="cb276-18"><a href="#cb276-18" aria-hidden="true" tabindex="-1"></a>                             <span class="at">annotation_colors =</span> ann_colors, </span>
+<span id="cb276-19"><a href="#cb276-19" aria-hidden="true" tabindex="-1"></a>                             <span class="at">color =</span> colors, </span>
+<span id="cb276-20"><a href="#cb276-20" aria-hidden="true" tabindex="-1"></a>                             <span class="at">breaks =</span> breaks,</span>
+<span id="cb276-21"><a href="#cb276-21" aria-hidden="true" tabindex="-1"></a>                             <span class="at">clustering_distance_cols =</span> <span class="st">"euclidean"</span>, </span>
+<span id="cb276-22"><a href="#cb276-22" aria-hidden="true" tabindex="-1"></a>                             <span class="at">clustering_method =</span> <span class="st">"complete"</span>)</span>
+<span id="cb276-23"><a href="#cb276-23" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb276-24"><a href="#cb276-24" aria-hidden="true" tabindex="-1"></a>  <span class="co"># print plot</span></span>
+<span id="cb276-25"><a href="#cb276-25" aria-hidden="true" tabindex="-1"></a>  genus_clusters</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
@@ -3546,44 +3560,44 @@ A17  diseased          A17</code></pre>
 </figure>
 </div>
 </div>
-<div class="sourceCode cell-code" id="cb275"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb275-1"><a href="#cb275-1" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggsave</span>(<span class="st">"../imgs/Figure_3E.png"</span>, </span>
-<span id="cb275-2"><a href="#cb275-2" aria-hidden="true" tabindex="-1"></a>       genus_clusters,</span>
-<span id="cb275-3"><a href="#cb275-3" aria-hidden="true" tabindex="-1"></a>       <span class="at">width =</span> <span class="dv">20</span>,</span>
-<span id="cb275-4"><a href="#cb275-4" aria-hidden="true" tabindex="-1"></a>       <span class="at">height =</span> <span class="dv">12</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb277"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb277-1"><a href="#cb277-1" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggsave</span>(<span class="st">"../imgs/Figure_3E.png"</span>, </span>
+<span id="cb277-2"><a href="#cb277-2" aria-hidden="true" tabindex="-1"></a>       genus_clusters,</span>
+<span id="cb277-3"><a href="#cb277-3" aria-hidden="true" tabindex="-1"></a>       <span class="at">width =</span> <span class="dv">20</span>,</span>
+<span id="cb277-4"><a href="#cb277-4" aria-hidden="true" tabindex="-1"></a>       <span class="at">height =</span> <span class="dv">12</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="determining-mean-centred-log-ratos" class="level2">
 <h2 class="anchored" data-anchor-id="determining-mean-centred-log-ratos">7.3 Determining mean Centred log ratos</h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb276"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb276-1"><a href="#cb276-1" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Combine CLR z-scores with Sample Conditions</span></span>
-<span id="cb276-2"><a href="#cb276-2" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Combine mat and sample_data</span></span>
-<span id="cb276-3"><a href="#cb276-3" aria-hidden="true" tabindex="-1"></a>  clr_z_with_condition <span class="ot">&lt;-</span> <span class="fu">as.data.frame</span>(<span class="fu">t</span>(mat))</span>
-<span id="cb276-4"><a href="#cb276-4" aria-hidden="true" tabindex="-1"></a>  clr_z_with_condition<span class="sc">$</span>condition <span class="ot">&lt;-</span> sample_data<span class="sc">$</span>condition</span>
-<span id="cb276-5"><a href="#cb276-5" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb276-6"><a href="#cb276-6" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Specify genera of interest</span></span>
-<span id="cb276-7"><a href="#cb276-7" aria-hidden="true" tabindex="-1"></a>  genera_of_interest <span class="ot">&lt;-</span> top_Genus_above_1</span>
-<span id="cb276-8"><a href="#cb276-8" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb276-9"><a href="#cb276-9" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb276-10"><a href="#cb276-10" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Identify genera present in the CLR z-score data</span></span>
-<span id="cb276-11"><a href="#cb276-11" aria-hidden="true" tabindex="-1"></a>  valid_genera <span class="ot">&lt;-</span> <span class="fu">intersect</span>(genera_of_interest, <span class="fu">colnames</span>(clr_z_with_condition))</span>
-<span id="cb276-12"><a href="#cb276-12" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb276-13"><a href="#cb276-13" aria-hidden="true" tabindex="-1"></a>  valid_genera <span class="ot">=</span> <span class="fu">c</span>(valid_genera, <span class="st">"g__Filifactor"</span>)</span>
-<span id="cb276-14"><a href="#cb276-14" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb276-15"><a href="#cb276-15" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Subset for valid genera and condition</span></span>
-<span id="cb276-16"><a href="#cb276-16" aria-hidden="true" tabindex="-1"></a>  clr_z_subset <span class="ot">&lt;-</span> clr_z_with_condition[, <span class="fu">c</span>(valid_genera, <span class="st">"condition"</span>)]</span>
-<span id="cb276-17"><a href="#cb276-17" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb276-18"><a href="#cb276-18" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Calculate mean z-scores</span></span>
-<span id="cb276-19"><a href="#cb276-19" aria-hidden="true" tabindex="-1"></a>  mean_clr_z_scores <span class="ot">&lt;-</span> clr_z_subset <span class="sc">%&gt;%</span></span>
-<span id="cb276-20"><a href="#cb276-20" aria-hidden="true" tabindex="-1"></a>    dplyr<span class="sc">::</span><span class="fu">group_by</span>(condition) <span class="sc">%&gt;%</span></span>
-<span id="cb276-21"><a href="#cb276-21" aria-hidden="true" tabindex="-1"></a>    dplyr<span class="sc">::</span><span class="fu">summarise</span>(<span class="fu">across</span>(<span class="fu">everything</span>(), <span class="sc">~</span> <span class="fu">mean</span>(.x, <span class="at">na.rm =</span> <span class="cn">TRUE</span>), <span class="at">.names =</span> <span class="st">"mean_{.col}"</span>))</span>
-<span id="cb276-22"><a href="#cb276-22" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb276-23"><a href="#cb276-23" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Calculate means</span></span>
-<span id="cb276-24"><a href="#cb276-24" aria-hidden="true" tabindex="-1"></a>  mean_clr_z_scores <span class="ot">&lt;-</span> clr_z_subset <span class="sc">%&gt;%</span></span>
-<span id="cb276-25"><a href="#cb276-25" aria-hidden="true" tabindex="-1"></a>    dplyr<span class="sc">::</span><span class="fu">group_by</span>(condition) <span class="sc">%&gt;%</span></span>
-<span id="cb276-26"><a href="#cb276-26" aria-hidden="true" tabindex="-1"></a>    dplyr<span class="sc">::</span><span class="fu">summarise</span>(<span class="fu">across</span>(<span class="fu">all_of</span>(valid_genera), <span class="sc">~</span> <span class="fu">mean</span>(.x, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)))</span>
-<span id="cb276-27"><a href="#cb276-27" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb276-28"><a href="#cb276-28" aria-hidden="true" tabindex="-1"></a>  <span class="co"># View the result</span></span>
-<span id="cb276-29"><a href="#cb276-29" aria-hidden="true" tabindex="-1"></a>  <span class="fu">print</span>(mean_clr_z_scores)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb278"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb278-1"><a href="#cb278-1" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Combine CLR z-scores with Sample Conditions</span></span>
+<span id="cb278-2"><a href="#cb278-2" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Combine mat and sample_data</span></span>
+<span id="cb278-3"><a href="#cb278-3" aria-hidden="true" tabindex="-1"></a>  clr_z_with_condition <span class="ot">&lt;-</span> <span class="fu">as.data.frame</span>(<span class="fu">t</span>(mat))</span>
+<span id="cb278-4"><a href="#cb278-4" aria-hidden="true" tabindex="-1"></a>  clr_z_with_condition<span class="sc">$</span>condition <span class="ot">&lt;-</span> sample_data<span class="sc">$</span>condition</span>
+<span id="cb278-5"><a href="#cb278-5" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb278-6"><a href="#cb278-6" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Specify genera of interest</span></span>
+<span id="cb278-7"><a href="#cb278-7" aria-hidden="true" tabindex="-1"></a>  genera_of_interest <span class="ot">&lt;-</span> top_Genus_above_1</span>
+<span id="cb278-8"><a href="#cb278-8" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb278-9"><a href="#cb278-9" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb278-10"><a href="#cb278-10" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Identify genera present in the CLR z-score data</span></span>
+<span id="cb278-11"><a href="#cb278-11" aria-hidden="true" tabindex="-1"></a>  valid_genera <span class="ot">&lt;-</span> <span class="fu">intersect</span>(genera_of_interest, <span class="fu">colnames</span>(clr_z_with_condition))</span>
+<span id="cb278-12"><a href="#cb278-12" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb278-13"><a href="#cb278-13" aria-hidden="true" tabindex="-1"></a>  valid_genera <span class="ot">=</span> <span class="fu">c</span>(valid_genera, <span class="st">"g__Filifactor"</span>)</span>
+<span id="cb278-14"><a href="#cb278-14" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb278-15"><a href="#cb278-15" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Subset for valid genera and condition</span></span>
+<span id="cb278-16"><a href="#cb278-16" aria-hidden="true" tabindex="-1"></a>  clr_z_subset <span class="ot">&lt;-</span> clr_z_with_condition[, <span class="fu">c</span>(valid_genera, <span class="st">"condition"</span>)]</span>
+<span id="cb278-17"><a href="#cb278-17" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb278-18"><a href="#cb278-18" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Calculate mean z-scores</span></span>
+<span id="cb278-19"><a href="#cb278-19" aria-hidden="true" tabindex="-1"></a>  mean_clr_z_scores <span class="ot">&lt;-</span> clr_z_subset <span class="sc">%&gt;%</span></span>
+<span id="cb278-20"><a href="#cb278-20" aria-hidden="true" tabindex="-1"></a>    dplyr<span class="sc">::</span><span class="fu">group_by</span>(condition) <span class="sc">%&gt;%</span></span>
+<span id="cb278-21"><a href="#cb278-21" aria-hidden="true" tabindex="-1"></a>    dplyr<span class="sc">::</span><span class="fu">summarise</span>(<span class="fu">across</span>(<span class="fu">everything</span>(), <span class="sc">~</span> <span class="fu">mean</span>(.x, <span class="at">na.rm =</span> <span class="cn">TRUE</span>), <span class="at">.names =</span> <span class="st">"mean_{.col}"</span>))</span>
+<span id="cb278-22"><a href="#cb278-22" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb278-23"><a href="#cb278-23" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Calculate means</span></span>
+<span id="cb278-24"><a href="#cb278-24" aria-hidden="true" tabindex="-1"></a>  mean_clr_z_scores <span class="ot">&lt;-</span> clr_z_subset <span class="sc">%&gt;%</span></span>
+<span id="cb278-25"><a href="#cb278-25" aria-hidden="true" tabindex="-1"></a>    dplyr<span class="sc">::</span><span class="fu">group_by</span>(condition) <span class="sc">%&gt;%</span></span>
+<span id="cb278-26"><a href="#cb278-26" aria-hidden="true" tabindex="-1"></a>    dplyr<span class="sc">::</span><span class="fu">summarise</span>(<span class="fu">across</span>(<span class="fu">all_of</span>(valid_genera), <span class="sc">~</span> <span class="fu">mean</span>(.x, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)))</span>
+<span id="cb278-27"><a href="#cb278-27" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb278-28"><a href="#cb278-28" aria-hidden="true" tabindex="-1"></a>  <span class="co"># View the result</span></span>
+<span id="cb278-29"><a href="#cb278-29" aria-hidden="true" tabindex="-1"></a>  <span class="fu">print</span>(mean_clr_z_scores)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 2 × 21
   condition g__Prevotella g__Streptococcus g__Neisseria g__Haemophilus
@@ -3597,22 +3611,22 @@ A17  diseased          A17</code></pre>
 #   g__Capnocytophaga &lt;dbl&gt;, g__Porphyromonas &lt;dbl&gt;, g__Bacteroides &lt;dbl&gt;,
 #   g__Gemella &lt;dbl&gt;, g__Filifactor &lt;dbl&gt;</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb278"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb278-1"><a href="#cb278-1" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Convert to long format for ggplot</span></span>
-<span id="cb278-2"><a href="#cb278-2" aria-hidden="true" tabindex="-1"></a>  clr_z_long <span class="ot">&lt;-</span> mean_clr_z_scores <span class="sc">%&gt;%</span> </span>
-<span id="cb278-3"><a href="#cb278-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">pivot_longer</span>(<span class="at">cols =</span> <span class="sc">-</span>condition, <span class="at">names_to =</span> <span class="st">"Genus"</span>, <span class="at">values_to =</span> <span class="st">"Mean_Z_Score"</span>)</span>
-<span id="cb278-4"><a href="#cb278-4" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb278-5"><a href="#cb278-5" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb278-6"><a href="#cb278-6" aria-hidden="true" tabindex="-1"></a>  Mean_CLR_Z_Score <span class="ot">=</span> <span class="fu">ggplot</span>(clr_z_long, <span class="fu">aes</span>(<span class="at">x =</span> Mean_Z_Score, <span class="at">y =</span> condition, <span class="at">fill =</span> condition)) <span class="sc">+</span></span>
-<span id="cb278-7"><a href="#cb278-7" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_bar</span>(<span class="at">stat =</span> <span class="st">"identity"</span>, <span class="at">position =</span> <span class="fu">position_dodge</span>(), <span class="at">color =</span> <span class="st">"black"</span>) <span class="sc">+</span>  <span class="co"># Black border around bars</span></span>
-<span id="cb278-8"><a href="#cb278-8" aria-hidden="true" tabindex="-1"></a>    <span class="fu">facet_wrap</span>(<span class="sc">~</span> Genus, <span class="at">scales =</span> <span class="st">"free_y"</span>, <span class="at">ncol =</span> <span class="dv">1</span>) <span class="sc">+</span>  <span class="co"># Separate panels for each genus</span></span>
-<span id="cb278-9"><a href="#cb278-9" aria-hidden="true" tabindex="-1"></a>    <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"Condition"</span>, <span class="at">y =</span> <span class="st">"Mean CLR Z-Score"</span>, <span class="at">fill =</span> <span class="st">"Condition"</span>, <span class="at">title =</span> <span class="st">"Mean CLR Z-Scores by Genus and Condition"</span>) <span class="sc">+</span></span>
-<span id="cb278-10"><a href="#cb278-10" aria-hidden="true" tabindex="-1"></a>    <span class="fu">theme_minimal</span>(<span class="at">base_size =</span> <span class="dv">5</span>) <span class="sc">+</span></span>
-<span id="cb278-11"><a href="#cb278-11" aria-hidden="true" tabindex="-1"></a>    <span class="fu">theme</span>(<span class="at">panel.border =</span> <span class="fu">element_rect</span>(<span class="at">color =</span> <span class="st">"black"</span>, <span class="at">fill =</span> <span class="cn">NA</span>, <span class="at">size =</span> <span class="dv">1</span>))  <span class="co"># Add a border around each panel </span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb280"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb280-1"><a href="#cb280-1" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Convert to long format for ggplot</span></span>
+<span id="cb280-2"><a href="#cb280-2" aria-hidden="true" tabindex="-1"></a>  clr_z_long <span class="ot">&lt;-</span> mean_clr_z_scores <span class="sc">%&gt;%</span> </span>
+<span id="cb280-3"><a href="#cb280-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">pivot_longer</span>(<span class="at">cols =</span> <span class="sc">-</span>condition, <span class="at">names_to =</span> <span class="st">"Genus"</span>, <span class="at">values_to =</span> <span class="st">"Mean_Z_Score"</span>)</span>
+<span id="cb280-4"><a href="#cb280-4" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb280-5"><a href="#cb280-5" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb280-6"><a href="#cb280-6" aria-hidden="true" tabindex="-1"></a>  Mean_CLR_Z_Score <span class="ot">=</span> <span class="fu">ggplot</span>(clr_z_long, <span class="fu">aes</span>(<span class="at">x =</span> Mean_Z_Score, <span class="at">y =</span> condition, <span class="at">fill =</span> condition)) <span class="sc">+</span></span>
+<span id="cb280-7"><a href="#cb280-7" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_bar</span>(<span class="at">stat =</span> <span class="st">"identity"</span>, <span class="at">position =</span> <span class="fu">position_dodge</span>(), <span class="at">color =</span> <span class="st">"black"</span>) <span class="sc">+</span>  <span class="co"># Black border around bars</span></span>
+<span id="cb280-8"><a href="#cb280-8" aria-hidden="true" tabindex="-1"></a>    <span class="fu">facet_wrap</span>(<span class="sc">~</span> Genus, <span class="at">scales =</span> <span class="st">"free_y"</span>, <span class="at">ncol =</span> <span class="dv">1</span>) <span class="sc">+</span>  <span class="co"># Separate panels for each genus</span></span>
+<span id="cb280-9"><a href="#cb280-9" aria-hidden="true" tabindex="-1"></a>    <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"Condition"</span>, <span class="at">y =</span> <span class="st">"Mean CLR Z-Score"</span>, <span class="at">fill =</span> <span class="st">"Condition"</span>, <span class="at">title =</span> <span class="st">"Mean CLR Z-Scores by Genus and Condition"</span>) <span class="sc">+</span></span>
+<span id="cb280-10"><a href="#cb280-10" aria-hidden="true" tabindex="-1"></a>    <span class="fu">theme_minimal</span>(<span class="at">base_size =</span> <span class="dv">5</span>) <span class="sc">+</span></span>
+<span id="cb280-11"><a href="#cb280-11" aria-hidden="true" tabindex="-1"></a>    <span class="fu">theme</span>(<span class="at">panel.border =</span> <span class="fu">element_rect</span>(<span class="at">color =</span> <span class="st">"black"</span>, <span class="at">fill =</span> <span class="cn">NA</span>, <span class="at">size =</span> <span class="dv">1</span>))  <span class="co"># Add a border around each panel </span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stderr">
 <pre><code>Warning: The `size` argument of `element_rect()` is deprecated as of ggplot2 3.4.0.
 ℹ Please use the `linewidth` argument instead.</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb280"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb280-1"><a href="#cb280-1" aria-hidden="true" tabindex="-1"></a>  Mean_CLR_Z_Score</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb282"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb282-1"><a href="#cb282-1" aria-hidden="true" tabindex="-1"></a>  Mean_CLR_Z_Score</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
@@ -3620,10 +3634,10 @@ A17  diseased          A17</code></pre>
 </figure>
 </div>
 </div>
-<div class="sourceCode cell-code" id="cb281"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb281-1"><a href="#cb281-1" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggsave</span>(<span class="st">"../imgs/Figure_3F.png"</span>, </span>
-<span id="cb281-2"><a href="#cb281-2" aria-hidden="true" tabindex="-1"></a>       Mean_CLR_Z_Score,</span>
-<span id="cb281-3"><a href="#cb281-3" aria-hidden="true" tabindex="-1"></a>       <span class="at">width =</span> <span class="dv">10</span>,</span>
-<span id="cb281-4"><a href="#cb281-4" aria-hidden="true" tabindex="-1"></a>       <span class="at">height =</span> <span class="dv">20</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb283"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb283-1"><a href="#cb283-1" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggsave</span>(<span class="st">"../imgs/Figure_3F.png"</span>, </span>
+<span id="cb283-2"><a href="#cb283-2" aria-hidden="true" tabindex="-1"></a>       Mean_CLR_Z_Score,</span>
+<span id="cb283-3"><a href="#cb283-3" aria-hidden="true" tabindex="-1"></a>       <span class="at">width =</span> <span class="dv">10</span>,</span>
+<span id="cb283-4"><a href="#cb283-4" aria-hidden="true" tabindex="-1"></a>       <span class="at">height =</span> <span class="dv">20</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 </section>

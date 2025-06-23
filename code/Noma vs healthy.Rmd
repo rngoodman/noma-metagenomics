@@ -1657,7 +1657,6 @@ print(paste("Specificity:", round(specificity, 4)))
   
 ```{r}
   # Ensure column names are correctly referenced
-  set.seed(123456)
   
   train_data$`metadata$condition`
 
@@ -1667,6 +1666,7 @@ print(paste("Specificity:", round(specificity, 4)))
   test_data$condition
 
   # Permutation testing
+  set.seed(1234)
   null_accuracies <- replicate(1000, {
     # Shuffle the labels
     perm_labels <- sample(train_data$condition)  # Use the actual column name for condition
@@ -1682,19 +1682,24 @@ print(paste("Specificity:", round(specificity, 4)))
   
   # Compare observed accuracy to null distribution
   observed_accuracy <- mean(predict(rf_model_cv, test_data) == test_data$condition)
+
+# Calculate the p-value
+p_value <- sum(null_accuracies >= observed_accuracy) / length(null_accuracies)
+
+# Print the p-value
+print(p_value)
   
   # Visualize and interpret
   
   # 2. Create the plot
-  hist(null_accuracies, main = "Null Distribution of Accuracy", xlab = "Accuracy")
+  hist(null_accuracies, main =paste("Null Distribution of Accuracy\np-value =", round(p_value, 4)), xlab = "Accuracy")
   abline(v = observed_accuracy, col = "red", lwd = 2)  
-
 
   # Save as pnf file
 # 1. Open png file
-png("../imgs/Figure_3C.png", width = 2560, height = 2560, units = "px")
+png("../imgs/Figure_3C.png", width = 256, height = 256, units = "px")
 # 2. Create the plot
-hist(null_accuracies, main = "Null Distribution of Accuracy", xlab = "Accuracy")
+hist(null_accuracies, main =paste("Null Distribution of Accuracy\np-value =", round(p_value, 4)), xlab = "Accuracy")
 abline(v = observed_accuracy, col = "red", lwd = 2) 
 # 3. Close the file
 dev.off()
