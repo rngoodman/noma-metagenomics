@@ -1327,7 +1327,7 @@ plotCountsGGsigline = function(dds, gene, intgroup = "condition", normalized = T
 
 Now plot the different genera 
 
-```{r}
+```{r, warning=FALSE}
 
 plot_1 = plotCountsGGsigline(dds_hc, gene= "g__Treponema", intgroup = "accession", plot = "box", text = FALSE, showSignificance = TRUE, lineSpacing = 5, groupOrder = c("noma", "DRR", "SRR", "SRS"))
 plot_2 = plotCountsGGsigline(dds_hc, gene= "g__Bacteroides", intgroup = "accession", plot = "box", text = FALSE, showSignificance = TRUE, lineSpacing = 5, groupOrder = c("noma", "DRR", "SRR", "SRS"))
@@ -1409,13 +1409,13 @@ A permutation test (n = 1000) was conducted to evaluate the statistical signific
 ## 6.2 running random forests
  
 ```{r}
-  set.seed(123456)
+  set.seed(12345)
   # Run Random Forest to classify samples based on 'condition'
   rf_model <- randomForest(condition ~ ., data = ml_data_clean, ntree = 500, importance = TRUE)
   print(rf_model)
   importance_rf_model <- importance(rf_model)
   
-  set.seed(123456)
+  set.seed(12345)
   # Run Random Forest to classify samples based on 'condition'
   rf_model_condition <- randomForest(condition ~ ., data = ml_data_clean, ntree = 500, importance = TRUE)
   print(rf_model_condition)
@@ -1463,7 +1463,7 @@ A permutation test (n = 1000) was conducted to evaluate the statistical signific
   gp
   
   # Select only the top genera with a relative abundance above 1%
-  top_Genus_pc$top_Genus_above_0.1 = ifelse(top_Genus_pc$top_Genus_percentage > 1, top_Genus_pc$top_Genus, "-other")
+  top_Genus_pc$top_Genus_above_1 = ifelse(top_Genus_pc$top_Genus_percentage > 1, top_Genus_pc$top_Genus, "-other")
   top_Genus_above_1 = unique(top_Genus_pc$top_Genus_above_1)
   top_Genus_above_1_nog =  gsub("g__", "", top_Genus_above_1)
   top_Genus_above_1_nog
@@ -1478,7 +1478,7 @@ importance_df
 
 importance_df_to_plot = importance_df %>% filter(genera_above_1pc != "-other") %>% filter(!grepl("NA", genus))
 
-# Plot the top 10 important predictors above 0.1%
+# Plot the top 10 important predictors above 1%
 gp2 = ggplot(importance_df_to_plot, aes(x = reorder(genera_above_1pc, `MeanDecreaseAccuracy`), y = `MeanDecreaseAccuracy`)) +
   geom_bar(stat = "identity", fill = "steelblue") +
   coord_flip() +  # Flip to make the plot horizontal
@@ -1492,7 +1492,6 @@ gp2 = ggplot(importance_df_to_plot, aes(x = reorder(genera_above_1pc, `MeanDecre
 gp2
 
 ggsave("../imgs/Figure_3A.png", plot = gp2, width = 28, height = 16, dpi = 400)
-  
 ```
 
 ## 6.4 Cross validation 
@@ -1668,7 +1667,7 @@ print(paste("Specificity:", round(specificity, 4)))
   test_data$condition
 
   # Permutation testing
-  null_accuracies <- replicate(10, {
+  null_accuracies <- replicate(1000, {
     # Shuffle the labels
     perm_labels <- sample(train_data$condition)  # Use the actual column name for condition
     train_data_perm <- train_data
