@@ -69,33 +69,33 @@ phyloseq_metaphlan = makePhyloseqFromTreeSE(tse_metaphlan)
 ```{r}
 
 # Define the function to update metadata
-update_sample_metadata <- function(tse_object) {
+update_sample_metadata = function(tse_object) {
   # Extract sample names (column names)
-  sample_names <- colnames(tse_object)
+  sample_names = colnames(tse_object)
   
   # Create the "accession" column based on sample name prefix
-  accession <- ifelse(grepl("^SRS", sample_names), "SRS",
+  accession = ifelse(grepl("^SRS", sample_names), "SRS",
                       ifelse(grepl("^SRR", sample_names), "SRR",
                              ifelse(grepl("^DRR", sample_names), "DRR", NA)))
   
   # Create the "location" column based on sample name prefix
-  location <- ifelse(grepl("^SRS", sample_names), "USA",
+  location = ifelse(grepl("^SRS", sample_names), "USA",
                      ifelse(grepl("^SRR", sample_names), "Denmark",
                             ifelse(grepl("^DRR", sample_names), "Japan", NA)))
   
   # Create a DataFrame with the new metadata columns
-  sample_metadata <- DataFrame(accession = accession, location = location)
-  rownames(sample_metadata) <- sample_names
+  sample_metadata = DataFrame(accession = accession, location = location)
+  rownames(sample_metadata) = sample_names
   
   # Add the metadata as colData to the TreeSummarizedExperiment object
-  colData(tse_object) <- sample_metadata
+  colData(tse_object) = sample_metadata
   
   # Return the updated object
   return(tse_object)
 }
 
 # Example usage:
-tse_metaphlan <- update_sample_metadata(tse_metaphlan)
+tse_metaphlan = update_sample_metadata(tse_metaphlan)
 tse_metaphlan_genus = altExp(tse_metaphlan, "Genus") 
 tse_metaphlan_genus = update_sample_metadata(tse_metaphlan_genus)
 
@@ -109,7 +109,7 @@ head(as.data.frame(colData(tse_metaphlan_genus)))
 
 ```{r echo=FALSE, eval=FALSE}
 
-(count <- assays(tse_metaphlan)[[1]])
+(count = assays(tse_metaphlan)[[1]])
 
 rowData(tse_metaphlan)
 
@@ -131,7 +131,7 @@ tse_metaphlan_healthy = tse_metaphlan
 tse_metaphlan_healthy_genus = tse_metaphlan_genus
 
 # make an assay for abundance
-tse_metaphlan_healthy <- transformAssay(tse_metaphlan_healthy, assay.type="counts", method="relabundance")
+tse_metaphlan_healthy = transformAssay(tse_metaphlan_healthy, assay.type="counts", method="relabundance")
 
 taxonomyRanks(tse_metaphlan_healthy)
 
@@ -163,8 +163,8 @@ library(vegan)
 set.seed(123456)
 
 # Calculate bray curtis distance matrix on main variables 
-olp.bray <- phyloseq::distance(phyloseq_healthy_esd, method = "bray")
-sample.olp.df <- data.frame(sample_data(phyloseq_healthy_esd))
+olp.bray = phyloseq::distance(phyloseq_healthy_esd, method = "bray")
+sample.olp.df = data.frame(sample_data(phyloseq_healthy_esd))
 permanova_all = vegan::adonis2(olp.bray ~ accession , data = sample.olp.df)
 permanova_all
 ```
@@ -174,7 +174,7 @@ Next we will test the beta dispersion
 ```{r}
 # All together now
 vegan::adonis2(olp.bray ~ accession, data = sample.olp.df)
-beta <- betadisper(olp.bray, sample.olp.df$accession)
+beta = betadisper(olp.bray, sample.olp.df$accession)
 permutest(beta)
 # we don't want this to be significant 
 ```
@@ -195,7 +195,7 @@ condition_ano
 
 ```{r}
 #condition
-olp.bray <- phyloseq::distance(phyloseq_healthy_esd, method = "bray") # Calculate bray curtis distance matrix
+olp.bray = phyloseq::distance(phyloseq_healthy_esd, method = "bray") # Calculate bray curtis distance matrix
 condition_group = get_variable(phyloseq_healthy_esd, "accession") # Make condition Grouping
 # Run MRPP
 set.seed(123456)
@@ -211,54 +211,54 @@ vegan::mrpp(olp.bray, condition_group, permutations = 999,
 
 
 # Extract the counts and taxonomic table
-counts <- assay(tse_metaphlan_genus, "counts")
-tax_table <- rowData(tse_metaphlan_genus)$Genus  # Replace "Genus" with your taxonomic level of interest
-sample_data <- colData(tse_metaphlan_genus)
+counts = assay(tse_metaphlan_genus, "counts")
+tax_table = rowData(tse_metaphlan_genus)$Genus  # Replace "Genus" with your taxonomic level of interest
+sample_data = colData(tse_metaphlan_genus)
 
 groups = as.data.frame(sample_data)
 
 # Aggregate counts by Genus
-aggregated_counts <- rowsum(counts, tax_table)
+aggregated_counts = rowsum(counts, tax_table)
 
 # Create a new aggregated TreeSummarizedExperiment object
-tse_aggregated <- TreeSummarizedExperiment(assays = list(counts = aggregated_counts), 
+tse_aggregated = TreeSummarizedExperiment(assays = list(counts = aggregated_counts), 
                                            colData = sample_data)
 
 # Calculate relative abundances
-relative_abundances <- sweep(assay(tse_aggregated, "counts"), 2, colSums(assay(tse_aggregated, "counts")), FUN = "/") * 100
+relative_abundances = sweep(assay(tse_aggregated, "counts"), 2, colSums(assay(tse_aggregated, "counts")), FUN = "/") * 100
 
 # Convert to a data frame and group by Treatment
-relative_df <- as.data.frame(t(relative_abundances))
+relative_df = as.data.frame(t(relative_abundances))
 
 set.seed (123456)
 
 # Define the vector of genera names (without the "g__" prefix)
-genera <- c("Prevotella", "Treponema", "Neisseria", "Bacteroides", 
+genera = c("Prevotella", "Treponema", "Neisseria", "Bacteroides", 
             "Filifactor", "Porphyromonas", "Fusobacterium", "Escherichia",
             "Selenomonas", "Aggregatibacter", "Capnocytophaga",
             "Streptococcus", "Actinomyces", "Campylobacter", "Dialister", "Gemella",
             "Haemophilus", "Leptotrichia", "Rothia", "Schaalia", "Tannerella", "Veillonella")
 
 # Initialize an empty data frame to store the results
-permanova_taxa_results <- data.frame(Genus = character(), pvalue = numeric(), stringsAsFactors = FALSE)
+permanova_taxa_results = data.frame(Genus = character(), pvalue = numeric(), stringsAsFactors = FALSE)
 
 # Loop over each genus
 for (genus in genera) {
   set.seed (123456)
   # Subset the data for the genus; adjust column selection as needed
-  subset_data <- relative_df %>% select(paste0("g__", genus))
+  subset_data = relative_df %>% select(paste0("g__", genus))
   
   # Calculate the Bray-Curtis distance
-  bray_dist <- vegdist(subset_data, method = "bray")
+  bray_dist = vegdist(subset_data, method = "bray")
   
   # Run PERMANOVA using adonis2
-  adonis_result <- adonis2(bray_dist ~ accession, data = groups)
+  adonis_result = adonis2(bray_dist ~ accession, data = groups)
   
   # Extract the p-value for the sample_type factor (usually in the first row)
-  pval <- adonis_result$`Pr(>F)`[1]
+  pval = adonis_result$`Pr(>F)`[1]
   
   # Append the result to the results data frame
-  permanova_taxa_results <- rbind(permanova_taxa_results, data.frame(Genus = genus, pvalue = pval))
+  permanova_taxa_results = rbind(permanova_taxa_results, data.frame(Genus = genus, pvalue = pval))
 }
 
 print(permanova_taxa_results)
@@ -275,29 +275,29 @@ ptr = print(permanova_taxa_results)
 # Assume `tse` is your TreeSummarizedExperiment object
 # Extract the assay data (e.g., expression matrix)
 
-expr_data <- assay(tse_metaphlan_genus)
+expr_data = assay(tse_metaphlan_genus)
 
 colnames(tse_metaphlan)
 
-expr_data_df <- as.data.frame(expr_data)
+expr_data_df = as.data.frame(expr_data)
 ncol(expr_data_df)
 
 t_expr_data_df = t(expr_data_df)
 
 # Identify constant columns (zero variance)
-zero_var_cols <- apply(t_expr_data_df, 2, function(col) var(col) == 0)
+zero_var_cols = apply(t_expr_data_df, 2, function(col) var(col) == 0)
 # Display columns with zero variance
 names(t_expr_data_df)[zero_var_cols]
 # Remove constant columns
-t_expr_data_df_filtered <- t_expr_data_df[, !zero_var_cols]
+t_expr_data_df_filtered = t_expr_data_df[, !zero_var_cols]
 
-colnames(t_expr_data_df_filtered) <- gsub(".*(g__*)", "\\1", colnames(t_expr_data_df_filtered))
+colnames(t_expr_data_df_filtered) = gsub(".*(g__*)", "\\1", colnames(t_expr_data_df_filtered))
 
 # Optionally scale and center the data (depends on your data)
-#expr_data_scaled <- scale(t_expr_data_df)
+#expr_data_scaled = scale(t_expr_data_df)
 
 # Run PCA using the prcomp function
-pca_result <- prcomp(t_expr_data_df_filtered, center = TRUE, scale. = TRUE)
+pca_result = prcomp(t_expr_data_df_filtered, center = TRUE, scale. = TRUE)
 
 
 # View the summary of the PCA result
@@ -320,9 +320,9 @@ plot(pca_result$x[,1], pca_result$x[,2],
 ```{r}
 # Optionally, visualize PCA with ggplot2 for more customized plotting
 library(ggplot2)
-pca_df <- as.data.frame(pca_result$x)
-pca_df$sample <- rownames(pca_result$x)
-pca_df$sample2 <- colnames(expr_data)
+pca_df = as.data.frame(pca_result$x)
+pca_df$sample = rownames(pca_result$x)
+pca_df$sample2 = colnames(expr_data)
 
 ggplot(pca_df, aes(x = PC1, y = PC2, label = sample, col = sample)) +
   geom_point() +
@@ -338,29 +338,29 @@ Now we will remove the DRR accession
 ```{r}
 
 drops = c("DRR214959", "DRR214960", "DRR214961", "DRR214962", "DRR241310")
-expr_data_df <-  expr_data_df[ , !(names(expr_data_df) %in% drops)]
+expr_data_df =  expr_data_df[ , !(names(expr_data_df) %in% drops)]
 ncol(expr_data_df)
 
 t_expr_data_df = t(expr_data_df)
 
 # Identify constant columns (zero variance)
-zero_var_cols <- apply(t_expr_data_df, 2, function(col) var(col) == 0)
+zero_var_cols = apply(t_expr_data_df, 2, function(col) var(col) == 0)
 # Display columns with zero variance
 names(t_expr_data_df)[zero_var_cols]
 # Remove constant columns
-t_expr_data_df_filtered <- t_expr_data_df[, !zero_var_cols]
+t_expr_data_df_filtered = t_expr_data_df[, !zero_var_cols]
 
-colnames(t_expr_data_df_filtered) <- gsub(".*(g__*)", "\\1", colnames(t_expr_data_df_filtered))
+colnames(t_expr_data_df_filtered) = gsub(".*(g__*)", "\\1", colnames(t_expr_data_df_filtered))
 
 # Run PCA using the prcomp function
-pca_result <- prcomp(t_expr_data_df_filtered, center = TRUE, scale. = TRUE)
+pca_result = prcomp(t_expr_data_df_filtered, center = TRUE, scale. = TRUE)
 
 #dev.off()
 
 # Optionally, visualize PCA with ggplot2 for more customized plotting
 library(ggplot2)
-pca_df <- as.data.frame(pca_result$x)
-pca_df$sample <- rownames(pca_result$x)
+pca_df = as.data.frame(pca_result$x)
+pca_df$sample = rownames(pca_result$x)
 
 ggplot(pca_df, aes(x = PC1, y = PC2, label = sample, col = sample)) +
   geom_point() +

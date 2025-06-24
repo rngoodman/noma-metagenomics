@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="author" content="Richard Goodman">
-<meta name="dcterms.date" content="2025-06-20">
+<meta name="dcterms.date" content="2025-06-24">
 
 <title>Noma Metagenomics: Short-read taxonomic based metagenomic analysis of noma swab vs saliva samples in R</title>
 <style>
@@ -98,7 +98,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <div>
     <div class="quarto-title-meta-heading">Published</div>
     <div class="quarto-title-meta-contents">
-      <p class="date">June 20, 2025</p>
+      <p class="date">June 24, 2025</p>
     </div>
   </div>
   
@@ -193,7 +193,7 @@ colTree: NULL</code></pre>
 <span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a>metadata_3 <span class="ot">=</span> dplyr<span class="sc">::</span><span class="fu">left_join</span>(coldata, metadata_2, <span class="at">by =</span> <span class="st">"sample_name"</span>)</span>
 <span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a><span class="co"># Create a DataFrame with this information</span></span>
-<span id="cb4-15"><a href="#cb4-15" aria-hidden="true" tabindex="-1"></a>metadata_df <span class="ot">&lt;-</span> <span class="fu">DataFrame</span>(metadata_3)</span>
+<span id="cb4-15"><a href="#cb4-15" aria-hidden="true" tabindex="-1"></a>metadata_df <span class="ot">=</span> <span class="fu">DataFrame</span>(metadata_3)</span>
 <span id="cb4-16"><a href="#cb4-16" aria-hidden="true" tabindex="-1"></a><span class="fu">rownames</span>(metadata_df) <span class="ot">=</span> metadata_3<span class="sc">$</span>sample_name</span>
 <span id="cb4-17"><a href="#cb4-17" aria-hidden="true" tabindex="-1"></a>t_metadata_df <span class="ot">=</span> <span class="fu">t</span>(metadata_df)</span>
 <span id="cb4-18"><a href="#cb4-18" aria-hidden="true" tabindex="-1"></a><span class="fu">ncol</span>(t_metadata_df)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -293,7 +293,7 @@ colTree: NULL</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>swb_and_sal <span class="ot">=</span> metadata_3 <span class="sc">%&gt;%</span> <span class="fu">group_by</span>(respondent_id) <span class="sc">%&gt;%</span> <span class="fu">summarise</span>(<span class="at">Count =</span> <span class="fu">n</span>()) <span class="sc">%&gt;%</span> <span class="fu">filter</span>(Count <span class="sc">==</span> <span class="dv">2</span>)</span>
 <span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>ids_to_remove <span class="ot">=</span> swb_and_sal <span class="sc">%&gt;%</span> <span class="fu">pull</span>(respondent_id)</span>
-<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>swb_and_sal_filtered <span class="ot">&lt;-</span> metadata_3  <span class="sc">%&gt;%</span> <span class="fu">filter</span>(<span class="sc">!</span>respondent_id <span class="sc">%in%</span> ids_to_remove)</span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>swb_and_sal_filtered <span class="ot">=</span> metadata_3  <span class="sc">%&gt;%</span> <span class="fu">filter</span>(<span class="sc">!</span>respondent_id <span class="sc">%in%</span> ids_to_remove)</span>
 <span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb20-5"><a href="#cb20-5" aria-hidden="true" tabindex="-1"></a><span class="co"># count saliva and swab samples without particpants above</span></span>
 <span id="cb20-6"><a href="#cb20-6" aria-hidden="true" tabindex="-1"></a>swb_and_sal_filtered <span class="sc">%&gt;%</span> <span class="fu">group_by</span>(sample_type) <span class="sc">%&gt;%</span> <span class="fu">summarise</span>(<span class="at">Count =</span> <span class="fu">n</span>())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -310,7 +310,7 @@ colTree: NULL</code></pre>
 <pre><code>[1] "N10" "N13" "N17" "N18" "N4"  "N5"  "N6"  "N7"  "N9" </code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Add this DataFrame as colData to your TreeSummarizedExperiment object</span></span>
-<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a><span class="fu">colData</span>(tse_metaphlan_sal_swb) <span class="ot">&lt;-</span> metadata_df</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a><span class="fu">colData</span>(tse_metaphlan_sal_swb) <span class="ot">=</span> metadata_df</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="inspecting-the-data" class="level2">
@@ -334,7 +334,7 @@ colTree: NULL</code></pre>
 <span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Use makePhyloseqFromTreeSE from Miaverse</span></span>
 <span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb26-4"><a href="#cb26-4" aria-hidden="true" tabindex="-1"></a><span class="co"># make an assay for abundance</span></span>
-<span id="cb26-5"><a href="#cb26-5" aria-hidden="true" tabindex="-1"></a>tse_metaphlan_sal_swb <span class="ot">&lt;-</span> <span class="fu">transformAssay</span>(tse_metaphlan_sal_swb, <span class="at">assay.type=</span><span class="st">"counts"</span>, <span class="at">method=</span><span class="st">"relabundance"</span>)</span>
+<span id="cb26-5"><a href="#cb26-5" aria-hidden="true" tabindex="-1"></a>tse_metaphlan_sal_swb <span class="ot">=</span> <span class="fu">transformAssay</span>(tse_metaphlan_sal_swb, <span class="at">assay.type=</span><span class="st">"counts"</span>, <span class="at">method=</span><span class="st">"relabundance"</span>)</span>
 <span id="cb26-6"><a href="#cb26-6" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb26-7"><a href="#cb26-7" aria-hidden="true" tabindex="-1"></a><span class="fu">taxonomyRanks</span>(tse_metaphlan_sal_swb)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
@@ -363,7 +363,7 @@ colTree: NULL</code></pre>
 <div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a>tse_metaphlan_sal_swb_genus <span class="ot">=</span> <span class="fu">altExp</span>(tse_metaphlan_sal_swb, <span class="st">"Genus"</span>)</span>
 <span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Check that colData was added successfully</span></span>
-<span id="cb30-4"><a href="#cb30-4" aria-hidden="true" tabindex="-1"></a><span class="fu">colData</span>(tse_metaphlan_sal_swb_genus) <span class="ot">&lt;-</span> metadata_df</span>
+<span id="cb30-4"><a href="#cb30-4" aria-hidden="true" tabindex="-1"></a><span class="fu">colData</span>(tse_metaphlan_sal_swb_genus) <span class="ot">=</span> metadata_df</span>
 <span id="cb30-5"><a href="#cb30-5" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb30-6"><a href="#cb30-6" aria-hidden="true" tabindex="-1"></a>metadata_noma_genus <span class="ot">=</span> <span class="fu">as.data.frame</span>(<span class="fu">colData</span>(tse_metaphlan_sal_swb_genus))</span>
 <span id="cb30-7"><a href="#cb30-7" aria-hidden="true" tabindex="-1"></a></span>
@@ -390,8 +390,8 @@ colTree: NULL</code></pre>
 <div class="sourceCode cell-code" id="cb34"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">123456</span>)</span>
 <span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb34-3"><a href="#cb34-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Calculate bray curtis distance matrix on main variables </span></span>
-<span id="cb34-4"><a href="#cb34-4" aria-hidden="true" tabindex="-1"></a>noma.bray <span class="ot">&lt;-</span> phyloseq<span class="sc">::</span><span class="fu">distance</span>(phyloseq_noma_esd, <span class="at">method =</span> <span class="st">"bray"</span>)</span>
-<span id="cb34-5"><a href="#cb34-5" aria-hidden="true" tabindex="-1"></a>sample.noma.df <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="fu">sample_data</span>(phyloseq_noma_esd))</span>
+<span id="cb34-4"><a href="#cb34-4" aria-hidden="true" tabindex="-1"></a>noma.bray <span class="ot">=</span> phyloseq<span class="sc">::</span><span class="fu">distance</span>(phyloseq_noma_esd, <span class="at">method =</span> <span class="st">"bray"</span>)</span>
+<span id="cb34-5"><a href="#cb34-5" aria-hidden="true" tabindex="-1"></a>sample.noma.df <span class="ot">=</span> <span class="fu">data.frame</span>(<span class="fu">sample_data</span>(phyloseq_noma_esd))</span>
 <span id="cb34-6"><a href="#cb34-6" aria-hidden="true" tabindex="-1"></a>permanova_all <span class="ot">=</span> vegan<span class="sc">::</span><span class="fu">adonis2</span>(noma.bray <span class="sc">~</span> sex , <span class="at">data =</span> sample.noma.df)</span>
 <span id="cb34-7"><a href="#cb34-7" aria-hidden="true" tabindex="-1"></a>permanova_all</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
@@ -421,7 +421,7 @@ Model     1   0.1930 0.04626 1.2612  0.263
 Residual 26   3.9798 0.95374              
 Total    27   4.1729 1.00000              </code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb38"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a>beta <span class="ot">&lt;-</span> <span class="fu">betadisper</span>(noma.bray, sample.noma.df<span class="sc">$</span>sex)</span>
+<div class="sourceCode cell-code" id="cb38"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a>beta <span class="ot">=</span> <span class="fu">betadisper</span>(noma.bray, sample.noma.df<span class="sc">$</span>sex)</span>
 <span id="cb38-2"><a href="#cb38-2" aria-hidden="true" tabindex="-1"></a><span class="fu">permutest</span>(beta)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>
@@ -475,7 +475,7 @@ Number of permutations: 999</code></pre>
 <h2 class="anchored" data-anchor-id="mrpp-across-entire-dataset">3.4 MRPP across entire dataset</h2>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb45"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb45-1"><a href="#cb45-1" aria-hidden="true" tabindex="-1"></a><span class="co">#condition</span></span>
-<span id="cb45-2"><a href="#cb45-2" aria-hidden="true" tabindex="-1"></a>noma.bray <span class="ot">&lt;-</span> phyloseq<span class="sc">::</span><span class="fu">distance</span>(phyloseq_noma_esd, <span class="at">method =</span> <span class="st">"bray"</span>) <span class="co"># Calculate bray curtis distance matrix</span></span>
+<span id="cb45-2"><a href="#cb45-2" aria-hidden="true" tabindex="-1"></a>noma.bray <span class="ot">=</span> phyloseq<span class="sc">::</span><span class="fu">distance</span>(phyloseq_noma_esd, <span class="at">method =</span> <span class="st">"bray"</span>) <span class="co"># Calculate bray curtis distance matrix</span></span>
 <span id="cb45-3"><a href="#cb45-3" aria-hidden="true" tabindex="-1"></a>condition_group <span class="ot">=</span> <span class="fu">get_variable</span>(phyloseq_noma_esd, <span class="st">"sex"</span>) <span class="co"># Make condition Grouping</span></span>
 <span id="cb45-4"><a href="#cb45-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Run MRPP</span></span>
 <span id="cb45-5"><a href="#cb45-5" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">123456</span>)</span>
@@ -514,18 +514,18 @@ Number of permutations: 999</code></pre>
 [5] "noma_stage_on_admission" "sample_type"            </code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb49"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb49-1"><a href="#cb49-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Define the list of metadata variables you want to test</span></span>
-<span id="cb49-2"><a href="#cb49-2" aria-hidden="true" tabindex="-1"></a>variables_to_test <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"sex"</span>, <span class="st">"age"</span>, <span class="st">"noma_stage_on_admission"</span>, <span class="st">"respondent_id"</span>, <span class="st">"sample_type"</span>)</span>
+<span id="cb49-2"><a href="#cb49-2" aria-hidden="true" tabindex="-1"></a>variables_to_test <span class="ot">=</span> <span class="fu">c</span>(<span class="st">"sex"</span>, <span class="st">"age"</span>, <span class="st">"noma_stage_on_admission"</span>, <span class="st">"respondent_id"</span>, <span class="st">"sample_type"</span>)</span>
 <span id="cb49-3"><a href="#cb49-3" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb49-4"><a href="#cb49-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Set a seed for reproducibility of permutation-based tests</span></span>
 <span id="cb49-5"><a href="#cb49-5" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">123456</span>)</span>
 <span id="cb49-6"><a href="#cb49-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb49-7"><a href="#cb49-7" aria-hidden="true" tabindex="-1"></a>bray_dist <span class="ot">&lt;-</span> phyloseq<span class="sc">::</span><span class="fu">distance</span>(phyloseq_noma_esd, <span class="at">method =</span> <span class="st">"bray"</span>)</span>
+<span id="cb49-7"><a href="#cb49-7" aria-hidden="true" tabindex="-1"></a>bray_dist <span class="ot">=</span> phyloseq<span class="sc">::</span><span class="fu">distance</span>(phyloseq_noma_esd, <span class="at">method =</span> <span class="st">"bray"</span>)</span>
 <span id="cb49-8"><a href="#cb49-8" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb49-9"><a href="#cb49-9" aria-hidden="true" tabindex="-1"></a><span class="co"># Extract the sample data into a data frame for use with adonis2</span></span>
-<span id="cb49-10"><a href="#cb49-10" aria-hidden="true" tabindex="-1"></a>sample_df <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="fu">sample_data</span>(phyloseq_noma_esd))</span>
+<span id="cb49-10"><a href="#cb49-10" aria-hidden="true" tabindex="-1"></a>sample_df <span class="ot">=</span> <span class="fu">data.frame</span>(<span class="fu">sample_data</span>(phyloseq_noma_esd))</span>
 <span id="cb49-11"><a href="#cb49-11" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb49-12"><a href="#cb49-12" aria-hidden="true" tabindex="-1"></a><span class="co"># Create an empty list to store the results from each iteration</span></span>
-<span id="cb49-13"><a href="#cb49-13" aria-hidden="true" tabindex="-1"></a>results_list <span class="ot">&lt;-</span> <span class="fu">list</span>()</span>
+<span id="cb49-13"><a href="#cb49-13" aria-hidden="true" tabindex="-1"></a>results_list <span class="ot">=</span> <span class="fu">list</span>()</span>
 <span id="cb49-14"><a href="#cb49-14" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb49-15"><a href="#cb49-15" aria-hidden="true" tabindex="-1"></a><span class="co"># Loop through each variable name in the 'variables_to_test' vector</span></span>
 <span id="cb49-16"><a href="#cb49-16" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (variable <span class="cf">in</span> variables_to_test) {</span>
@@ -534,36 +534,36 @@ Number of permutations: 999</code></pre>
 <span id="cb49-19"><a href="#cb49-19" aria-hidden="true" tabindex="-1"></a>  </span>
 <span id="cb49-20"><a href="#cb49-20" aria-hidden="true" tabindex="-1"></a>  <span class="co"># PERMANOVA (adonis2) </span></span>
 <span id="cb49-21"><a href="#cb49-21" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Create the statistical formula dynamically for the current variable</span></span>
-<span id="cb49-22"><a href="#cb49-22" aria-hidden="true" tabindex="-1"></a>  formula <span class="ot">&lt;-</span> <span class="fu">as.formula</span>(<span class="fu">paste</span>(<span class="st">"bray_dist ~"</span>, variable))</span>
+<span id="cb49-22"><a href="#cb49-22" aria-hidden="true" tabindex="-1"></a>  formula <span class="ot">=</span> <span class="fu">as.formula</span>(<span class="fu">paste</span>(<span class="st">"bray_dist ~"</span>, variable))</span>
 <span id="cb49-23"><a href="#cb49-23" aria-hidden="true" tabindex="-1"></a>  </span>
 <span id="cb49-24"><a href="#cb49-24" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Run the PERMANOVA test using the adonis2 function</span></span>
-<span id="cb49-25"><a href="#cb49-25" aria-hidden="true" tabindex="-1"></a>  permanova_res <span class="ot">&lt;-</span> vegan<span class="sc">::</span><span class="fu">adonis2</span>(formula, <span class="at">data =</span> sample_df, <span class="at">permutations =</span> <span class="dv">999</span>)</span>
+<span id="cb49-25"><a href="#cb49-25" aria-hidden="true" tabindex="-1"></a>  permanova_res <span class="ot">=</span> vegan<span class="sc">::</span><span class="fu">adonis2</span>(formula, <span class="at">data =</span> sample_df, <span class="at">permutations =</span> <span class="dv">999</span>)</span>
 <span id="cb49-26"><a href="#cb49-26" aria-hidden="true" tabindex="-1"></a>  </span>
 <span id="cb49-27"><a href="#cb49-27" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Extract the p-value from the results. It's in the 'Pr(&gt;F)' column.</span></span>
-<span id="cb49-28"><a href="#cb49-28" aria-hidden="true" tabindex="-1"></a>  p_permanova <span class="ot">&lt;-</span> permanova_res<span class="sc">$</span><span class="st">`</span><span class="at">Pr(&gt;F)</span><span class="st">`</span>[<span class="dv">1</span>]</span>
+<span id="cb49-28"><a href="#cb49-28" aria-hidden="true" tabindex="-1"></a>  p_permanova <span class="ot">=</span> permanova_res<span class="sc">$</span><span class="st">`</span><span class="at">Pr(&gt;F)</span><span class="st">`</span>[<span class="dv">1</span>]</span>
 <span id="cb49-29"><a href="#cb49-29" aria-hidden="true" tabindex="-1"></a>  </span>
 <span id="cb49-30"><a href="#cb49-30" aria-hidden="true" tabindex="-1"></a>  <span class="co"># ANOSIM </span></span>
 <span id="cb49-31"><a href="#cb49-31" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Get the grouping factor (the actual variable data) from the phyloseq object</span></span>
-<span id="cb49-32"><a href="#cb49-32" aria-hidden="true" tabindex="-1"></a>  grouping_factor <span class="ot">&lt;-</span> phyloseq<span class="sc">::</span><span class="fu">get_variable</span>(phyloseq_noma_esd, variable)</span>
+<span id="cb49-32"><a href="#cb49-32" aria-hidden="true" tabindex="-1"></a>  grouping_factor <span class="ot">=</span> phyloseq<span class="sc">::</span><span class="fu">get_variable</span>(phyloseq_noma_esd, variable)</span>
 <span id="cb49-33"><a href="#cb49-33" aria-hidden="true" tabindex="-1"></a>  </span>
 <span id="cb49-34"><a href="#cb49-34" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Run the ANOSIM test</span></span>
-<span id="cb49-35"><a href="#cb49-35" aria-hidden="true" tabindex="-1"></a>  anosim_res <span class="ot">&lt;-</span> vegan<span class="sc">::</span><span class="fu">anosim</span>(bray_dist, grouping_factor, <span class="at">permutations =</span> <span class="dv">999</span>)</span>
+<span id="cb49-35"><a href="#cb49-35" aria-hidden="true" tabindex="-1"></a>  anosim_res <span class="ot">=</span> vegan<span class="sc">::</span><span class="fu">anosim</span>(bray_dist, grouping_factor, <span class="at">permutations =</span> <span class="dv">999</span>)</span>
 <span id="cb49-36"><a href="#cb49-36" aria-hidden="true" tabindex="-1"></a>  </span>
 <span id="cb49-37"><a href="#cb49-37" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Extract the p-value (significance) from the ANOSIM result</span></span>
-<span id="cb49-38"><a href="#cb49-38" aria-hidden="true" tabindex="-1"></a>  p_anosim <span class="ot">&lt;-</span> anosim_res<span class="sc">$</span>signif</span>
+<span id="cb49-38"><a href="#cb49-38" aria-hidden="true" tabindex="-1"></a>  p_anosim <span class="ot">=</span> anosim_res<span class="sc">$</span>signif</span>
 <span id="cb49-39"><a href="#cb49-39" aria-hidden="true" tabindex="-1"></a>  </span>
 <span id="cb49-40"><a href="#cb49-40" aria-hidden="true" tabindex="-1"></a>  <span class="co"># MRPP </span></span>
 <span id="cb49-41"><a href="#cb49-41" aria-hidden="true" tabindex="-1"></a>  <span class="co"># The grouping factor is the same as for ANOSIM</span></span>
 <span id="cb49-42"><a href="#cb49-42" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Run the MRPP test</span></span>
-<span id="cb49-43"><a href="#cb49-43" aria-hidden="true" tabindex="-1"></a>  mrpp_res <span class="ot">&lt;-</span> vegan<span class="sc">::</span><span class="fu">mrpp</span>(bray_dist, grouping_factor, <span class="at">permutations =</span> <span class="dv">999</span>)</span>
+<span id="cb49-43"><a href="#cb49-43" aria-hidden="true" tabindex="-1"></a>  mrpp_res <span class="ot">=</span> vegan<span class="sc">::</span><span class="fu">mrpp</span>(bray_dist, grouping_factor, <span class="at">permutations =</span> <span class="dv">999</span>)</span>
 <span id="cb49-44"><a href="#cb49-44" aria-hidden="true" tabindex="-1"></a>  </span>
 <span id="cb49-45"><a href="#cb49-45" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Extract the p-value from the MRPP result</span></span>
-<span id="cb49-46"><a href="#cb49-46" aria-hidden="true" tabindex="-1"></a>  p_mrpp <span class="ot">&lt;-</span> mrpp_res<span class="sc">$</span>Pvalue</span>
+<span id="cb49-46"><a href="#cb49-46" aria-hidden="true" tabindex="-1"></a>  p_mrpp <span class="ot">=</span> mrpp_res<span class="sc">$</span>Pvalue</span>
 <span id="cb49-47"><a href="#cb49-47" aria-hidden="true" tabindex="-1"></a>  </span>
 <span id="cb49-48"><a href="#cb49-48" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Store Results </span></span>
 <span id="cb49-49"><a href="#cb49-49" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Store the p-values for the current variable in our results list.</span></span>
 <span id="cb49-50"><a href="#cb49-50" aria-hidden="true" tabindex="-1"></a>  <span class="co"># We create a small data frame for this iteration's results.</span></span>
-<span id="cb49-51"><a href="#cb49-51" aria-hidden="true" tabindex="-1"></a>  results_list[[variable]] <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
+<span id="cb49-51"><a href="#cb49-51" aria-hidden="true" tabindex="-1"></a>  results_list[[variable]] <span class="ot">=</span> <span class="fu">data.frame</span>(</span>
 <span id="cb49-52"><a href="#cb49-52" aria-hidden="true" tabindex="-1"></a>    <span class="at">Variable =</span> <span class="fu">paste0</span>(variable, <span class="st">"."</span>),</span>
 <span id="cb49-53"><a href="#cb49-53" aria-hidden="true" tabindex="-1"></a>    <span class="st">`</span><span class="at">permanova.</span><span class="st">`</span> <span class="ot">=</span> p_permanova,</span>
 <span id="cb49-54"><a href="#cb49-54" aria-hidden="true" tabindex="-1"></a>    <span class="st">`</span><span class="at">anosim.</span><span class="st">`</span> <span class="ot">=</span> p_anosim,</span>
@@ -588,10 +588,10 @@ Number of permutations: 999</code></pre>
 <pre><code>Running tests for variable: sample_type</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb55"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb55-1"><a href="#cb55-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Combine the list of individual data frames into one final table</span></span>
-<span id="cb55-2"><a href="#cb55-2" aria-hidden="true" tabindex="-1"></a>final_results_table <span class="ot">&lt;-</span> <span class="fu">do.call</span>(rbind, results_list)</span>
+<span id="cb55-2"><a href="#cb55-2" aria-hidden="true" tabindex="-1"></a>final_results_table <span class="ot">=</span> <span class="fu">do.call</span>(rbind, results_list)</span>
 <span id="cb55-3"><a href="#cb55-3" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb55-4"><a href="#cb55-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Clean up the row names of the final table</span></span>
-<span id="cb55-5"><a href="#cb55-5" aria-hidden="true" tabindex="-1"></a><span class="fu">rownames</span>(final_results_table) <span class="ot">&lt;-</span> <span class="cn">NULL</span></span>
+<span id="cb55-5"><a href="#cb55-5" aria-hidden="true" tabindex="-1"></a><span class="fu">rownames</span>(final_results_table) <span class="ot">=</span> <span class="cn">NULL</span></span>
 <span id="cb55-6"><a href="#cb55-6" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb55-7"><a href="#cb55-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Print the final, consolidated table to the console</span></span>
 <span id="cb55-8"><a href="#cb55-8" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(final_results_table)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -610,52 +610,52 @@ Number of permutations: 999</code></pre>
 <h2 class="anchored" data-anchor-id="permanova-function-for-specific-taxa">3.5 Permanova function for specific taxa</h2>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb58"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb58-1"><a href="#cb58-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Extract the counts and taxonomic table</span></span>
-<span id="cb58-2"><a href="#cb58-2" aria-hidden="true" tabindex="-1"></a>counts <span class="ot">&lt;-</span> <span class="fu">assay</span>(tse_metaphlan_sal_swb_genus, <span class="st">"counts"</span>)</span>
-<span id="cb58-3"><a href="#cb58-3" aria-hidden="true" tabindex="-1"></a>tax_table <span class="ot">&lt;-</span> <span class="fu">rowData</span>(tse_metaphlan_sal_swb_genus)<span class="sc">$</span>Genus  <span class="co"># Replace "Genus" with your taxonomic level of interest</span></span>
-<span id="cb58-4"><a href="#cb58-4" aria-hidden="true" tabindex="-1"></a>sample_data <span class="ot">&lt;-</span> <span class="fu">colData</span>(tse_metaphlan_sal_swb_genus)</span>
+<span id="cb58-2"><a href="#cb58-2" aria-hidden="true" tabindex="-1"></a>counts <span class="ot">=</span> <span class="fu">assay</span>(tse_metaphlan_sal_swb_genus, <span class="st">"counts"</span>)</span>
+<span id="cb58-3"><a href="#cb58-3" aria-hidden="true" tabindex="-1"></a>tax_table <span class="ot">=</span> <span class="fu">rowData</span>(tse_metaphlan_sal_swb_genus)<span class="sc">$</span>Genus  <span class="co"># Replace "Genus" with your taxonomic level of interest</span></span>
+<span id="cb58-4"><a href="#cb58-4" aria-hidden="true" tabindex="-1"></a>sample_data <span class="ot">=</span> <span class="fu">colData</span>(tse_metaphlan_sal_swb_genus)</span>
 <span id="cb58-5"><a href="#cb58-5" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb58-6"><a href="#cb58-6" aria-hidden="true" tabindex="-1"></a>groups <span class="ot">=</span> <span class="fu">as.data.frame</span>(sample_data)</span>
 <span id="cb58-7"><a href="#cb58-7" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb58-8"><a href="#cb58-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Aggregate counts by Genus</span></span>
-<span id="cb58-9"><a href="#cb58-9" aria-hidden="true" tabindex="-1"></a>aggregated_counts <span class="ot">&lt;-</span> <span class="fu">rowsum</span>(counts, tax_table)</span>
+<span id="cb58-9"><a href="#cb58-9" aria-hidden="true" tabindex="-1"></a>aggregated_counts <span class="ot">=</span> <span class="fu">rowsum</span>(counts, tax_table)</span>
 <span id="cb58-10"><a href="#cb58-10" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb58-11"><a href="#cb58-11" aria-hidden="true" tabindex="-1"></a><span class="co"># Create a new aggregated TreeSummarizedExperiment object</span></span>
-<span id="cb58-12"><a href="#cb58-12" aria-hidden="true" tabindex="-1"></a>tse_aggregated <span class="ot">&lt;-</span> <span class="fu">TreeSummarizedExperiment</span>(<span class="at">assays =</span> <span class="fu">list</span>(<span class="at">counts =</span> aggregated_counts), </span>
+<span id="cb58-12"><a href="#cb58-12" aria-hidden="true" tabindex="-1"></a>tse_aggregated <span class="ot">=</span> <span class="fu">TreeSummarizedExperiment</span>(<span class="at">assays =</span> <span class="fu">list</span>(<span class="at">counts =</span> aggregated_counts), </span>
 <span id="cb58-13"><a href="#cb58-13" aria-hidden="true" tabindex="-1"></a>                                           <span class="at">colData =</span> sample_data)</span>
 <span id="cb58-14"><a href="#cb58-14" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb58-15"><a href="#cb58-15" aria-hidden="true" tabindex="-1"></a><span class="co"># Calculate relative abundances</span></span>
-<span id="cb58-16"><a href="#cb58-16" aria-hidden="true" tabindex="-1"></a>relative_abundances <span class="ot">&lt;-</span> <span class="fu">sweep</span>(<span class="fu">assay</span>(tse_aggregated, <span class="st">"counts"</span>), <span class="dv">2</span>, <span class="fu">colSums</span>(<span class="fu">assay</span>(tse_aggregated, <span class="st">"counts"</span>)), <span class="at">FUN =</span> <span class="st">"/"</span>) <span class="sc">*</span> <span class="dv">100</span></span>
+<span id="cb58-16"><a href="#cb58-16" aria-hidden="true" tabindex="-1"></a>relative_abundances <span class="ot">=</span> <span class="fu">sweep</span>(<span class="fu">assay</span>(tse_aggregated, <span class="st">"counts"</span>), <span class="dv">2</span>, <span class="fu">colSums</span>(<span class="fu">assay</span>(tse_aggregated, <span class="st">"counts"</span>)), <span class="at">FUN =</span> <span class="st">"/"</span>) <span class="sc">*</span> <span class="dv">100</span></span>
 <span id="cb58-17"><a href="#cb58-17" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb58-18"><a href="#cb58-18" aria-hidden="true" tabindex="-1"></a><span class="co"># Convert to a data frame and group by Treatment</span></span>
-<span id="cb58-19"><a href="#cb58-19" aria-hidden="true" tabindex="-1"></a>relative_df <span class="ot">&lt;-</span> <span class="fu">as.data.frame</span>(<span class="fu">t</span>(relative_abundances))</span>
+<span id="cb58-19"><a href="#cb58-19" aria-hidden="true" tabindex="-1"></a>relative_df <span class="ot">=</span> <span class="fu">as.data.frame</span>(<span class="fu">t</span>(relative_abundances))</span>
 <span id="cb58-20"><a href="#cb58-20" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb58-21"><a href="#cb58-21" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span> (<span class="dv">123456</span>)</span>
 <span id="cb58-22"><a href="#cb58-22" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb58-23"><a href="#cb58-23" aria-hidden="true" tabindex="-1"></a><span class="co"># Define the vector of genera names (without the "g__" prefix)</span></span>
-<span id="cb58-24"><a href="#cb58-24" aria-hidden="true" tabindex="-1"></a>genera <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"Prevotella"</span>, <span class="st">"Treponema"</span>, <span class="st">"Neisseria"</span>, <span class="st">"Bacteroides"</span>, </span>
+<span id="cb58-24"><a href="#cb58-24" aria-hidden="true" tabindex="-1"></a>genera <span class="ot">=</span> <span class="fu">c</span>(<span class="st">"Prevotella"</span>, <span class="st">"Treponema"</span>, <span class="st">"Neisseria"</span>, <span class="st">"Bacteroides"</span>, </span>
 <span id="cb58-25"><a href="#cb58-25" aria-hidden="true" tabindex="-1"></a>            <span class="st">"Filifactor"</span>, <span class="st">"Porphyromonas"</span>, <span class="st">"Fusobacterium"</span>, <span class="st">"Escherichia"</span>,</span>
 <span id="cb58-26"><a href="#cb58-26" aria-hidden="true" tabindex="-1"></a>            <span class="st">"Selenomonas"</span>, <span class="st">"Aggregatibacter"</span>, <span class="st">"Capnocytophaga"</span>)</span>
 <span id="cb58-27"><a href="#cb58-27" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb58-28"><a href="#cb58-28" aria-hidden="true" tabindex="-1"></a><span class="co"># Initialize an empty data frame to store the results</span></span>
-<span id="cb58-29"><a href="#cb58-29" aria-hidden="true" tabindex="-1"></a>permanova_taxa_results <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">Genus =</span> <span class="fu">character</span>(), <span class="at">pvalue =</span> <span class="fu">numeric</span>(), <span class="at">stringsAsFactors =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb58-29"><a href="#cb58-29" aria-hidden="true" tabindex="-1"></a>permanova_taxa_results <span class="ot">=</span> <span class="fu">data.frame</span>(<span class="at">Genus =</span> <span class="fu">character</span>(), <span class="at">pvalue =</span> <span class="fu">numeric</span>(), <span class="at">stringsAsFactors =</span> <span class="cn">FALSE</span>)</span>
 <span id="cb58-30"><a href="#cb58-30" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb58-31"><a href="#cb58-31" aria-hidden="true" tabindex="-1"></a><span class="co"># Loop over each genus</span></span>
 <span id="cb58-32"><a href="#cb58-32" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (genus <span class="cf">in</span> genera) {</span>
 <span id="cb58-33"><a href="#cb58-33" aria-hidden="true" tabindex="-1"></a>  <span class="fu">set.seed</span> (<span class="dv">123456</span>)</span>
 <span id="cb58-34"><a href="#cb58-34" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Subset the data for the genus; adjust column selection as needed</span></span>
-<span id="cb58-35"><a href="#cb58-35" aria-hidden="true" tabindex="-1"></a>  subset_data <span class="ot">&lt;-</span> relative_df <span class="sc">%&gt;%</span> <span class="fu">select</span>(<span class="fu">paste0</span>(<span class="st">"g__"</span>, genus))</span>
+<span id="cb58-35"><a href="#cb58-35" aria-hidden="true" tabindex="-1"></a>  subset_data <span class="ot">=</span> relative_df <span class="sc">%&gt;%</span> <span class="fu">select</span>(<span class="fu">paste0</span>(<span class="st">"g__"</span>, genus))</span>
 <span id="cb58-36"><a href="#cb58-36" aria-hidden="true" tabindex="-1"></a>  </span>
 <span id="cb58-37"><a href="#cb58-37" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Calculate the Bray-Curtis distance</span></span>
-<span id="cb58-38"><a href="#cb58-38" aria-hidden="true" tabindex="-1"></a>  bray_dist <span class="ot">&lt;-</span> <span class="fu">vegdist</span>(subset_data, <span class="at">method =</span> <span class="st">"bray"</span>)</span>
+<span id="cb58-38"><a href="#cb58-38" aria-hidden="true" tabindex="-1"></a>  bray_dist <span class="ot">=</span> <span class="fu">vegdist</span>(subset_data, <span class="at">method =</span> <span class="st">"bray"</span>)</span>
 <span id="cb58-39"><a href="#cb58-39" aria-hidden="true" tabindex="-1"></a>  </span>
 <span id="cb58-40"><a href="#cb58-40" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Run PERMANOVA using adonis2</span></span>
-<span id="cb58-41"><a href="#cb58-41" aria-hidden="true" tabindex="-1"></a>  adonis_result <span class="ot">&lt;-</span> <span class="fu">adonis2</span>(bray_dist <span class="sc">~</span> sample_type, <span class="at">data =</span> groups)</span>
+<span id="cb58-41"><a href="#cb58-41" aria-hidden="true" tabindex="-1"></a>  adonis_result <span class="ot">=</span> <span class="fu">adonis2</span>(bray_dist <span class="sc">~</span> sample_type, <span class="at">data =</span> groups)</span>
 <span id="cb58-42"><a href="#cb58-42" aria-hidden="true" tabindex="-1"></a>  </span>
 <span id="cb58-43"><a href="#cb58-43" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Extract the p-value for the sample_type factor (usually in the first row)</span></span>
-<span id="cb58-44"><a href="#cb58-44" aria-hidden="true" tabindex="-1"></a>  pval <span class="ot">&lt;-</span> adonis_result<span class="sc">$</span><span class="st">`</span><span class="at">Pr(&gt;F)</span><span class="st">`</span>[<span class="dv">1</span>]</span>
+<span id="cb58-44"><a href="#cb58-44" aria-hidden="true" tabindex="-1"></a>  pval <span class="ot">=</span> adonis_result<span class="sc">$</span><span class="st">`</span><span class="at">Pr(&gt;F)</span><span class="st">`</span>[<span class="dv">1</span>]</span>
 <span id="cb58-45"><a href="#cb58-45" aria-hidden="true" tabindex="-1"></a>  </span>
 <span id="cb58-46"><a href="#cb58-46" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Append the result to the results data frame</span></span>
-<span id="cb58-47"><a href="#cb58-47" aria-hidden="true" tabindex="-1"></a>  permanova_taxa_results <span class="ot">&lt;-</span> <span class="fu">rbind</span>(permanova_taxa_results, <span class="fu">data.frame</span>(<span class="at">Genus =</span> genus, <span class="at">pvalue =</span> pval))</span>
+<span id="cb58-47"><a href="#cb58-47" aria-hidden="true" tabindex="-1"></a>  permanova_taxa_results <span class="ot">=</span> <span class="fu">rbind</span>(permanova_taxa_results, <span class="fu">data.frame</span>(<span class="at">Genus =</span> genus, <span class="at">pvalue =</span> pval))</span>
 <span id="cb58-48"><a href="#cb58-48" aria-hidden="true" tabindex="-1"></a>}</span>
 <span id="cb58-49"><a href="#cb58-49" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb58-50"><a href="#cb58-50" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(permanova_taxa_results)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -688,22 +688,22 @@ Number of permutations: 999</code></pre>
 <pre><code>[1] "Kingdom" "Phylum"  "Class"   "Order"   "Family"  "Genus"   "Species"</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb62"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb62-1"><a href="#cb62-1" aria-hidden="true" tabindex="-1"></a>  <span class="co"># make an assay for abundance</span></span>
-<span id="cb62-2"><a href="#cb62-2" aria-hidden="true" tabindex="-1"></a>  tse_metaphlan_sal_swb <span class="ot">&lt;-</span> <span class="fu">transformAssay</span>(tse_metaphlan_sal_swb, <span class="at">assay.type=</span><span class="st">"counts"</span>, <span class="at">method=</span><span class="st">"relabundance"</span>)</span>
+<span id="cb62-2"><a href="#cb62-2" aria-hidden="true" tabindex="-1"></a>  tse_metaphlan_sal_swb <span class="ot">=</span> <span class="fu">transformAssay</span>(tse_metaphlan_sal_swb, <span class="at">assay.type=</span><span class="st">"counts"</span>, <span class="at">method=</span><span class="st">"relabundance"</span>)</span>
 <span id="cb62-3"><a href="#cb62-3" aria-hidden="true" tabindex="-1"></a>  </span>
 <span id="cb62-4"><a href="#cb62-4" aria-hidden="true" tabindex="-1"></a>  <span class="co"># make an altExp and matrix for Genus</span></span>
-<span id="cb62-5"><a href="#cb62-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">altExp</span>(tse_metaphlan_sal_swb,<span class="st">"Genus"</span>) <span class="ot">&lt;-</span> <span class="fu">agglomerateByRank</span>(tse_metaphlan_sal_swb,<span class="st">"Genus"</span>)</span>
+<span id="cb62-5"><a href="#cb62-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">altExp</span>(tse_metaphlan_sal_swb,<span class="st">"Genus"</span>) <span class="ot">=</span> <span class="fu">agglomerateByRank</span>(tse_metaphlan_sal_swb,<span class="st">"Genus"</span>)</span>
 <span id="cb62-6"><a href="#cb62-6" aria-hidden="true" tabindex="-1"></a>  </span>
 <span id="cb62-7"><a href="#cb62-7" aria-hidden="true" tabindex="-1"></a>  <span class="co"># make a dataframe of relative abundance </span></span>
-<span id="cb62-8"><a href="#cb62-8" aria-hidden="true" tabindex="-1"></a>  relabundance_df_Genus <span class="ot">&lt;-</span> <span class="fu">as.data.frame</span>(<span class="fu">assay</span>(<span class="fu">altExp</span>(tse_metaphlan_sal_swb, <span class="st">"Genus"</span>), <span class="st">"relabundance"</span>))</span>
+<span id="cb62-8"><a href="#cb62-8" aria-hidden="true" tabindex="-1"></a>  relabundance_df_Genus <span class="ot">=</span> <span class="fu">as.data.frame</span>(<span class="fu">assay</span>(<span class="fu">altExp</span>(tse_metaphlan_sal_swb, <span class="st">"Genus"</span>), <span class="st">"relabundance"</span>))</span>
 <span id="cb62-9"><a href="#cb62-9" aria-hidden="true" tabindex="-1"></a>  </span>
 <span id="cb62-10"><a href="#cb62-10" aria-hidden="true" tabindex="-1"></a>  <span class="co"># make a matric of relative abundance </span></span>
-<span id="cb62-11"><a href="#cb62-11" aria-hidden="true" tabindex="-1"></a>  relabundance_matrix_Genus <span class="ot">&lt;-</span> <span class="fu">assay</span>(<span class="fu">altExp</span>(tse_metaphlan_sal_swb, <span class="st">"Genus"</span>), <span class="st">"relabundance"</span>)</span>
+<span id="cb62-11"><a href="#cb62-11" aria-hidden="true" tabindex="-1"></a>  relabundance_matrix_Genus <span class="ot">=</span> <span class="fu">assay</span>(<span class="fu">altExp</span>(tse_metaphlan_sal_swb, <span class="st">"Genus"</span>), <span class="st">"relabundance"</span>)</span>
 <span id="cb62-12"><a href="#cb62-12" aria-hidden="true" tabindex="-1"></a>  </span>
 <span id="cb62-13"><a href="#cb62-13" aria-hidden="true" tabindex="-1"></a>  <span class="co"># calculate the total relative abundance of each Genus (row sums)</span></span>
-<span id="cb62-14"><a href="#cb62-14" aria-hidden="true" tabindex="-1"></a>  total_relabundance_Genus <span class="ot">&lt;-</span> <span class="fu">rowSums</span>(relabundance_matrix_Genus)</span>
+<span id="cb62-14"><a href="#cb62-14" aria-hidden="true" tabindex="-1"></a>  total_relabundance_Genus <span class="ot">=</span> <span class="fu">rowSums</span>(relabundance_matrix_Genus)</span>
 <span id="cb62-15"><a href="#cb62-15" aria-hidden="true" tabindex="-1"></a>  </span>
 <span id="cb62-16"><a href="#cb62-16" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Identify the top 20 top Genuss</span></span>
-<span id="cb62-17"><a href="#cb62-17" aria-hidden="true" tabindex="-1"></a>  top_Genus <span class="ot">&lt;-</span> <span class="fu">names</span>(<span class="fu">sort</span>(total_relabundance_Genus, <span class="at">decreasing =</span> <span class="cn">TRUE</span>)[<span class="dv">1</span><span class="sc">:</span><span class="dv">20</span>])</span>
+<span id="cb62-17"><a href="#cb62-17" aria-hidden="true" tabindex="-1"></a>  top_Genus <span class="ot">=</span> <span class="fu">names</span>(<span class="fu">sort</span>(total_relabundance_Genus, <span class="at">decreasing =</span> <span class="cn">TRUE</span>)[<span class="dv">1</span><span class="sc">:</span><span class="dv">20</span>])</span>
 <span id="cb62-18"><a href="#cb62-18" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Delete everything from start to Genus</span></span>
 <span id="cb62-19"><a href="#cb62-19" aria-hidden="true" tabindex="-1"></a>  top_Genus <span class="ot">=</span> <span class="fu">sub</span>(<span class="st">".*_g__"</span>,<span class="st">""</span>,top_Genus)</span>
 <span id="cb62-20"><a href="#cb62-20" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Add Genus back in </span></span>
@@ -721,16 +721,16 @@ Number of permutations: 999</code></pre>
 [19] "g__Tannerella"      "g__Rothia"         </code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb64"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb64-1"><a href="#cb64-1" aria-hidden="true" tabindex="-1"></a>  <span class="co"># make a new tse_metaphlan_sal_swb where the top 14 Genuss are recognised, while others are "other"</span></span>
-<span id="cb64-2"><a href="#cb64-2" aria-hidden="true" tabindex="-1"></a>  tse_metaphlan_sal_swb_top_20_Genus <span class="ot">&lt;-</span> tse_metaphlan_sal_swb</span>
+<span id="cb64-2"><a href="#cb64-2" aria-hidden="true" tabindex="-1"></a>  tse_metaphlan_sal_swb_top_20_Genus <span class="ot">=</span> tse_metaphlan_sal_swb</span>
 <span id="cb64-3"><a href="#cb64-3" aria-hidden="true" tabindex="-1"></a>  </span>
 <span id="cb64-4"><a href="#cb64-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">head</span>(<span class="fu">rowData</span>(tse_metaphlan_sal_swb_top_20_Genus)<span class="sc">$</span>Genus)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] "g__Coprothermobacter"  "g__Caldisericum"       "g__Desulfurispirillum"
 [4] NA                      "g__Endomicrobium"      "g__Endomicrobium"     </code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb66"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb66-1"><a href="#cb66-1" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rowData</span>(tse_metaphlan_sal_swb_top_20_Genus)<span class="sc">$</span>Genus <span class="ot">&lt;-</span> <span class="fu">ifelse</span>(<span class="fu">rowData</span>(tse_metaphlan_sal_swb_top_20_Genus)<span class="sc">$</span>Genus <span class="sc">%in%</span> top_Genus, <span class="fu">rowData</span>(tse_metaphlan_sal_swb_top_20_Genus)<span class="sc">$</span>Genus, <span class="st">"-other"</span>)</span>
+<div class="sourceCode cell-code" id="cb66"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb66-1"><a href="#cb66-1" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rowData</span>(tse_metaphlan_sal_swb_top_20_Genus)<span class="sc">$</span>Genus <span class="ot">=</span> <span class="fu">ifelse</span>(<span class="fu">rowData</span>(tse_metaphlan_sal_swb_top_20_Genus)<span class="sc">$</span>Genus <span class="sc">%in%</span> top_Genus, <span class="fu">rowData</span>(tse_metaphlan_sal_swb_top_20_Genus)<span class="sc">$</span>Genus, <span class="st">"-other"</span>)</span>
 <span id="cb66-2"><a href="#cb66-2" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb66-3"><a href="#cb66-3" aria-hidden="true" tabindex="-1"></a>  genus_colors <span class="ot">&lt;-</span> <span class="fu">c</span>(</span>
+<span id="cb66-3"><a href="#cb66-3" aria-hidden="true" tabindex="-1"></a>  genus_colors <span class="ot">=</span> <span class="fu">c</span>(</span>
 <span id="cb66-4"><a href="#cb66-4" aria-hidden="true" tabindex="-1"></a>    <span class="st">"-other"</span> <span class="ot">=</span> <span class="st">"#E41A1C"</span>,</span>
 <span id="cb66-5"><a href="#cb66-5" aria-hidden="true" tabindex="-1"></a>    <span class="st">"g__Actinomyces"</span> <span class="ot">=</span> <span class="st">"#377EB8"</span>,</span>
 <span id="cb66-6"><a href="#cb66-6" aria-hidden="true" tabindex="-1"></a>    <span class="st">"g__Aggregatibacter"</span> <span class="ot">=</span> <span class="st">"#4DAF4A"</span>,</span>
@@ -756,7 +756,7 @@ Number of permutations: 999</code></pre>
 <span id="cb66-26"><a href="#cb66-26" aria-hidden="true" tabindex="-1"></a>    <span class="st">"g__Veillonella"</span> <span class="ot">=</span> <span class="st">"#FFD92F"</span></span>
 <span id="cb66-27"><a href="#cb66-27" aria-hidden="true" tabindex="-1"></a>  )</span>
 <span id="cb66-28"><a href="#cb66-28" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb66-29"><a href="#cb66-29" aria-hidden="true" tabindex="-1"></a>  Genus_plot_sal_swb <span class="ot">&lt;-</span> <span class="fu">plotAbundance</span>(tse_metaphlan_sal_swb_top_20_Genus, </span>
+<span id="cb66-29"><a href="#cb66-29" aria-hidden="true" tabindex="-1"></a>  Genus_plot_sal_swb <span class="ot">=</span> <span class="fu">plotAbundance</span>(tse_metaphlan_sal_swb_top_20_Genus, </span>
 <span id="cb66-30"><a href="#cb66-30" aria-hidden="true" tabindex="-1"></a>                              <span class="at">assay.type =</span> <span class="st">"relabundance"</span>, </span>
 <span id="cb66-31"><a href="#cb66-31" aria-hidden="true" tabindex="-1"></a>                              <span class="at">rank =</span> <span class="st">"Genus"</span>, </span>
 <span id="cb66-32"><a href="#cb66-32" aria-hidden="true" tabindex="-1"></a>                              <span class="at">add_x_text =</span> <span class="cn">TRUE</span>) <span class="sc">+</span></span>
@@ -868,7 +868,7 @@ colTree: NULL</code></pre>
 <div class="sourceCode cell-code" id="cb80"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb80-1"><a href="#cb80-1" aria-hidden="true" tabindex="-1"></a><span class="co">#__________________________Makes into Genus________________________________________________</span></span>
 <span id="cb80-2"><a href="#cb80-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb80-3"><a href="#cb80-3" aria-hidden="true" tabindex="-1"></a><span class="co"># make an assay for abundance</span></span>
-<span id="cb80-4"><a href="#cb80-4" aria-hidden="true" tabindex="-1"></a>tse_metaphlan_sal_swb <span class="ot">&lt;-</span> <span class="fu">transformAssay</span>(tse_metaphlan_sal_swb, <span class="at">assay.type=</span><span class="st">"counts"</span>, <span class="at">method=</span><span class="st">"relabundance"</span>)</span>
+<span id="cb80-4"><a href="#cb80-4" aria-hidden="true" tabindex="-1"></a>tse_metaphlan_sal_swb <span class="ot">=</span> <span class="fu">transformAssay</span>(tse_metaphlan_sal_swb, <span class="at">assay.type=</span><span class="st">"counts"</span>, <span class="at">method=</span><span class="st">"relabundance"</span>)</span>
 <span id="cb80-5"><a href="#cb80-5" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb80-6"><a href="#cb80-6" aria-hidden="true" tabindex="-1"></a><span class="fu">taxonomyRanks</span>(tse_metaphlan_sal_swb)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
@@ -901,7 +901,7 @@ colTree: NULL</code></pre>
 <div class="sourceCode cell-code" id="cb84"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb84-1"><a href="#cb84-1" aria-hidden="true" tabindex="-1"></a>tse_metaphlan_sal_swb_genus <span class="ot">=</span> <span class="fu">altExp</span>(tse_metaphlan_sal_swb, <span class="st">"Genus"</span>)</span>
 <span id="cb84-2"><a href="#cb84-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb84-3"><a href="#cb84-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Check that colData was added successfully</span></span>
-<span id="cb84-4"><a href="#cb84-4" aria-hidden="true" tabindex="-1"></a><span class="fu">colData</span>(tse_metaphlan_sal_swb_genus) <span class="ot">&lt;-</span> metadata_df</span>
+<span id="cb84-4"><a href="#cb84-4" aria-hidden="true" tabindex="-1"></a><span class="fu">colData</span>(tse_metaphlan_sal_swb_genus) <span class="ot">=</span> metadata_df</span>
 <span id="cb84-5"><a href="#cb84-5" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb84-6"><a href="#cb84-6" aria-hidden="true" tabindex="-1"></a>metadata_noma_genus <span class="ot">=</span> <span class="fu">as.data.frame</span>(<span class="fu">colData</span>(tse_metaphlan_sal_swb_genus))</span>
 <span id="cb84-7"><a href="#cb84-7" aria-hidden="true" tabindex="-1"></a></span>
@@ -934,10 +934,10 @@ colTree: NULL</code></pre>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb85"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb85-1"><a href="#cb85-1" aria-hidden="true" tabindex="-1"></a>dds_noma <span class="ot">=</span> deseq2_metaphlan_noma</span>
 <span id="cb85-2"><a href="#cb85-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb85-3"><a href="#cb85-3" aria-hidden="true" tabindex="-1"></a><span class="fu">design</span>(dds_noma) <span class="ot">&lt;-</span> <span class="er">~</span> noma_stage_on_admission  <span class="co"># Replace with your column name for condition</span></span>
+<span id="cb85-3"><a href="#cb85-3" aria-hidden="true" tabindex="-1"></a><span class="fu">design</span>(dds_noma) <span class="ot">=</span> <span class="er">~</span> noma_stage_on_admission  <span class="co"># Replace with your column name for condition</span></span>
 <span id="cb85-4"><a href="#cb85-4" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb85-5"><a href="#cb85-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Run DESeq2 analysis</span></span>
-<span id="cb85-6"><a href="#cb85-6" aria-hidden="true" tabindex="-1"></a>dds_stage <span class="ot">&lt;-</span> <span class="fu">DESeq</span>(dds_noma)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb85-6"><a href="#cb85-6" aria-hidden="true" tabindex="-1"></a>dds_stage <span class="ot">=</span> <span class="fu">DESeq</span>(dds_noma)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="extract-results-for-noma-stage" class="level2">
@@ -948,7 +948,7 @@ colTree: NULL</code></pre>
 <pre><code>[1] "Stage_2" "Stage_4" "Stage_3" "Stage_1"</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb88"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb88-1"><a href="#cb88-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Extract results for diseased vs healthy</span></span>
-<span id="cb88-2"><a href="#cb88-2" aria-hidden="true" tabindex="-1"></a>res_stage <span class="ot">&lt;-</span> <span class="fu">results</span>(dds_stage)</span>
+<span id="cb88-2"><a href="#cb88-2" aria-hidden="true" tabindex="-1"></a>res_stage <span class="ot">=</span> <span class="fu">results</span>(dds_stage)</span>
 <span id="cb88-3"><a href="#cb88-3" aria-hidden="true" tabindex="-1"></a>res_stage</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>log2 fold change (MLE): noma stage on admission Stage 4 vs Stage 1 
@@ -1033,20 +1033,20 @@ NA_NA_NA_o__Caudovirales_f__Siphoviridae_g__Nonanavirus                         
 NA_NA_NA_o__Caudovirales_f__Siphoviridae_g__Phicbkvirus                                                                    0.996147
 NA_NA_NA_o__Caudovirales_f__Siphoviridae_g__Casadabanvirus                                                                 0.996147</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb90"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb90-1"><a href="#cb90-1" aria-hidden="true" tabindex="-1"></a>string <span class="ot">&lt;-</span> <span class="st">"NA_p__Actinobacteria_c__Actinobacteria_o__Streptomycetales_f__Streptomycetaceae_g__Streptomyces"</span></span>
-<span id="cb90-2"><a href="#cb90-2" aria-hidden="true" tabindex="-1"></a>string_result <span class="ot">&lt;-</span> <span class="fu">gsub</span>(<span class="st">".*(g__Streptomyces)"</span>, <span class="st">"</span><span class="sc">\\</span><span class="st">1"</span>, string)</span>
+<div class="sourceCode cell-code" id="cb90"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb90-1"><a href="#cb90-1" aria-hidden="true" tabindex="-1"></a>string <span class="ot">=</span> <span class="st">"NA_p__Actinobacteria_c__Actinobacteria_o__Streptomycetales_f__Streptomycetaceae_g__Streptomyces"</span></span>
+<span id="cb90-2"><a href="#cb90-2" aria-hidden="true" tabindex="-1"></a>string_result <span class="ot">=</span> <span class="fu">gsub</span>(<span class="st">".*(g__Streptomyces)"</span>, <span class="st">"</span><span class="sc">\\</span><span class="st">1"</span>, string)</span>
 <span id="cb90-3"><a href="#cb90-3" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(string_result)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] "g__Streptomyces"</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb92"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb92-1"><a href="#cb92-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Clean up genus names for dds</span></span>
-<span id="cb92-2"><a href="#cb92-2" aria-hidden="true" tabindex="-1"></a><span class="fu">rownames</span>(dds_stage) <span class="ot">&lt;-</span> <span class="fu">gsub</span>(<span class="st">".*(g__*)"</span>, <span class="st">"</span><span class="sc">\\</span><span class="st">1"</span>, <span class="fu">rownames</span>(dds_stage))</span>
+<span id="cb92-2"><a href="#cb92-2" aria-hidden="true" tabindex="-1"></a><span class="fu">rownames</span>(dds_stage) <span class="ot">=</span> <span class="fu">gsub</span>(<span class="st">".*(g__*)"</span>, <span class="st">"</span><span class="sc">\\</span><span class="st">1"</span>, <span class="fu">rownames</span>(dds_stage))</span>
 <span id="cb92-3"><a href="#cb92-3" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb92-4"><a href="#cb92-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Clean up genus names for res</span></span>
-<span id="cb92-5"><a href="#cb92-5" aria-hidden="true" tabindex="-1"></a>res_stage<span class="sc">@</span>rownames <span class="ot">&lt;-</span> <span class="fu">gsub</span>(<span class="st">".*(g__*)"</span>, <span class="st">"</span><span class="sc">\\</span><span class="st">1"</span>, res_stage<span class="sc">@</span>rownames)</span>
+<span id="cb92-5"><a href="#cb92-5" aria-hidden="true" tabindex="-1"></a>res_stage<span class="sc">@</span>rownames <span class="ot">=</span> <span class="fu">gsub</span>(<span class="st">".*(g__*)"</span>, <span class="st">"</span><span class="sc">\\</span><span class="st">1"</span>, res_stage<span class="sc">@</span>rownames)</span>
 <span id="cb92-6"><a href="#cb92-6" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb92-7"><a href="#cb92-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb92-8"><a href="#cb92-8" aria-hidden="true" tabindex="-1"></a>res_stage_1_2 <span class="ot">&lt;-</span> <span class="fu">results</span>(dds_stage, <span class="at">contrast =</span> <span class="fu">c</span>(<span class="st">"noma_stage_on_admission"</span>, <span class="st">"Stage_1"</span>, <span class="st">"Stage_2"</span>))</span>
+<span id="cb92-8"><a href="#cb92-8" aria-hidden="true" tabindex="-1"></a>res_stage_1_2 <span class="ot">=</span> <span class="fu">results</span>(dds_stage, <span class="at">contrast =</span> <span class="fu">c</span>(<span class="st">"noma_stage_on_admission"</span>, <span class="st">"Stage_1"</span>, <span class="st">"Stage_2"</span>))</span>
 <span id="cb92-9"><a href="#cb92-9" aria-hidden="true" tabindex="-1"></a>res_stage_1_2</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>log2 fold change (MLE): noma_stage_on_admission Stage_1 vs Stage_2 
@@ -1111,7 +1111,7 @@ g__Nonanavirus             NA
 g__Phicbkvirus             NA
 g__Casadabanvirus          NA</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb96"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb96-1"><a href="#cb96-1" aria-hidden="true" tabindex="-1"></a>res_stage_2_3 <span class="ot">&lt;-</span> <span class="fu">results</span>(dds_stage, <span class="at">contrast =</span> <span class="fu">c</span>(<span class="st">"noma_stage_on_admission"</span>, <span class="st">"Stage_2"</span>, <span class="st">"Stage_3"</span>))</span>
+<div class="sourceCode cell-code" id="cb96"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb96-1"><a href="#cb96-1" aria-hidden="true" tabindex="-1"></a>res_stage_2_3 <span class="ot">=</span> <span class="fu">results</span>(dds_stage, <span class="at">contrast =</span> <span class="fu">c</span>(<span class="st">"noma_stage_on_admission"</span>, <span class="st">"Stage_2"</span>, <span class="st">"Stage_3"</span>))</span>
 <span id="cb96-2"><a href="#cb96-2" aria-hidden="true" tabindex="-1"></a>res_stage_2_3</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>log2 fold change (MLE): noma_stage_on_admission Stage_2 vs Stage_3 
@@ -1144,7 +1144,7 @@ g__Nonanavirus                   0.451255  0.701377
 g__Phicbkvirus                   0.479105  0.725474
 g__Casadabanvirus                0.460729        NA</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb98"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb98-1"><a href="#cb98-1" aria-hidden="true" tabindex="-1"></a>res_stage_3_4 <span class="ot">&lt;-</span> <span class="fu">results</span>(dds_stage, <span class="at">contrast =</span> <span class="fu">c</span>(<span class="st">"noma_stage_on_admission"</span>, <span class="st">"Stage_3"</span>, <span class="st">"Stage_4"</span>))</span>
+<div class="sourceCode cell-code" id="cb98"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb98-1"><a href="#cb98-1" aria-hidden="true" tabindex="-1"></a>res_stage_3_4 <span class="ot">=</span> <span class="fu">results</span>(dds_stage, <span class="at">contrast =</span> <span class="fu">c</span>(<span class="st">"noma_stage_on_admission"</span>, <span class="st">"Stage_3"</span>, <span class="st">"Stage_4"</span>))</span>
 <span id="cb98-2"><a href="#cb98-2" aria-hidden="true" tabindex="-1"></a>res_stage_3_4</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>log2 fold change (MLE): noma_stage_on_admission Stage_3 vs Stage_4 
@@ -1207,7 +1207,7 @@ low counts [2]     : 1, 0.055%
 [1] see 'cooksCutoff' argument of ?results
 [2] see 'independentFiltering' argument of ?results</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb104"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb104-1"><a href="#cb104-1" aria-hidden="true" tabindex="-1"></a>res_stage_ordered <span class="ot">&lt;-</span> res_stage[<span class="fu">order</span>(res_stage<span class="sc">$</span>padj),]</span>
+<div class="sourceCode cell-code" id="cb104"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb104-1"><a href="#cb104-1" aria-hidden="true" tabindex="-1"></a>res_stage_ordered <span class="ot">=</span> res_stage[<span class="fu">order</span>(res_stage<span class="sc">$</span>padj),]</span>
 <span id="cb104-2"><a href="#cb104-2" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(res_stage_ordered, <span class="at">n =</span><span class="dv">20</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>log2 fold change (MLE): noma stage on admission Stage 4 vs Stage 1 
@@ -1242,7 +1242,7 @@ g__Thermodesulfatator    0.996147</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb106"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb106-1"><a href="#cb106-1" aria-hidden="true" tabindex="-1"></a>res_stage_ordered_df <span class="ot">=</span> <span class="fu">as.data.frame</span>(res_stage_ordered)</span>
 <span id="cb106-2"><a href="#cb106-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb106-3"><a href="#cb106-3" aria-hidden="true" tabindex="-1"></a>res_stage_1_2_ordered <span class="ot">&lt;-</span> res_stage[<span class="fu">order</span>(res_stage_1_2<span class="sc">$</span>padj),]</span>
+<span id="cb106-3"><a href="#cb106-3" aria-hidden="true" tabindex="-1"></a>res_stage_1_2_ordered <span class="ot">=</span> res_stage[<span class="fu">order</span>(res_stage_1_2<span class="sc">$</span>padj),]</span>
 <span id="cb106-4"><a href="#cb106-4" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(res_stage_1_2_ordered, <span class="at">n =</span><span class="dv">20</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>log2 fold change (MLE): noma stage on admission Stage 4 vs Stage 1 
@@ -1275,7 +1275,7 @@ g__Dialister       0.996147
 g__Jeotgalibaca    0.996147
 g__Jonquetella     0.996147</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb108"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb108-1"><a href="#cb108-1" aria-hidden="true" tabindex="-1"></a>res_stage_2_3_ordered <span class="ot">&lt;-</span> res_stage[<span class="fu">order</span>(res_stage_2_3<span class="sc">$</span>padj),]</span>
+<div class="sourceCode cell-code" id="cb108"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb108-1"><a href="#cb108-1" aria-hidden="true" tabindex="-1"></a>res_stage_2_3_ordered <span class="ot">=</span> res_stage[<span class="fu">order</span>(res_stage_2_3<span class="sc">$</span>padj),]</span>
 <span id="cb108-2"><a href="#cb108-2" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(res_stage_2_3_ordered, <span class="at">n =</span><span class="dv">20</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>log2 fold change (MLE): noma stage on admission Stage 4 vs Stage 1 
@@ -1308,7 +1308,7 @@ g__Stenotrophomonas  0.996147
 g__Paeniclostridium  0.996147
 g__Rickettsia        0.996147</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb110"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb110-1"><a href="#cb110-1" aria-hidden="true" tabindex="-1"></a>res_stage_3_4_ordered <span class="ot">&lt;-</span> res_stage[<span class="fu">order</span>(res_stage_3_4<span class="sc">$</span>padj),]</span>
+<div class="sourceCode cell-code" id="cb110"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb110-1"><a href="#cb110-1" aria-hidden="true" tabindex="-1"></a>res_stage_3_4_ordered <span class="ot">=</span> res_stage[<span class="fu">order</span>(res_stage_3_4<span class="sc">$</span>padj),]</span>
 <span id="cb110-2"><a href="#cb110-2" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(res_stage_2_3_ordered, <span class="at">n =</span><span class="dv">20</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>log2 fold change (MLE): noma stage on admission Stage 4 vs Stage 1 
@@ -1359,7 +1359,7 @@ low counts [2]     : 1, 0.055%
 <section id="inspect-genera-that-are-significantly-different-between-noma-stages" class="level2">
 <h2 class="anchored" data-anchor-id="inspect-genera-that-are-significantly-different-between-noma-stages">5.4 Inspect genera that are significantly different between noma stages</h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb114"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb114-1"><a href="#cb114-1" aria-hidden="true" tabindex="-1"></a>significant_stage <span class="ot">&lt;-</span> <span class="fu">as.data.frame</span>(res_stage) <span class="sc">%&gt;%</span></span>
+<div class="sourceCode cell-code" id="cb114"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb114-1"><a href="#cb114-1" aria-hidden="true" tabindex="-1"></a>significant_stage <span class="ot">=</span> <span class="fu">as.data.frame</span>(res_stage) <span class="sc">%&gt;%</span></span>
 <span id="cb114-2"><a href="#cb114-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(padj <span class="sc">&lt;</span> <span class="fl">0.05</span>)</span>
 <span id="cb114-3"><a href="#cb114-3" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(significant_stage) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
@@ -1370,7 +1370,7 @@ g__Propionibacterium 195.0813       4.623263 0.9852933 4.692270 2.701900e-06
 g__Desulfomicrobium  2.394969e-05
 g__Propionibacterium 2.437113e-03</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb116"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb116-1"><a href="#cb116-1" aria-hidden="true" tabindex="-1"></a> significant_stage_1_2 <span class="ot">&lt;-</span> <span class="fu">as.data.frame</span>(res_stage_1_2) <span class="sc">%&gt;%</span></span>
+<div class="sourceCode cell-code" id="cb116"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb116-1"><a href="#cb116-1" aria-hidden="true" tabindex="-1"></a> significant_stage_1_2 <span class="ot">=</span> <span class="fu">as.data.frame</span>(res_stage_1_2) <span class="sc">%&gt;%</span></span>
 <span id="cb116-2"><a href="#cb116-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(padj <span class="sc">&lt;</span> <span class="fl">0.05</span>)</span>
 <span id="cb116-3"><a href="#cb116-3" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(significant_stage_1_2) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
@@ -1389,7 +1389,7 @@ g__Psychrobacter  0.0127075686
 g__Actinobacillus 0.0406162827
 g__Alicycliphilus 0.0293744999</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb118"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb118-1"><a href="#cb118-1" aria-hidden="true" tabindex="-1"></a>significant_stage_2_3 <span class="ot">&lt;-</span> <span class="fu">as.data.frame</span>(res_stage_2_3) <span class="sc">%&gt;%</span></span>
+<div class="sourceCode cell-code" id="cb118"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb118-1"><a href="#cb118-1" aria-hidden="true" tabindex="-1"></a>significant_stage_2_3 <span class="ot">=</span> <span class="fu">as.data.frame</span>(res_stage_2_3) <span class="sc">%&gt;%</span></span>
 <span id="cb118-2"><a href="#cb118-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(padj <span class="sc">&lt;</span> <span class="fl">0.05</span>)</span>
 <span id="cb118-3"><a href="#cb118-3" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(significant_stage_2_3) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
@@ -1415,7 +1415,7 @@ g__Thermodesulfovibrio                        0.016610112
 NA_p__Candidatus_Saccharibacteria_NA_NA_NA_NA 0.019253505
 g__Orientia                                   0.002461660</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb120"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb120-1"><a href="#cb120-1" aria-hidden="true" tabindex="-1"></a>significant_stage_3_4 <span class="ot">&lt;-</span> <span class="fu">as.data.frame</span>(res_stage_3_4) <span class="sc">%&gt;%</span></span>
+<div class="sourceCode cell-code" id="cb120"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb120-1"><a href="#cb120-1" aria-hidden="true" tabindex="-1"></a>significant_stage_3_4 <span class="ot">=</span> <span class="fu">as.data.frame</span>(res_stage_3_4) <span class="sc">%&gt;%</span></span>
 <span id="cb120-2"><a href="#cb120-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(padj <span class="sc">&lt;</span> <span class="fl">0.05</span>)</span>
 <span id="cb120-3"><a href="#cb120-3" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(significant_stage_3_4) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
@@ -1430,7 +1430,7 @@ g__Propionibacterium 6.331560e-03</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb122"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb122-1"><a href="#cb122-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Order the results </span></span>
 <span id="cb122-2"><a href="#cb122-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb122-3"><a href="#cb122-3" aria-hidden="true" tabindex="-1"></a>sig_res_stage <span class="ot">&lt;-</span> significant_stage[<span class="fu">order</span>(significant_stage<span class="sc">$</span>padj),]</span>
+<span id="cb122-3"><a href="#cb122-3" aria-hidden="true" tabindex="-1"></a>sig_res_stage <span class="ot">=</span> significant_stage[<span class="fu">order</span>(significant_stage<span class="sc">$</span>padj),]</span>
 <span id="cb122-4"><a href="#cb122-4" aria-hidden="true" tabindex="-1"></a>sig_res_stage<span class="sc">$</span>genus <span class="ot">=</span> <span class="fu">rownames</span>(sig_res_stage)</span>
 <span id="cb122-5"><a href="#cb122-5" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(sig_res_stage)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
@@ -1451,7 +1451,7 @@ g__Desulfomicrobium  2.394969e-05  g__Desulfomicrobium
 g__Propionibacterium 2.437113e-03 g__Propionibacterium</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb126"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb126-1"><a href="#cb126-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Order the results for stages 1 to 2 </span></span>
-<span id="cb126-2"><a href="#cb126-2" aria-hidden="true" tabindex="-1"></a>sig_res_stage_1_2 <span class="ot">&lt;-</span> significant_stage_2_3[<span class="fu">order</span>(significant_stage_1_2<span class="sc">$</span>padj),]</span>
+<span id="cb126-2"><a href="#cb126-2" aria-hidden="true" tabindex="-1"></a>sig_res_stage_1_2 <span class="ot">=</span> significant_stage_2_3[<span class="fu">order</span>(significant_stage_1_2<span class="sc">$</span>padj),]</span>
 <span id="cb126-3"><a href="#cb126-3" aria-hidden="true" tabindex="-1"></a>sig_res_stage_1_2<span class="sc">$</span>genus <span class="ot">=</span> <span class="fu">rownames</span>(sig_res_stage_1_2)</span>
 <span id="cb126-4"><a href="#cb126-4" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(sig_res_stage_1_2)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
@@ -1510,7 +1510,7 @@ g__Liberibacter          5.112052e-04 0.0131238719          g__Liberibacter</cod
 <pre><code>[1] 40</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb132"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb132-1"><a href="#cb132-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Order the results for stages 2 to 3</span></span>
-<span id="cb132-2"><a href="#cb132-2" aria-hidden="true" tabindex="-1"></a>sig_res_stage_2_3 <span class="ot">&lt;-</span> significant_stage_2_3[<span class="fu">order</span>(significant_stage_2_3<span class="sc">$</span>padj),]</span>
+<span id="cb132-2"><a href="#cb132-2" aria-hidden="true" tabindex="-1"></a>sig_res_stage_2_3 <span class="ot">=</span> significant_stage_2_3[<span class="fu">order</span>(significant_stage_2_3<span class="sc">$</span>padj),]</span>
 <span id="cb132-3"><a href="#cb132-3" aria-hidden="true" tabindex="-1"></a>sig_res_stage_2_3<span class="sc">$</span>genus <span class="ot">=</span> <span class="fu">rownames</span>(sig_res_stage_2_3)</span>
 <span id="cb132-4"><a href="#cb132-4" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(sig_res_stage_2_3)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
@@ -1569,7 +1569,7 @@ g__Beutenbergia    1.292036e-03    g__Beutenbergia</code></pre>
 <pre><code>[1] 120</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb138"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb138-1"><a href="#cb138-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Order the results for stages 3 to 4 </span></span>
-<span id="cb138-2"><a href="#cb138-2" aria-hidden="true" tabindex="-1"></a>sig_res_stage_3_4 <span class="ot">&lt;-</span> significant_stage_2_3[<span class="fu">order</span>(significant_stage_3_4<span class="sc">$</span>padj),]</span>
+<span id="cb138-2"><a href="#cb138-2" aria-hidden="true" tabindex="-1"></a>sig_res_stage_3_4 <span class="ot">=</span> significant_stage_2_3[<span class="fu">order</span>(significant_stage_3_4<span class="sc">$</span>padj),]</span>
 <span id="cb138-3"><a href="#cb138-3" aria-hidden="true" tabindex="-1"></a>sig_res_stage_3_4<span class="sc">$</span>genus <span class="ot">=</span> <span class="fu">rownames</span>(sig_res_stage_3_4)</span>
 <span id="cb138-4"><a href="#cb138-4" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(sig_res_stage_3_4)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
@@ -1607,16 +1607,16 @@ g__Dictyoglomus 0.001599713 g__Dictyoglomus</code></pre>
 <pre><code>[1] "Kingdom" "Phylum"  "Class"   "Order"   "Family"  "Genus"   "Species"</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb146"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb146-1"><a href="#cb146-1" aria-hidden="true" tabindex="-1"></a><span class="co"># make an altExp and matrix for Genus</span></span>
-<span id="cb146-2"><a href="#cb146-2" aria-hidden="true" tabindex="-1"></a><span class="fu">altExp</span>(tse_metaphlan_sal_swb,<span class="st">"Genus"</span>) <span class="ot">&lt;-</span> <span class="fu">agglomerateByRank</span>(tse_metaphlan_sal_swb,<span class="st">"Genus"</span>)</span>
+<span id="cb146-2"><a href="#cb146-2" aria-hidden="true" tabindex="-1"></a><span class="fu">altExp</span>(tse_metaphlan_sal_swb,<span class="st">"Genus"</span>) <span class="ot">=</span> <span class="fu">agglomerateByRank</span>(tse_metaphlan_sal_swb,<span class="st">"Genus"</span>)</span>
 <span id="cb146-3"><a href="#cb146-3" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb146-4"><a href="#cb146-4" aria-hidden="true" tabindex="-1"></a><span class="co"># make a dataframe of relative abundance </span></span>
-<span id="cb146-5"><a href="#cb146-5" aria-hidden="true" tabindex="-1"></a>relabundance_df_Genus <span class="ot">&lt;-</span> <span class="fu">as.data.frame</span>(<span class="fu">assay</span>(<span class="fu">altExp</span>(tse_metaphlan_sal_swb, <span class="st">"Genus"</span>), <span class="st">"relabundance"</span>))</span>
+<span id="cb146-5"><a href="#cb146-5" aria-hidden="true" tabindex="-1"></a>relabundance_df_Genus <span class="ot">=</span> <span class="fu">as.data.frame</span>(<span class="fu">assay</span>(<span class="fu">altExp</span>(tse_metaphlan_sal_swb, <span class="st">"Genus"</span>), <span class="st">"relabundance"</span>))</span>
 <span id="cb146-6"><a href="#cb146-6" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb146-7"><a href="#cb146-7" aria-hidden="true" tabindex="-1"></a><span class="co"># make a matric of relative abundance </span></span>
-<span id="cb146-8"><a href="#cb146-8" aria-hidden="true" tabindex="-1"></a>relabundance_matrix_Genus <span class="ot">&lt;-</span> <span class="fu">assay</span>(<span class="fu">altExp</span>(tse_metaphlan_sal_swb, <span class="st">"Genus"</span>), <span class="st">"relabundance"</span>)</span>
+<span id="cb146-8"><a href="#cb146-8" aria-hidden="true" tabindex="-1"></a>relabundance_matrix_Genus <span class="ot">=</span> <span class="fu">assay</span>(<span class="fu">altExp</span>(tse_metaphlan_sal_swb, <span class="st">"Genus"</span>), <span class="st">"relabundance"</span>)</span>
 <span id="cb146-9"><a href="#cb146-9" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb146-10"><a href="#cb146-10" aria-hidden="true" tabindex="-1"></a><span class="co"># calculate the total relative abundance of each Genus (row sums)</span></span>
-<span id="cb146-11"><a href="#cb146-11" aria-hidden="true" tabindex="-1"></a>total_relabundance_Genus <span class="ot">&lt;-</span> <span class="fu">rowSums</span>(relabundance_matrix_Genus)</span>
+<span id="cb146-11"><a href="#cb146-11" aria-hidden="true" tabindex="-1"></a>total_relabundance_Genus <span class="ot">=</span> <span class="fu">rowSums</span>(relabundance_matrix_Genus)</span>
 <span id="cb146-12"><a href="#cb146-12" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb146-13"><a href="#cb146-13" aria-hidden="true" tabindex="-1"></a><span class="co"># Get the top highly abundant genera based on relative abundance </span></span>
 <span id="cb146-14"><a href="#cb146-14" aria-hidden="true" tabindex="-1"></a>top_Genus_numbers_basic <span class="ot">=</span> <span class="fu">sort</span>(total_relabundance_Genus, <span class="at">decreasing =</span> <span class="cn">TRUE</span>)</span>
@@ -1632,7 +1632,7 @@ g__Dictyoglomus 0.001599713 g__Dictyoglomus</code></pre>
 ℹ The signature and semantics have changed, see `?as_tibble`.</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb148"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb148-1"><a href="#cb148-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Rename genera to remove any higher taxonomic names (a quirk of the metaphaln style)</span></span>
-<span id="cb148-2"><a href="#cb148-2" aria-hidden="true" tabindex="-1"></a><span class="fu">rownames</span>(top_Genus_numbers_df) <span class="ot">&lt;-</span> <span class="fu">gsub</span>(<span class="st">".*(g__*)"</span>, <span class="st">"</span><span class="sc">\\</span><span class="st">1"</span>, <span class="fu">rownames</span>(top_Genus_numbers_df))</span>
+<span id="cb148-2"><a href="#cb148-2" aria-hidden="true" tabindex="-1"></a><span class="fu">rownames</span>(top_Genus_numbers_df) <span class="ot">=</span> <span class="fu">gsub</span>(<span class="st">".*(g__*)"</span>, <span class="st">"</span><span class="sc">\\</span><span class="st">1"</span>, <span class="fu">rownames</span>(top_Genus_numbers_df))</span>
 <span id="cb148-3"><a href="#cb148-3" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb148-4"><a href="#cb148-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Get percenatge by dividing by total number of samples (21) and * by 100</span></span>
 <span id="cb148-5"><a href="#cb148-5" aria-hidden="true" tabindex="-1"></a>top_Genus_pc <span class="ot">=</span> top_Genus_numbers <span class="sc">%&gt;%</span> </span>
@@ -1662,7 +1662,7 @@ g__Dictyoglomus 0.001599713 g__Dictyoglomus</code></pre>
 <pre><code>[1] "-other"</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb154"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb154-1"><a href="#cb154-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Order the results  and look for highly abundant ones </span></span>
-<span id="cb154-2"><a href="#cb154-2" aria-hidden="true" tabindex="-1"></a>sig_res_stage <span class="ot">&lt;-</span> significant_stage[<span class="fu">order</span>(significant_stage<span class="sc">$</span>padj),]</span>
+<span id="cb154-2"><a href="#cb154-2" aria-hidden="true" tabindex="-1"></a>sig_res_stage <span class="ot">=</span> significant_stage[<span class="fu">order</span>(significant_stage<span class="sc">$</span>padj),]</span>
 <span id="cb154-3"><a href="#cb154-3" aria-hidden="true" tabindex="-1"></a>sig_res_stage<span class="sc">$</span>genus <span class="ot">=</span> <span class="fu">rownames</span>(sig_res_stage)</span>
 <span id="cb154-4"><a href="#cb154-4" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(sig_res_stage)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
@@ -1683,7 +1683,7 @@ g__Desulfomicrobium  2.394969e-05  g__Desulfomicrobium
 g__Propionibacterium 2.437113e-03 g__Propionibacterium</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb158"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb158-1"><a href="#cb158-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Order the results for stages 1 to 2 </span></span>
-<span id="cb158-2"><a href="#cb158-2" aria-hidden="true" tabindex="-1"></a>sig_res_stage_1_2 <span class="ot">&lt;-</span> significant_stage_2_3[<span class="fu">order</span>(significant_stage_1_2<span class="sc">$</span>padj),]</span>
+<span id="cb158-2"><a href="#cb158-2" aria-hidden="true" tabindex="-1"></a>sig_res_stage_1_2 <span class="ot">=</span> significant_stage_2_3[<span class="fu">order</span>(significant_stage_1_2<span class="sc">$</span>padj),]</span>
 <span id="cb158-3"><a href="#cb158-3" aria-hidden="true" tabindex="-1"></a>sig_res_stage_1_2<span class="sc">$</span>genus <span class="ot">=</span> <span class="fu">rownames</span>(sig_res_stage_1_2)</span>
 <span id="cb158-4"><a href="#cb158-4" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(sig_res_stage_1_2)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
@@ -1791,7 +1791,7 @@ g__Liberibacter          5.112052e-04 0.0131238719          g__Liberibacter</cod
 <pre><code>[1] "-other"         "g__Pseudomonas"</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb168"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb168-1"><a href="#cb168-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Order the results for stages 2 to 3</span></span>
-<span id="cb168-2"><a href="#cb168-2" aria-hidden="true" tabindex="-1"></a>sig_res_stage_2_3 <span class="ot">&lt;-</span> significant_stage_2_3[<span class="fu">order</span>(significant_stage_2_3<span class="sc">$</span>padj),]</span>
+<span id="cb168-2"><a href="#cb168-2" aria-hidden="true" tabindex="-1"></a>sig_res_stage_2_3 <span class="ot">=</span> significant_stage_2_3[<span class="fu">order</span>(significant_stage_2_3<span class="sc">$</span>padj),]</span>
 <span id="cb168-3"><a href="#cb168-3" aria-hidden="true" tabindex="-1"></a>sig_res_stage_2_3<span class="sc">$</span>genus <span class="ot">=</span> <span class="fu">rownames</span>(sig_res_stage_2_3)</span>
 <span id="cb168-4"><a href="#cb168-4" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(sig_res_stage_2_3)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
@@ -1986,7 +1986,7 @@ g__Beutenbergia    1.292036e-03    g__Beutenbergia</code></pre>
 [8] "NA_p__Firmicutes_c__Clostridia_o__Clostridiales_f__Lachnospiraceae_NA"</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb178"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb178-1"><a href="#cb178-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Order the results for stages 3 to 4 </span></span>
-<span id="cb178-2"><a href="#cb178-2" aria-hidden="true" tabindex="-1"></a>sig_res_stage_3_4 <span class="ot">&lt;-</span> significant_stage_2_3[<span class="fu">order</span>(significant_stage_3_4<span class="sc">$</span>padj),]</span>
+<span id="cb178-2"><a href="#cb178-2" aria-hidden="true" tabindex="-1"></a>sig_res_stage_3_4 <span class="ot">=</span> significant_stage_2_3[<span class="fu">order</span>(significant_stage_3_4<span class="sc">$</span>padj),]</span>
 <span id="cb178-3"><a href="#cb178-3" aria-hidden="true" tabindex="-1"></a>sig_res_stage_3_4<span class="sc">$</span>genus <span class="ot">=</span> <span class="fu">rownames</span>(sig_res_stage_3_4)</span>
 <span id="cb178-4"><a href="#cb178-4" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(sig_res_stage_3_4)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
@@ -2034,7 +2034,7 @@ g__Dictyoglomus 0.001599713 g__Dictyoglomus</code></pre>
 <h2 class="anchored" data-anchor-id="plot-counts-of-genera-across-noma-stages">5.6 Plot counts of genera across noma stages</h2>
 <p>First we create a function</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb190"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb190-1"><a href="#cb190-1" aria-hidden="true" tabindex="-1"></a>plotCountsGGanysig <span class="ot">&lt;-</span> <span class="cf">function</span>(dds, gene, <span class="at">intgroup =</span> <span class="st">"condition"</span>, <span class="at">normalized =</span> <span class="cn">TRUE</span>,  </span>
+<div class="sourceCode cell-code" id="cb190"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb190-1"><a href="#cb190-1" aria-hidden="true" tabindex="-1"></a>plotCountsGGanysig <span class="ot">=</span> <span class="cf">function</span>(dds, gene, <span class="at">intgroup =</span> <span class="st">"condition"</span>, <span class="at">normalized =</span> <span class="cn">TRUE</span>,  </span>
 <span id="cb190-2"><a href="#cb190-2" aria-hidden="true" tabindex="-1"></a>                         <span class="at">transform =</span> <span class="cn">TRUE</span>, main, <span class="at">xlab =</span> <span class="st">"group"</span>, <span class="at">returnData =</span> <span class="cn">FALSE</span>,  </span>
 <span id="cb190-3"><a href="#cb190-3" aria-hidden="true" tabindex="-1"></a>                         <span class="at">replaced =</span> <span class="cn">FALSE</span>, pc, <span class="at">plot =</span> <span class="st">"point"</span>, <span class="at">text =</span> <span class="cn">TRUE</span>, <span class="at">showSignificance =</span> <span class="cn">TRUE</span>, ...) {  </span>
 <span id="cb190-4"><a href="#cb190-4" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Check input gene validity</span></span>
@@ -2054,22 +2054,22 @@ g__Dictyoglomus 0.001599713 g__Dictyoglomus</code></pre>
 <span id="cb190-18"><a href="#cb190-18" aria-hidden="true" tabindex="-1"></a>  </span>
 <span id="cb190-19"><a href="#cb190-19" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Set pseudo count if not provided</span></span>
 <span id="cb190-20"><a href="#cb190-20" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (<span class="fu">missing</span>(pc)) {  </span>
-<span id="cb190-21"><a href="#cb190-21" aria-hidden="true" tabindex="-1"></a>    pc <span class="ot">&lt;-</span> <span class="cf">if</span> (transform) <span class="fl">0.5</span> <span class="cf">else</span> <span class="dv">0</span>  </span>
+<span id="cb190-21"><a href="#cb190-21" aria-hidden="true" tabindex="-1"></a>    pc <span class="ot">=</span> <span class="cf">if</span> (transform) <span class="fl">0.5</span> <span class="cf">else</span> <span class="dv">0</span>  </span>
 <span id="cb190-22"><a href="#cb190-22" aria-hidden="true" tabindex="-1"></a>  }  </span>
 <span id="cb190-23"><a href="#cb190-23" aria-hidden="true" tabindex="-1"></a>  </span>
 <span id="cb190-24"><a href="#cb190-24" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Estimate size factors if missing</span></span>
 <span id="cb190-25"><a href="#cb190-25" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (<span class="fu">is.null</span>(<span class="fu">sizeFactors</span>(dds)) <span class="sc">&amp;</span> <span class="fu">is.null</span>(<span class="fu">normalizationFactors</span>(dds))) {  </span>
-<span id="cb190-26"><a href="#cb190-26" aria-hidden="true" tabindex="-1"></a>    dds <span class="ot">&lt;-</span> <span class="fu">estimateSizeFactors</span>(dds)  </span>
+<span id="cb190-26"><a href="#cb190-26" aria-hidden="true" tabindex="-1"></a>    dds <span class="ot">=</span> <span class="fu">estimateSizeFactors</span>(dds)  </span>
 <span id="cb190-27"><a href="#cb190-27" aria-hidden="true" tabindex="-1"></a>  }  </span>
 <span id="cb190-28"><a href="#cb190-28" aria-hidden="true" tabindex="-1"></a>  </span>
 <span id="cb190-29"><a href="#cb190-29" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Get the counts for the gene</span></span>
-<span id="cb190-30"><a href="#cb190-30" aria-hidden="true" tabindex="-1"></a>  cnts <span class="ot">&lt;-</span> <span class="fu">counts</span>(dds, <span class="at">normalized =</span> normalized, <span class="at">replaced =</span> replaced)[gene, ]  </span>
+<span id="cb190-30"><a href="#cb190-30" aria-hidden="true" tabindex="-1"></a>  cnts <span class="ot">=</span> <span class="fu">counts</span>(dds, <span class="at">normalized =</span> normalized, <span class="at">replaced =</span> replaced)[gene, ]  </span>
 <span id="cb190-31"><a href="#cb190-31" aria-hidden="true" tabindex="-1"></a>  </span>
 <span id="cb190-32"><a href="#cb190-32" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Generate grouping variable</span></span>
-<span id="cb190-33"><a href="#cb190-33" aria-hidden="true" tabindex="-1"></a>  group <span class="ot">&lt;-</span> <span class="cf">if</span> (<span class="fu">length</span>(intgroup) <span class="sc">==</span> <span class="dv">1</span>) {  </span>
+<span id="cb190-33"><a href="#cb190-33" aria-hidden="true" tabindex="-1"></a>  group <span class="ot">=</span> <span class="cf">if</span> (<span class="fu">length</span>(intgroup) <span class="sc">==</span> <span class="dv">1</span>) {  </span>
 <span id="cb190-34"><a href="#cb190-34" aria-hidden="true" tabindex="-1"></a>    <span class="fu">colData</span>(dds)[[intgroup]]  </span>
 <span id="cb190-35"><a href="#cb190-35" aria-hidden="true" tabindex="-1"></a>  } <span class="cf">else</span> <span class="cf">if</span> (<span class="fu">length</span>(intgroup) <span class="sc">==</span> <span class="dv">2</span>) {  </span>
-<span id="cb190-36"><a href="#cb190-36" aria-hidden="true" tabindex="-1"></a>    lvls <span class="ot">&lt;-</span> <span class="fu">as.vector</span>(<span class="fu">t</span>(<span class="fu">outer</span>(<span class="fu">levels</span>(<span class="fu">colData</span>(dds)[[intgroup[<span class="dv">1</span>]]]),  </span>
+<span id="cb190-36"><a href="#cb190-36" aria-hidden="true" tabindex="-1"></a>    lvls <span class="ot">=</span> <span class="fu">as.vector</span>(<span class="fu">t</span>(<span class="fu">outer</span>(<span class="fu">levels</span>(<span class="fu">colData</span>(dds)[[intgroup[<span class="dv">1</span>]]]),  </span>
 <span id="cb190-37"><a href="#cb190-37" aria-hidden="true" tabindex="-1"></a>                              <span class="fu">levels</span>(<span class="fu">colData</span>(dds)[[intgroup[<span class="dv">2</span>]]]), <span class="cf">function</span>(x, y) <span class="fu">paste</span>(x, y, <span class="at">sep =</span> <span class="st">":"</span>))))  </span>
 <span id="cb190-38"><a href="#cb190-38" aria-hidden="true" tabindex="-1"></a>    <span class="fu">droplevels</span>(<span class="fu">factor</span>(<span class="fu">apply</span>(<span class="fu">as.data.frame</span>(<span class="fu">colData</span>(dds)[, intgroup, <span class="at">drop =</span> <span class="cn">FALSE</span>]), <span class="dv">1</span>, paste, <span class="at">collapse =</span> <span class="st">":"</span>),  </span>
 <span id="cb190-39"><a href="#cb190-39" aria-hidden="true" tabindex="-1"></a>                      <span class="at">levels =</span> lvls))  </span>
@@ -2078,14 +2078,14 @@ g__Dictyoglomus 0.001599713 g__Dictyoglomus</code></pre>
 <span id="cb190-42"><a href="#cb190-42" aria-hidden="true" tabindex="-1"></a>  }  </span>
 <span id="cb190-43"><a href="#cb190-43" aria-hidden="true" tabindex="-1"></a>  </span>
 <span id="cb190-44"><a href="#cb190-44" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Create the data frame with counts, group, and sample names</span></span>
-<span id="cb190-45"><a href="#cb190-45" aria-hidden="true" tabindex="-1"></a>  data <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">count =</span> cnts <span class="sc">+</span> pc, <span class="at">group =</span> group, <span class="at">sample =</span> <span class="fu">colnames</span>(dds), <span class="at">condition =</span> group)  </span>
+<span id="cb190-45"><a href="#cb190-45" aria-hidden="true" tabindex="-1"></a>  data <span class="ot">=</span> <span class="fu">data.frame</span>(<span class="at">count =</span> cnts <span class="sc">+</span> pc, <span class="at">group =</span> group, <span class="at">sample =</span> <span class="fu">colnames</span>(dds), <span class="at">condition =</span> group)  </span>
 <span id="cb190-46"><a href="#cb190-46" aria-hidden="true" tabindex="-1"></a>  </span>
 <span id="cb190-47"><a href="#cb190-47" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Set log scale if necessary</span></span>
-<span id="cb190-48"><a href="#cb190-48" aria-hidden="true" tabindex="-1"></a>  logxy <span class="ot">&lt;-</span> <span class="cf">if</span> (transform) <span class="st">"y"</span> <span class="cf">else</span> <span class="st">""</span>  </span>
+<span id="cb190-48"><a href="#cb190-48" aria-hidden="true" tabindex="-1"></a>  logxy <span class="ot">=</span> <span class="cf">if</span> (transform) <span class="st">"y"</span> <span class="cf">else</span> <span class="st">""</span>  </span>
 <span id="cb190-49"><a href="#cb190-49" aria-hidden="true" tabindex="-1"></a>  </span>
 <span id="cb190-50"><a href="#cb190-50" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Set the plot title</span></span>
 <span id="cb190-51"><a href="#cb190-51" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (<span class="fu">missing</span>(main)) {  </span>
-<span id="cb190-52"><a href="#cb190-52" aria-hidden="true" tabindex="-1"></a>    main <span class="ot">&lt;-</span> <span class="cf">if</span> (<span class="fu">is.numeric</span>(gene)) {  </span>
+<span id="cb190-52"><a href="#cb190-52" aria-hidden="true" tabindex="-1"></a>    main <span class="ot">=</span> <span class="cf">if</span> (<span class="fu">is.numeric</span>(gene)) {  </span>
 <span id="cb190-53"><a href="#cb190-53" aria-hidden="true" tabindex="-1"></a>      <span class="fu">rownames</span>(dds)[gene]  </span>
 <span id="cb190-54"><a href="#cb190-54" aria-hidden="true" tabindex="-1"></a>    } <span class="cf">else</span> {  </span>
 <span id="cb190-55"><a href="#cb190-55" aria-hidden="true" tabindex="-1"></a>      gene  </span>
@@ -2093,14 +2093,14 @@ g__Dictyoglomus 0.001599713 g__Dictyoglomus</code></pre>
 <span id="cb190-57"><a href="#cb190-57" aria-hidden="true" tabindex="-1"></a>  }  </span>
 <span id="cb190-58"><a href="#cb190-58" aria-hidden="true" tabindex="-1"></a>  </span>
 <span id="cb190-59"><a href="#cb190-59" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Set the y-axis label based on normalization</span></span>
-<span id="cb190-60"><a href="#cb190-60" aria-hidden="true" tabindex="-1"></a>  ylab <span class="ot">&lt;-</span> <span class="fu">ifelse</span>(normalized, <span class="st">"normalized count"</span>, <span class="st">"count"</span>)  </span>
+<span id="cb190-60"><a href="#cb190-60" aria-hidden="true" tabindex="-1"></a>  ylab <span class="ot">=</span> <span class="fu">ifelse</span>(normalized, <span class="st">"normalized count"</span>, <span class="st">"count"</span>)  </span>
 <span id="cb190-61"><a href="#cb190-61" aria-hidden="true" tabindex="-1"></a>  </span>
 <span id="cb190-62"><a href="#cb190-62" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Return the data if requested</span></span>
 <span id="cb190-63"><a href="#cb190-63" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (returnData)  </span>
 <span id="cb190-64"><a href="#cb190-64" aria-hidden="true" tabindex="-1"></a>    <span class="fu">return</span>(<span class="fu">data.frame</span>(<span class="at">count =</span> data<span class="sc">$</span>count, <span class="fu">colData</span>(dds)[intgroup]))  </span>
 <span id="cb190-65"><a href="#cb190-65" aria-hidden="true" tabindex="-1"></a>  </span>
 <span id="cb190-66"><a href="#cb190-66" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Create the base ggplot object with data and aesthetic mappings</span></span>
-<span id="cb190-67"><a href="#cb190-67" aria-hidden="true" tabindex="-1"></a>  p <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(data, <span class="fu">aes</span>(<span class="at">x =</span> group, <span class="at">y =</span> count, <span class="at">label =</span> sample, <span class="at">color =</span> condition)) <span class="sc">+</span></span>
+<span id="cb190-67"><a href="#cb190-67" aria-hidden="true" tabindex="-1"></a>  p <span class="ot">=</span> <span class="fu">ggplot</span>(data, <span class="fu">aes</span>(<span class="at">x =</span> group, <span class="at">y =</span> count, <span class="at">label =</span> sample, <span class="at">color =</span> condition)) <span class="sc">+</span></span>
 <span id="cb190-68"><a href="#cb190-68" aria-hidden="true" tabindex="-1"></a>    <span class="fu">labs</span>(<span class="at">x =</span> xlab, <span class="at">y =</span> ylab, <span class="at">title =</span> main) <span class="sc">+</span>  <span class="co"># Labels and title</span></span>
 <span id="cb190-69"><a href="#cb190-69" aria-hidden="true" tabindex="-1"></a>    <span class="fu">theme_minimal</span>() <span class="sc">+</span>  <span class="co"># Clean theme</span></span>
 <span id="cb190-70"><a href="#cb190-70" aria-hidden="true" tabindex="-1"></a>    <span class="fu">scale_y_continuous</span>(<span class="at">trans =</span> <span class="fu">ifelse</span>(transform, <span class="st">"log10"</span>, <span class="st">"identity"</span>)) <span class="sc">+</span>  <span class="co"># Apply log transformation if needed</span></span>
@@ -2108,20 +2108,20 @@ g__Dictyoglomus 0.001599713 g__Dictyoglomus</code></pre>
 <span id="cb190-72"><a href="#cb190-72" aria-hidden="true" tabindex="-1"></a>  </span>
 <span id="cb190-73"><a href="#cb190-73" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Select the type of plot based on the 'plot' argument</span></span>
 <span id="cb190-74"><a href="#cb190-74" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (plot <span class="sc">==</span> <span class="st">"point"</span>) {</span>
-<span id="cb190-75"><a href="#cb190-75" aria-hidden="true" tabindex="-1"></a>    p <span class="ot">&lt;-</span> p <span class="sc">+</span> <span class="fu">geom_point</span>(<span class="at">size =</span> <span class="dv">3</span>)</span>
-<span id="cb190-76"><a href="#cb190-76" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> (text) p <span class="ot">&lt;-</span> p <span class="sc">+</span> <span class="fu">geom_text</span>(<span class="at">hjust =</span> <span class="sc">-</span><span class="fl">0.2</span>, <span class="at">vjust =</span> <span class="dv">0</span>)  <span class="co"># Add text if text = TRUE</span></span>
+<span id="cb190-75"><a href="#cb190-75" aria-hidden="true" tabindex="-1"></a>    p <span class="ot">=</span> p <span class="sc">+</span> <span class="fu">geom_point</span>(<span class="at">size =</span> <span class="dv">3</span>)</span>
+<span id="cb190-76"><a href="#cb190-76" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> (text) p <span class="ot">=</span> p <span class="sc">+</span> <span class="fu">geom_text</span>(<span class="at">hjust =</span> <span class="sc">-</span><span class="fl">0.2</span>, <span class="at">vjust =</span> <span class="dv">0</span>)  <span class="co"># Add text if text = TRUE</span></span>
 <span id="cb190-77"><a href="#cb190-77" aria-hidden="true" tabindex="-1"></a>  } <span class="cf">else</span> <span class="cf">if</span> (plot <span class="sc">==</span> <span class="st">"jitter"</span>) {</span>
-<span id="cb190-78"><a href="#cb190-78" aria-hidden="true" tabindex="-1"></a>    p <span class="ot">&lt;-</span> p <span class="sc">+</span> <span class="fu">geom_jitter</span>(<span class="at">size =</span> <span class="dv">3</span>, <span class="at">width =</span> <span class="fl">0.2</span>)</span>
-<span id="cb190-79"><a href="#cb190-79" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> (text) p <span class="ot">&lt;-</span> p <span class="sc">+</span> <span class="fu">geom_text</span>(<span class="at">hjust =</span> <span class="sc">-</span><span class="fl">0.2</span>, <span class="at">vjust =</span> <span class="dv">0</span>)  <span class="co"># Add text if text = TRUE</span></span>
+<span id="cb190-78"><a href="#cb190-78" aria-hidden="true" tabindex="-1"></a>    p <span class="ot">=</span> p <span class="sc">+</span> <span class="fu">geom_jitter</span>(<span class="at">size =</span> <span class="dv">3</span>, <span class="at">width =</span> <span class="fl">0.2</span>)</span>
+<span id="cb190-79"><a href="#cb190-79" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> (text) p <span class="ot">=</span> p <span class="sc">+</span> <span class="fu">geom_text</span>(<span class="at">hjust =</span> <span class="sc">-</span><span class="fl">0.2</span>, <span class="at">vjust =</span> <span class="dv">0</span>)  <span class="co"># Add text if text = TRUE</span></span>
 <span id="cb190-80"><a href="#cb190-80" aria-hidden="true" tabindex="-1"></a>  } <span class="cf">else</span> <span class="cf">if</span> (plot <span class="sc">==</span> <span class="st">"bar"</span>) {</span>
-<span id="cb190-81"><a href="#cb190-81" aria-hidden="true" tabindex="-1"></a>    p <span class="ot">&lt;-</span> p <span class="sc">+</span> <span class="fu">geom_bar</span>(<span class="at">stat =</span> <span class="st">"summary"</span>, <span class="at">fun =</span> <span class="st">"mean"</span>, <span class="at">position =</span> <span class="st">"dodge"</span>, <span class="at">width =</span> <span class="fl">0.7</span>) <span class="sc">+</span>  <span class="co"># Bar plot with whiskers</span></span>
+<span id="cb190-81"><a href="#cb190-81" aria-hidden="true" tabindex="-1"></a>    p <span class="ot">=</span> p <span class="sc">+</span> <span class="fu">geom_bar</span>(<span class="at">stat =</span> <span class="st">"summary"</span>, <span class="at">fun =</span> <span class="st">"mean"</span>, <span class="at">position =</span> <span class="st">"dodge"</span>, <span class="at">width =</span> <span class="fl">0.7</span>) <span class="sc">+</span>  <span class="co"># Bar plot with whiskers</span></span>
 <span id="cb190-82"><a href="#cb190-82" aria-hidden="true" tabindex="-1"></a>      <span class="fu">geom_errorbar</span>(<span class="at">stat =</span> <span class="st">"summary"</span>, <span class="at">fun.data =</span> <span class="st">"mean_se"</span>, <span class="at">width =</span> <span class="fl">0.2</span>)</span>
 <span id="cb190-83"><a href="#cb190-83" aria-hidden="true" tabindex="-1"></a>  } <span class="cf">else</span> <span class="cf">if</span> (plot <span class="sc">==</span> <span class="st">"violin"</span>) {</span>
-<span id="cb190-84"><a href="#cb190-84" aria-hidden="true" tabindex="-1"></a>    p <span class="ot">&lt;-</span> p <span class="sc">+</span> <span class="fu">geom_violin</span>(<span class="at">trim =</span> <span class="cn">FALSE</span>) <span class="sc">+</span> <span class="fu">geom_jitter</span>(<span class="at">size =</span> <span class="dv">2</span>, <span class="at">width =</span> <span class="fl">0.2</span>)</span>
-<span id="cb190-85"><a href="#cb190-85" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> (text) p <span class="ot">&lt;-</span> p <span class="sc">+</span> <span class="fu">geom_text</span>(<span class="at">hjust =</span> <span class="sc">-</span><span class="fl">0.2</span>, <span class="at">vjust =</span> <span class="dv">0</span>)  <span class="co"># Add text if text = TRUE</span></span>
+<span id="cb190-84"><a href="#cb190-84" aria-hidden="true" tabindex="-1"></a>    p <span class="ot">=</span> p <span class="sc">+</span> <span class="fu">geom_violin</span>(<span class="at">trim =</span> <span class="cn">FALSE</span>) <span class="sc">+</span> <span class="fu">geom_jitter</span>(<span class="at">size =</span> <span class="dv">2</span>, <span class="at">width =</span> <span class="fl">0.2</span>)</span>
+<span id="cb190-85"><a href="#cb190-85" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> (text) p <span class="ot">=</span> p <span class="sc">+</span> <span class="fu">geom_text</span>(<span class="at">hjust =</span> <span class="sc">-</span><span class="fl">0.2</span>, <span class="at">vjust =</span> <span class="dv">0</span>)  <span class="co"># Add text if text = TRUE</span></span>
 <span id="cb190-86"><a href="#cb190-86" aria-hidden="true" tabindex="-1"></a>  } <span class="cf">else</span> <span class="cf">if</span> (plot <span class="sc">==</span> <span class="st">"box"</span>) {</span>
-<span id="cb190-87"><a href="#cb190-87" aria-hidden="true" tabindex="-1"></a>    p <span class="ot">&lt;-</span> p <span class="sc">+</span> <span class="fu">geom_boxplot</span>()</span>
-<span id="cb190-88"><a href="#cb190-88" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> (text) p <span class="ot">&lt;-</span> p <span class="sc">+</span> <span class="fu">geom_text</span>(<span class="at">hjust =</span> <span class="sc">-</span><span class="fl">0.2</span>, <span class="at">vjust =</span> <span class="dv">0</span>)  <span class="co"># Add text if text = TRUE</span></span>
+<span id="cb190-87"><a href="#cb190-87" aria-hidden="true" tabindex="-1"></a>    p <span class="ot">=</span> p <span class="sc">+</span> <span class="fu">geom_boxplot</span>()</span>
+<span id="cb190-88"><a href="#cb190-88" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> (text) p <span class="ot">=</span> p <span class="sc">+</span> <span class="fu">geom_text</span>(<span class="at">hjust =</span> <span class="sc">-</span><span class="fl">0.2</span>, <span class="at">vjust =</span> <span class="dv">0</span>)  <span class="co"># Add text if text = TRUE</span></span>
 <span id="cb190-89"><a href="#cb190-89" aria-hidden="true" tabindex="-1"></a>  } <span class="cf">else</span> {</span>
 <span id="cb190-90"><a href="#cb190-90" aria-hidden="true" tabindex="-1"></a>    <span class="fu">stop</span>(<span class="st">"Invalid plot type. Choose from 'point', 'jitter', 'bar', 'violin', or 'box'."</span>)</span>
 <span id="cb190-91"><a href="#cb190-91" aria-hidden="true" tabindex="-1"></a>  }</span>
@@ -2129,12 +2129,12 @@ g__Dictyoglomus 0.001599713 g__Dictyoglomus</code></pre>
 <span id="cb190-93"><a href="#cb190-93" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Add significance annotation if requested</span></span>
 <span id="cb190-94"><a href="#cb190-94" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (showSignificance) {</span>
 <span id="cb190-95"><a href="#cb190-95" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Get DESeq2 results for gene using Wald test and BH adjustment</span></span>
-<span id="cb190-96"><a href="#cb190-96" aria-hidden="true" tabindex="-1"></a>    res <span class="ot">&lt;-</span> <span class="fu">results</span>(dds, <span class="at">contrast =</span> <span class="fu">c</span>(intgroup, <span class="fu">levels</span>(group)[<span class="dv">1</span>], <span class="fu">levels</span>(group)[<span class="dv">2</span>]), <span class="at">alpha =</span> <span class="fl">0.05</span>)</span>
-<span id="cb190-97"><a href="#cb190-97" aria-hidden="true" tabindex="-1"></a>    res_gene <span class="ot">&lt;-</span> res[gene, ]</span>
+<span id="cb190-96"><a href="#cb190-96" aria-hidden="true" tabindex="-1"></a>    res <span class="ot">=</span> <span class="fu">results</span>(dds, <span class="at">contrast =</span> <span class="fu">c</span>(intgroup, <span class="fu">levels</span>(group)[<span class="dv">1</span>], <span class="fu">levels</span>(group)[<span class="dv">2</span>]), <span class="at">alpha =</span> <span class="fl">0.05</span>)</span>
+<span id="cb190-97"><a href="#cb190-97" aria-hidden="true" tabindex="-1"></a>    res_gene <span class="ot">=</span> res[gene, ]</span>
 <span id="cb190-98"><a href="#cb190-98" aria-hidden="true" tabindex="-1"></a>    </span>
 <span id="cb190-99"><a href="#cb190-99" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Check significance and add stars/annotations</span></span>
 <span id="cb190-100"><a href="#cb190-100" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> (<span class="sc">!</span><span class="fu">is.na</span>(res_gene<span class="sc">$</span>padj) <span class="sc">&amp;&amp;</span> res_gene<span class="sc">$</span>padj <span class="sc">&lt;</span> <span class="fl">0.05</span>) {</span>
-<span id="cb190-101"><a href="#cb190-101" aria-hidden="true" tabindex="-1"></a>      p <span class="ot">&lt;-</span> p <span class="sc">+</span> <span class="fu">annotate</span>(<span class="st">"text"</span>, <span class="at">x =</span> <span class="fl">1.5</span>, <span class="at">y =</span> <span class="fu">max</span>(data<span class="sc">$</span>count), <span class="at">label =</span> <span class="st">"*"</span>, <span class="at">size =</span> <span class="dv">8</span>)</span>
+<span id="cb190-101"><a href="#cb190-101" aria-hidden="true" tabindex="-1"></a>      p <span class="ot">=</span> p <span class="sc">+</span> <span class="fu">annotate</span>(<span class="st">"text"</span>, <span class="at">x =</span> <span class="fl">1.5</span>, <span class="at">y =</span> <span class="fu">max</span>(data<span class="sc">$</span>count), <span class="at">label =</span> <span class="st">"*"</span>, <span class="at">size =</span> <span class="dv">8</span>)</span>
 <span id="cb190-102"><a href="#cb190-102" aria-hidden="true" tabindex="-1"></a>    }</span>
 <span id="cb190-103"><a href="#cb190-103" aria-hidden="true" tabindex="-1"></a>  }</span>
 <span id="cb190-104"><a href="#cb190-104" aria-hidden="true" tabindex="-1"></a>  </span>

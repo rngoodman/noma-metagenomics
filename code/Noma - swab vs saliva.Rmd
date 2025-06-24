@@ -82,7 +82,7 @@ coldata = data.frame(sample_name = colnames(tse_metaphlan_sal_swb))
 metadata_3 = dplyr::left_join(coldata, metadata_2, by = "sample_name")
 
 # Create a DataFrame with this information
-metadata_df <- DataFrame(metadata_3)
+metadata_df = DataFrame(metadata_3)
 rownames(metadata_df) = metadata_3$sample_name
 t_metadata_df = t(metadata_df)
 ncol(t_metadata_df)
@@ -108,7 +108,7 @@ metadata_3 %>% group_by(respondent_id) %>% summarise(Count = n()) %>% filter(Cou
 metadata_3 %>% group_by(respondent_id) %>% summarise(Count = n()) %>% filter(Count == 2)
 swb_and_sal = metadata_3 %>% group_by(respondent_id) %>% summarise(Count = n()) %>% filter(Count == 2)
 ids_to_remove = swb_and_sal %>% pull(respondent_id)
-swb_and_sal_filtered <- metadata_3  %>% filter(!respondent_id %in% ids_to_remove)
+swb_and_sal_filtered = metadata_3  %>% filter(!respondent_id %in% ids_to_remove)
 
 # count saliva and swab samples without particpants above
 swb_and_sal_filtered %>% group_by(sample_type) %>% summarise(Count = n())
@@ -117,7 +117,7 @@ swb_and_sal_filtered %>% group_by(sample_type) %>% summarise(Count = n())
 print(ids_to_remove)   # Output as a character vector
 
 # Add this DataFrame as colData to your TreeSummarizedExperiment object
-colData(tse_metaphlan_sal_swb) <- metadata_df
+colData(tse_metaphlan_sal_swb) = metadata_df
 ```
 
 
@@ -125,7 +125,7 @@ colData(tse_metaphlan_sal_swb) <- metadata_df
 
 ```{r, echo=FALSE, eval=FALSE}
 
-(count <- assays(tse_metaphlan_sal_swb)[[1]])
+(count = assays(tse_metaphlan_sal_swb)[[1]])
 
 rowData(tse_metaphlan_sal_swb)
 
@@ -154,7 +154,7 @@ phyloseq_metaphlan = makePhyloseqFromTreeSE(tse_metaphlan_sal_swb)
 # Use makePhyloseqFromTreeSE from Miaverse
 
 # make an assay for abundance
-tse_metaphlan_sal_swb <- transformAssay(tse_metaphlan_sal_swb, assay.type="counts", method="relabundance")
+tse_metaphlan_sal_swb = transformAssay(tse_metaphlan_sal_swb, assay.type="counts", method="relabundance")
 
 taxonomyRanks(tse_metaphlan_sal_swb)
 
@@ -164,7 +164,7 @@ altExp(tse_metaphlan_sal_swb,"Genus")
 tse_metaphlan_sal_swb_genus = altExp(tse_metaphlan_sal_swb, "Genus")
 
 # Check that colData was added successfully
-colData(tse_metaphlan_sal_swb_genus) <- metadata_df
+colData(tse_metaphlan_sal_swb_genus) = metadata_df
 
 metadata_noma_genus = as.data.frame(colData(tse_metaphlan_sal_swb_genus))
 
@@ -186,8 +186,8 @@ nsamples(phyloseq_noma_esd)
 set.seed(123456)
 
 # Calculate bray curtis distance matrix on main variables 
-noma.bray <- phyloseq::distance(phyloseq_noma_esd, method = "bray")
-sample.noma.df <- data.frame(sample_data(phyloseq_noma_esd))
+noma.bray = phyloseq::distance(phyloseq_noma_esd, method = "bray")
+sample.noma.df = data.frame(sample_data(phyloseq_noma_esd))
 permanova_all = vegan::adonis2(noma.bray ~ sex , data = sample.noma.df)
 permanova_all
 ```
@@ -197,7 +197,7 @@ Next we will test the beta dispersion
 ```{r}
 # All together now
 vegan::adonis2(noma.bray ~ sex, data = sample.noma.df)
-beta <- betadisper(noma.bray, sample.noma.df$sex)
+beta = betadisper(noma.bray, sample.noma.df$sex)
 permutest(beta)
 # we don't want this to be significant 
 ```
@@ -218,7 +218,7 @@ condition_ano
 
 ```{r}
 #condition
-noma.bray <- phyloseq::distance(phyloseq_noma_esd, method = "bray") # Calculate bray curtis distance matrix
+noma.bray = phyloseq::distance(phyloseq_noma_esd, method = "bray") # Calculate bray curtis distance matrix
 condition_group = get_variable(phyloseq_noma_esd, "sex") # Make condition Grouping
 # Run MRPP
 set.seed(123456)
@@ -237,18 +237,18 @@ vegan::mrpp(noma.bray, condition_group, permutations = 999,
 colnames((colData(tse_metaphlan_sal_swb_genus)))
 
 # Define the list of metadata variables you want to test
-variables_to_test <- c("sex", "age", "noma_stage_on_admission", "respondent_id", "sample_type")
+variables_to_test = c("sex", "age", "noma_stage_on_admission", "respondent_id", "sample_type")
 
 # Set a seed for reproducibility of permutation-based tests
 set.seed(123456)
 
-bray_dist <- phyloseq::distance(phyloseq_noma_esd, method = "bray")
+bray_dist = phyloseq::distance(phyloseq_noma_esd, method = "bray")
 
 # Extract the sample data into a data frame for use with adonis2
-sample_df <- data.frame(sample_data(phyloseq_noma_esd))
+sample_df = data.frame(sample_data(phyloseq_noma_esd))
 
 # Create an empty list to store the results from each iteration
-results_list <- list()
+results_list = list()
 
 # Loop through each variable name in the 'variables_to_test' vector
 for (variable in variables_to_test) {
@@ -257,36 +257,36 @@ for (variable in variables_to_test) {
   
   # PERMANOVA (adonis2) 
   # Create the statistical formula dynamically for the current variable
-  formula <- as.formula(paste("bray_dist ~", variable))
+  formula = as.formula(paste("bray_dist ~", variable))
   
   # Run the PERMANOVA test using the adonis2 function
-  permanova_res <- vegan::adonis2(formula, data = sample_df, permutations = 999)
+  permanova_res = vegan::adonis2(formula, data = sample_df, permutations = 999)
   
   # Extract the p-value from the results. It's in the 'Pr(>F)' column.
-  p_permanova <- permanova_res$`Pr(>F)`[1]
+  p_permanova = permanova_res$`Pr(>F)`[1]
   
   # ANOSIM 
   # Get the grouping factor (the actual variable data) from the phyloseq object
-  grouping_factor <- phyloseq::get_variable(phyloseq_noma_esd, variable)
+  grouping_factor = phyloseq::get_variable(phyloseq_noma_esd, variable)
   
   # Run the ANOSIM test
-  anosim_res <- vegan::anosim(bray_dist, grouping_factor, permutations = 999)
+  anosim_res = vegan::anosim(bray_dist, grouping_factor, permutations = 999)
   
   # Extract the p-value (significance) from the ANOSIM result
-  p_anosim <- anosim_res$signif
+  p_anosim = anosim_res$signif
   
   # MRPP 
   # The grouping factor is the same as for ANOSIM
   # Run the MRPP test
-  mrpp_res <- vegan::mrpp(bray_dist, grouping_factor, permutations = 999)
+  mrpp_res = vegan::mrpp(bray_dist, grouping_factor, permutations = 999)
   
   # Extract the p-value from the MRPP result
-  p_mrpp <- mrpp_res$Pvalue
+  p_mrpp = mrpp_res$Pvalue
   
   # Store Results 
   # Store the p-values for the current variable in our results list.
   # We create a small data frame for this iteration's results.
-  results_list[[variable]] <- data.frame(
+  results_list[[variable]] = data.frame(
     Variable = paste0(variable, "."),
     `permanova.` = p_permanova,
     `anosim.` = p_anosim,
@@ -297,10 +297,10 @@ for (variable in variables_to_test) {
 }
 
 # Combine the list of individual data frames into one final table
-final_results_table <- do.call(rbind, results_list)
+final_results_table = do.call(rbind, results_list)
 
 # Clean up the row names of the final table
-rownames(final_results_table) <- NULL
+rownames(final_results_table) = NULL
 
 # Print the final, consolidated table to the console
 print(final_results_table)
@@ -314,52 +314,52 @@ write.csv(final_results_table, file ="../tbls/Table_1B.csv")
 ```{r}
 
 # Extract the counts and taxonomic table
-counts <- assay(tse_metaphlan_sal_swb_genus, "counts")
-tax_table <- rowData(tse_metaphlan_sal_swb_genus)$Genus  # Replace "Genus" with your taxonomic level of interest
-sample_data <- colData(tse_metaphlan_sal_swb_genus)
+counts = assay(tse_metaphlan_sal_swb_genus, "counts")
+tax_table = rowData(tse_metaphlan_sal_swb_genus)$Genus  # Replace "Genus" with your taxonomic level of interest
+sample_data = colData(tse_metaphlan_sal_swb_genus)
 
 groups = as.data.frame(sample_data)
 
 # Aggregate counts by Genus
-aggregated_counts <- rowsum(counts, tax_table)
+aggregated_counts = rowsum(counts, tax_table)
 
 # Create a new aggregated TreeSummarizedExperiment object
-tse_aggregated <- TreeSummarizedExperiment(assays = list(counts = aggregated_counts), 
+tse_aggregated = TreeSummarizedExperiment(assays = list(counts = aggregated_counts), 
                                            colData = sample_data)
 
 # Calculate relative abundances
-relative_abundances <- sweep(assay(tse_aggregated, "counts"), 2, colSums(assay(tse_aggregated, "counts")), FUN = "/") * 100
+relative_abundances = sweep(assay(tse_aggregated, "counts"), 2, colSums(assay(tse_aggregated, "counts")), FUN = "/") * 100
 
 # Convert to a data frame and group by Treatment
-relative_df <- as.data.frame(t(relative_abundances))
+relative_df = as.data.frame(t(relative_abundances))
 
 set.seed (123456)
 
 # Define the vector of genera names (without the "g__" prefix)
-genera <- c("Prevotella", "Treponema", "Neisseria", "Bacteroides", 
+genera = c("Prevotella", "Treponema", "Neisseria", "Bacteroides", 
             "Filifactor", "Porphyromonas", "Fusobacterium", "Escherichia",
             "Selenomonas", "Aggregatibacter", "Capnocytophaga")
 
 # Initialize an empty data frame to store the results
-permanova_taxa_results <- data.frame(Genus = character(), pvalue = numeric(), stringsAsFactors = FALSE)
+permanova_taxa_results = data.frame(Genus = character(), pvalue = numeric(), stringsAsFactors = FALSE)
 
 # Loop over each genus
 for (genus in genera) {
   set.seed (123456)
   # Subset the data for the genus; adjust column selection as needed
-  subset_data <- relative_df %>% select(paste0("g__", genus))
+  subset_data = relative_df %>% select(paste0("g__", genus))
   
   # Calculate the Bray-Curtis distance
-  bray_dist <- vegdist(subset_data, method = "bray")
+  bray_dist = vegdist(subset_data, method = "bray")
   
   # Run PERMANOVA using adonis2
-  adonis_result <- adonis2(bray_dist ~ sample_type, data = groups)
+  adonis_result = adonis2(bray_dist ~ sample_type, data = groups)
   
   # Extract the p-value for the sample_type factor (usually in the first row)
-  pval <- adonis_result$`Pr(>F)`[1]
+  pval = adonis_result$`Pr(>F)`[1]
   
   # Append the result to the results data frame
-  permanova_taxa_results <- rbind(permanova_taxa_results, data.frame(Genus = genus, pvalue = pval))
+  permanova_taxa_results = rbind(permanova_taxa_results, data.frame(Genus = genus, pvalue = pval))
 }
 
 print(permanova_taxa_results)
@@ -378,22 +378,22 @@ The top 20 most abundant genera were selected from across the entire dataset and
   taxonomyRanks(tse_metaphlan_sal_swb)
   
   # make an assay for abundance
-  tse_metaphlan_sal_swb <- transformAssay(tse_metaphlan_sal_swb, assay.type="counts", method="relabundance")
+  tse_metaphlan_sal_swb = transformAssay(tse_metaphlan_sal_swb, assay.type="counts", method="relabundance")
   
   # make an altExp and matrix for Genus
-  altExp(tse_metaphlan_sal_swb,"Genus") <- agglomerateByRank(tse_metaphlan_sal_swb,"Genus")
+  altExp(tse_metaphlan_sal_swb,"Genus") = agglomerateByRank(tse_metaphlan_sal_swb,"Genus")
   
   # make a dataframe of relative abundance 
-  relabundance_df_Genus <- as.data.frame(assay(altExp(tse_metaphlan_sal_swb, "Genus"), "relabundance"))
+  relabundance_df_Genus = as.data.frame(assay(altExp(tse_metaphlan_sal_swb, "Genus"), "relabundance"))
   
   # make a matric of relative abundance 
-  relabundance_matrix_Genus <- assay(altExp(tse_metaphlan_sal_swb, "Genus"), "relabundance")
+  relabundance_matrix_Genus = assay(altExp(tse_metaphlan_sal_swb, "Genus"), "relabundance")
   
   # calculate the total relative abundance of each Genus (row sums)
-  total_relabundance_Genus <- rowSums(relabundance_matrix_Genus)
+  total_relabundance_Genus = rowSums(relabundance_matrix_Genus)
   
   # Identify the top 20 top Genuss
-  top_Genus <- names(sort(total_relabundance_Genus, decreasing = TRUE)[1:20])
+  top_Genus = names(sort(total_relabundance_Genus, decreasing = TRUE)[1:20])
   # Delete everything from start to Genus
   top_Genus = sub(".*_g__","",top_Genus)
   # Add Genus back in 
@@ -403,13 +403,13 @@ The top 20 most abundant genera were selected from across the entire dataset and
   top_Genus
   
   # make a new tse_metaphlan_sal_swb where the top 14 Genuss are recognised, while others are "other"
-  tse_metaphlan_sal_swb_top_20_Genus <- tse_metaphlan_sal_swb
+  tse_metaphlan_sal_swb_top_20_Genus = tse_metaphlan_sal_swb
   
   head(rowData(tse_metaphlan_sal_swb_top_20_Genus)$Genus)
   
-  rowData(tse_metaphlan_sal_swb_top_20_Genus)$Genus <- ifelse(rowData(tse_metaphlan_sal_swb_top_20_Genus)$Genus %in% top_Genus, rowData(tse_metaphlan_sal_swb_top_20_Genus)$Genus, "-other")
+  rowData(tse_metaphlan_sal_swb_top_20_Genus)$Genus = ifelse(rowData(tse_metaphlan_sal_swb_top_20_Genus)$Genus %in% top_Genus, rowData(tse_metaphlan_sal_swb_top_20_Genus)$Genus, "-other")
   
-  genus_colors <- c(
+  genus_colors = c(
     "-other" = "#E41A1C",
     "g__Actinomyces" = "#377EB8",
     "g__Aggregatibacter" = "#4DAF4A",
@@ -435,7 +435,7 @@ The top 20 most abundant genera were selected from across the entire dataset and
     "g__Veillonella" = "#FFD92F"
   )
   
-  Genus_plot_sal_swb <- plotAbundance(tse_metaphlan_sal_swb_top_20_Genus, 
+  Genus_plot_sal_swb = plotAbundance(tse_metaphlan_sal_swb_top_20_Genus, 
                               assay.type = "relabundance", 
                               rank = "Genus", 
                               add_x_text = TRUE) +
@@ -486,7 +486,7 @@ unique(metadata_noma$noma_stage_on_admission)
 #__________________________Makes into Genus________________________________________________
 
 # make an assay for abundance
-tse_metaphlan_sal_swb <- transformAssay(tse_metaphlan_sal_swb, assay.type="counts", method="relabundance")
+tse_metaphlan_sal_swb = transformAssay(tse_metaphlan_sal_swb, assay.type="counts", method="relabundance")
 
 taxonomyRanks(tse_metaphlan_sal_swb)
 
@@ -496,7 +496,7 @@ altExp(tse_metaphlan_sal_swb,"Genus")
 tse_metaphlan_sal_swb_genus = altExp(tse_metaphlan_sal_swb, "Genus")
 
 # Check that colData was added successfully
-colData(tse_metaphlan_sal_swb_genus) <- metadata_df
+colData(tse_metaphlan_sal_swb_genus) = metadata_df
 
 metadata_noma_genus = as.data.frame(colData(tse_metaphlan_sal_swb_genus))
 
@@ -531,10 +531,10 @@ deseq2_metaphlan_noma = phyloseq::phyloseq_to_deseq2(phyloseq_metaphlan_noma, de
 
 dds_noma = deseq2_metaphlan_noma
 
-design(dds_noma) <- ~ noma_stage_on_admission  # Replace with your column name for condition
+design(dds_noma) = ~ noma_stage_on_admission  # Replace with your column name for condition
 
 # Run DESeq2 analysis
-dds_stage <- DESeq(dds_noma)
+dds_stage = DESeq(dds_noma)
 ```
 
 
@@ -546,46 +546,46 @@ unique(metadata_noma$noma_stage_on_admission)
 
 
 # Extract results for diseased vs healthy
-res_stage <- results(dds_stage)
+res_stage = results(dds_stage)
 res_stage
 
-string <- "NA_p__Actinobacteria_c__Actinobacteria_o__Streptomycetales_f__Streptomycetaceae_g__Streptomyces"
-string_result <- gsub(".*(g__Streptomyces)", "\\1", string)
+string = "NA_p__Actinobacteria_c__Actinobacteria_o__Streptomycetales_f__Streptomycetaceae_g__Streptomyces"
+string_result = gsub(".*(g__Streptomyces)", "\\1", string)
 print(string_result)
 
 # Clean up genus names for dds
-rownames(dds_stage) <- gsub(".*(g__*)", "\\1", rownames(dds_stage))
+rownames(dds_stage) = gsub(".*(g__*)", "\\1", rownames(dds_stage))
 
 # Clean up genus names for res
-res_stage@rownames <- gsub(".*(g__*)", "\\1", res_stage@rownames)
+res_stage@rownames = gsub(".*(g__*)", "\\1", res_stage@rownames)
 
 
-res_stage_1_2 <- results(dds_stage, contrast = c("noma_stage_on_admission", "Stage_1", "Stage_2"))
+res_stage_1_2 = results(dds_stage, contrast = c("noma_stage_on_admission", "Stage_1", "Stage_2"))
 res_stage_1_2
 res_stage_1_2[order(res_stage_1_2$padj),]
 
-res_stage_2_3 <- results(dds_stage, contrast = c("noma_stage_on_admission", "Stage_2", "Stage_3"))
+res_stage_2_3 = results(dds_stage, contrast = c("noma_stage_on_admission", "Stage_2", "Stage_3"))
 res_stage_2_3
 
-res_stage_3_4 <- results(dds_stage, contrast = c("noma_stage_on_admission", "Stage_3", "Stage_4"))
+res_stage_3_4 = results(dds_stage, contrast = c("noma_stage_on_admission", "Stage_3", "Stage_4"))
 res_stage_3_4
 
 head(results(dds_stage, tidy=TRUE))
 summary(res_stage)
 
-res_stage_ordered <- res_stage[order(res_stage$padj),]
+res_stage_ordered = res_stage[order(res_stage$padj),]
 head(res_stage_ordered, n =20)
 
 res_stage_ordered_df = as.data.frame(res_stage_ordered)
 
-res_stage_1_2_ordered <- res_stage[order(res_stage_1_2$padj),]
+res_stage_1_2_ordered = res_stage[order(res_stage_1_2$padj),]
 head(res_stage_1_2_ordered, n =20)
 
 
-res_stage_2_3_ordered <- res_stage[order(res_stage_2_3$padj),]
+res_stage_2_3_ordered = res_stage[order(res_stage_2_3$padj),]
 head(res_stage_2_3_ordered, n =20)
 
-res_stage_3_4_ordered <- res_stage[order(res_stage_3_4$padj),]
+res_stage_3_4_ordered = res_stage[order(res_stage_3_4$padj),]
 head(res_stage_2_3_ordered, n =20)
 
 summary(res_stage)
@@ -596,47 +596,47 @@ summary(res_stage)
 
 ```{r}
 
-significant_stage <- as.data.frame(res_stage) %>%
+significant_stage = as.data.frame(res_stage) %>%
   filter(padj < 0.05)
 head(significant_stage) 
 
 
- significant_stage_1_2 <- as.data.frame(res_stage_1_2) %>%
+ significant_stage_1_2 = as.data.frame(res_stage_1_2) %>%
   filter(padj < 0.05)
 head(significant_stage_1_2) 
 
 
-significant_stage_2_3 <- as.data.frame(res_stage_2_3) %>%
+significant_stage_2_3 = as.data.frame(res_stage_2_3) %>%
   filter(padj < 0.05)
 head(significant_stage_2_3) 
 
-significant_stage_3_4 <- as.data.frame(res_stage_3_4) %>%
+significant_stage_3_4 = as.data.frame(res_stage_3_4) %>%
   filter(padj < 0.05)
 head(significant_stage_3_4) 
 
 # Order the results 
 
-sig_res_stage <- significant_stage[order(significant_stage$padj),]
+sig_res_stage = significant_stage[order(significant_stage$padj),]
 sig_res_stage$genus = rownames(sig_res_stage)
 head(sig_res_stage)
 head(sig_res_stage, n= 15)
 
 # Order the results for stages 1 to 2 
-sig_res_stage_1_2 <- significant_stage_2_3[order(significant_stage_1_2$padj),]
+sig_res_stage_1_2 = significant_stage_2_3[order(significant_stage_1_2$padj),]
 sig_res_stage_1_2$genus = rownames(sig_res_stage_1_2)
 head(sig_res_stage_1_2)
 head(sig_res_stage_1_2, n= 15)
 nrow(sig_res_stage_1_2)
 
 # Order the results for stages 2 to 3
-sig_res_stage_2_3 <- significant_stage_2_3[order(significant_stage_2_3$padj),]
+sig_res_stage_2_3 = significant_stage_2_3[order(significant_stage_2_3$padj),]
 sig_res_stage_2_3$genus = rownames(sig_res_stage_2_3)
 head(sig_res_stage_2_3)
 head(sig_res_stage_2_3, n= 15)
 nrow(sig_res_stage_2_3)
 
 # Order the results for stages 3 to 4 
-sig_res_stage_3_4 <- significant_stage_2_3[order(significant_stage_3_4$padj),]
+sig_res_stage_3_4 = significant_stage_2_3[order(significant_stage_3_4$padj),]
 sig_res_stage_3_4$genus = rownames(sig_res_stage_3_4)
 head(sig_res_stage_3_4)
 head(sig_res_stage_3_4, n= 15)
@@ -652,16 +652,16 @@ nrow(sig_res_stage_3_4)
 taxonomyRanks(tse_metaphlan_sal_swb)
 
 # make an altExp and matrix for Genus
-altExp(tse_metaphlan_sal_swb,"Genus") <- agglomerateByRank(tse_metaphlan_sal_swb,"Genus")
+altExp(tse_metaphlan_sal_swb,"Genus") = agglomerateByRank(tse_metaphlan_sal_swb,"Genus")
 
 # make a dataframe of relative abundance 
-relabundance_df_Genus <- as.data.frame(assay(altExp(tse_metaphlan_sal_swb, "Genus"), "relabundance"))
+relabundance_df_Genus = as.data.frame(assay(altExp(tse_metaphlan_sal_swb, "Genus"), "relabundance"))
 
 # make a matric of relative abundance 
-relabundance_matrix_Genus <- assay(altExp(tse_metaphlan_sal_swb, "Genus"), "relabundance")
+relabundance_matrix_Genus = assay(altExp(tse_metaphlan_sal_swb, "Genus"), "relabundance")
 
 # calculate the total relative abundance of each Genus (row sums)
-total_relabundance_Genus <- rowSums(relabundance_matrix_Genus)
+total_relabundance_Genus = rowSums(relabundance_matrix_Genus)
 
 # Get the top highly abundant genera based on relative abundance 
 top_Genus_numbers_basic = sort(total_relabundance_Genus, decreasing = TRUE)
@@ -673,7 +673,7 @@ top_Genus_numbers_df = as.data.frame(top_Genus_numbers_basic)
 top_Genus_numbers = as.tibble(top_Genus_numbers_df)
 
 # Rename genera to remove any higher taxonomic names (a quirk of the metaphaln style)
-rownames(top_Genus_numbers_df) <- gsub(".*(g__*)", "\\1", rownames(top_Genus_numbers_df))
+rownames(top_Genus_numbers_df) = gsub(".*(g__*)", "\\1", rownames(top_Genus_numbers_df))
 
 # Get percenatge by dividing by total number of samples (21) and * by 100
 top_Genus_pc = top_Genus_numbers %>% 
@@ -696,13 +696,13 @@ sig_res_stage$genera_above_0.1pc_relab
 unique(sig_res_stage$genera_above_0.1pc_relab)
 
 # Order the results  and look for highly abundant ones 
-sig_res_stage <- significant_stage[order(significant_stage$padj),]
+sig_res_stage = significant_stage[order(significant_stage$padj),]
 sig_res_stage$genus = rownames(sig_res_stage)
 head(sig_res_stage)
 head(sig_res_stage, n= 15)
 
 # Order the results for stages 1 to 2 
-sig_res_stage_1_2 <- significant_stage_2_3[order(significant_stage_1_2$padj),]
+sig_res_stage_1_2 = significant_stage_2_3[order(significant_stage_1_2$padj),]
 sig_res_stage_1_2$genus = rownames(sig_res_stage_1_2)
 head(sig_res_stage_1_2)
 head(sig_res_stage_1_2, n= 15)
@@ -714,7 +714,7 @@ sig_res_stage_1_2$genera_above_0.1pc_relab = ifelse(sig_res_stage_1_2$genus %in%
 unique(sig_res_stage_1_2$genera_above_0.1pc_relab)
 
 # Order the results for stages 2 to 3
-sig_res_stage_2_3 <- significant_stage_2_3[order(significant_stage_2_3$padj),]
+sig_res_stage_2_3 = significant_stage_2_3[order(significant_stage_2_3$padj),]
 sig_res_stage_2_3$genus = rownames(sig_res_stage_2_3)
 head(sig_res_stage_2_3)
 head(sig_res_stage_2_3, n= 15)
@@ -726,7 +726,7 @@ sig_res_stage_2_3$genera_above_0.1pc_relab = ifelse(sig_res_stage_2_3$genus %in%
 unique(sig_res_stage_2_3$genera_above_0.1pc_relab)
 
 # Order the results for stages 3 to 4 
-sig_res_stage_3_4 <- significant_stage_2_3[order(significant_stage_3_4$padj),]
+sig_res_stage_3_4 = significant_stage_2_3[order(significant_stage_3_4$padj),]
 sig_res_stage_3_4$genus = rownames(sig_res_stage_3_4)
 head(sig_res_stage_3_4)
 head(sig_res_stage_3_4, n= 15)
@@ -745,7 +745,7 @@ unique(sig_res_stage_3_4$genera_above_0.1pc_relab)
 First we create a function 
 
 ```{r}
-plotCountsGGanysig <- function(dds, gene, intgroup = "condition", normalized = TRUE,  
+plotCountsGGanysig = function(dds, gene, intgroup = "condition", normalized = TRUE,  
                          transform = TRUE, main, xlab = "group", returnData = FALSE,  
                          replaced = FALSE, pc, plot = "point", text = TRUE, showSignificance = TRUE, ...) {  
   # Check input gene validity
@@ -765,22 +765,22 @@ plotCountsGGanysig <- function(dds, gene, intgroup = "condition", normalized = T
   
   # Set pseudo count if not provided
   if (missing(pc)) {  
-    pc <- if (transform) 0.5 else 0  
+    pc = if (transform) 0.5 else 0  
   }  
   
   # Estimate size factors if missing
   if (is.null(sizeFactors(dds)) & is.null(normalizationFactors(dds))) {  
-    dds <- estimateSizeFactors(dds)  
+    dds = estimateSizeFactors(dds)  
   }  
   
   # Get the counts for the gene
-  cnts <- counts(dds, normalized = normalized, replaced = replaced)[gene, ]  
+  cnts = counts(dds, normalized = normalized, replaced = replaced)[gene, ]  
   
   # Generate grouping variable
-  group <- if (length(intgroup) == 1) {  
+  group = if (length(intgroup) == 1) {  
     colData(dds)[[intgroup]]  
   } else if (length(intgroup) == 2) {  
-    lvls <- as.vector(t(outer(levels(colData(dds)[[intgroup[1]]]),  
+    lvls = as.vector(t(outer(levels(colData(dds)[[intgroup[1]]]),  
                               levels(colData(dds)[[intgroup[2]]]), function(x, y) paste(x, y, sep = ":"))))  
     droplevels(factor(apply(as.data.frame(colData(dds)[, intgroup, drop = FALSE]), 1, paste, collapse = ":"),  
                       levels = lvls))  
@@ -789,14 +789,14 @@ plotCountsGGanysig <- function(dds, gene, intgroup = "condition", normalized = T
   }  
   
   # Create the data frame with counts, group, and sample names
-  data <- data.frame(count = cnts + pc, group = group, sample = colnames(dds), condition = group)  
+  data = data.frame(count = cnts + pc, group = group, sample = colnames(dds), condition = group)  
   
   # Set log scale if necessary
-  logxy <- if (transform) "y" else ""  
+  logxy = if (transform) "y" else ""  
   
   # Set the plot title
   if (missing(main)) {  
-    main <- if (is.numeric(gene)) {  
+    main = if (is.numeric(gene)) {  
       rownames(dds)[gene]  
     } else {  
       gene  
@@ -804,14 +804,14 @@ plotCountsGGanysig <- function(dds, gene, intgroup = "condition", normalized = T
   }  
   
   # Set the y-axis label based on normalization
-  ylab <- ifelse(normalized, "normalized count", "count")  
+  ylab = ifelse(normalized, "normalized count", "count")  
   
   # Return the data if requested
   if (returnData)  
     return(data.frame(count = data$count, colData(dds)[intgroup]))  
   
   # Create the base ggplot object with data and aesthetic mappings
-  p <- ggplot(data, aes(x = group, y = count, label = sample, color = condition)) +
+  p = ggplot(data, aes(x = group, y = count, label = sample, color = condition)) +
     labs(x = xlab, y = ylab, title = main) +  # Labels and title
     theme_minimal() +  # Clean theme
     scale_y_continuous(trans = ifelse(transform, "log10", "identity")) +  # Apply log transformation if needed
@@ -819,20 +819,20 @@ plotCountsGGanysig <- function(dds, gene, intgroup = "condition", normalized = T
   
   # Select the type of plot based on the 'plot' argument
   if (plot == "point") {
-    p <- p + geom_point(size = 3)
-    if (text) p <- p + geom_text(hjust = -0.2, vjust = 0)  # Add text if text = TRUE
+    p = p + geom_point(size = 3)
+    if (text) p = p + geom_text(hjust = -0.2, vjust = 0)  # Add text if text = TRUE
   } else if (plot == "jitter") {
-    p <- p + geom_jitter(size = 3, width = 0.2)
-    if (text) p <- p + geom_text(hjust = -0.2, vjust = 0)  # Add text if text = TRUE
+    p = p + geom_jitter(size = 3, width = 0.2)
+    if (text) p = p + geom_text(hjust = -0.2, vjust = 0)  # Add text if text = TRUE
   } else if (plot == "bar") {
-    p <- p + geom_bar(stat = "summary", fun = "mean", position = "dodge", width = 0.7) +  # Bar plot with whiskers
+    p = p + geom_bar(stat = "summary", fun = "mean", position = "dodge", width = 0.7) +  # Bar plot with whiskers
       geom_errorbar(stat = "summary", fun.data = "mean_se", width = 0.2)
   } else if (plot == "violin") {
-    p <- p + geom_violin(trim = FALSE) + geom_jitter(size = 2, width = 0.2)
-    if (text) p <- p + geom_text(hjust = -0.2, vjust = 0)  # Add text if text = TRUE
+    p = p + geom_violin(trim = FALSE) + geom_jitter(size = 2, width = 0.2)
+    if (text) p = p + geom_text(hjust = -0.2, vjust = 0)  # Add text if text = TRUE
   } else if (plot == "box") {
-    p <- p + geom_boxplot()
-    if (text) p <- p + geom_text(hjust = -0.2, vjust = 0)  # Add text if text = TRUE
+    p = p + geom_boxplot()
+    if (text) p = p + geom_text(hjust = -0.2, vjust = 0)  # Add text if text = TRUE
   } else {
     stop("Invalid plot type. Choose from 'point', 'jitter', 'bar', 'violin', or 'box'.")
   }
@@ -840,12 +840,12 @@ plotCountsGGanysig <- function(dds, gene, intgroup = "condition", normalized = T
   # Add significance annotation if requested
   if (showSignificance) {
     # Get DESeq2 results for gene using Wald test and BH adjustment
-    res <- results(dds, contrast = c(intgroup, levels(group)[1], levels(group)[2]), alpha = 0.05)
-    res_gene <- res[gene, ]
+    res = results(dds, contrast = c(intgroup, levels(group)[1], levels(group)[2]), alpha = 0.05)
+    res_gene = res[gene, ]
     
     # Check significance and add stars/annotations
     if (!is.na(res_gene$padj) && res_gene$padj < 0.05) {
-      p <- p + annotate("text", x = 1.5, y = max(data$count), label = "*", size = 8)
+      p = p + annotate("text", x = 1.5, y = max(data$count), label = "*", size = 8)
     }
   }
   
