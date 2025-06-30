@@ -2,11 +2,11 @@
 
 This repository includes the code used to run the analysis in a recent study currently posted as a preprint on bioRxiv:
 
-Shotgun metagenomic analysis of the oral microbiomes of children with noma reveals a novel disease-associated organism
+[**Shotgun metagenomic analysis of the oral microbiomes of children with noma reveals a novel disease-associated organism**](https://doi.org/10.1101/2025.06.24.661267)
 
 Michael Olaleye, Angus M O'Ferrall, Richard N. Goodman, Deogracia W Kabila, Miriam Peters, Gregoire Falq, Joseph Samuel, Donal Doyle, Diana Gomez, Gbemisola Oloruntuyi, Shafiu Isah, Adeniyi S Adetunji, Elise N. Farley, Nicholas J Evans, Mark Sherlock, Adam P. Roberts, Mohana Amirtharajah, Stuart Ainsworth
 
-bioRxiv 2025.06.24.661267; doi: https://doi.org/10.1101/2025.06.24.661267
+*bioRxiv* 2025.06.24.661267; doi: [https://doi.org/10.1101/2025.06.24.661267](https://doi.org/10.1101/2025.06.24.661267)
 
 ## Part 1 - Taxonomic based metagenomic analysis
 
