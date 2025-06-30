@@ -8,11 +8,11 @@ Michael Olaleye, Angus M O'Ferrall, Richard N. Goodman, Deogracia W Kabila, Miri
 
 *bioRxiv* 2025.06.24.661267; doi: [https://doi.org/10.1101/2025.06.24.661267](https://doi.org/10.1101/2025.06.24.661267)
 
-The code used in the analysis is linked below for the **taxonomic based metagenomic analysis** of noma samples and healthy dataset (Table 1, Figures 1-3 and Supplementary Figures S1-S4) and the **recovery and analysis of *Treponema* MAGs from noma samples** (Figures 4-5).
+The code used in the analysis is linked below for the **taxonomic based metagenomic analysis** of noma samples and healthy dataset (Table 1, Figures 1-3 and Supplementary Figures S1-S4), the **recovery and analysis of *Treponema* MAGs from noma samples** (Figure 4) and  **AMR profiling of noma metagenomes** (Figure 5).
 
 ## Part 1 - Taxonomic based metagenomic analysis
 
-### Part 1.1 - [Within Noma dataset analysis](https://rngoodman.github.io/noma-metagenomics/code/Noma_swab_vs_saliva.html)
+### Part 1.1 - [Within noma dataset analysis](https://rngoodman.github.io/noma-metagenomics/code/Noma_swab_vs_saliva.html)
 * Relative abundance
 * non-parametric statistical tests
 
@@ -25,10 +25,10 @@ The code used in the analysis is linked below for the **taxonomic based metageno
 * Differential analysis
 * Machine learning and multivariate statistical analyses
 
-## Part 2 - Recovery and analysis of *Treponema* MAGs from Noma samples
+## Part 2 - Recovery and analysis of *Treponema* MAGs from noma samples
 
 *To be completed*
 
-## Part 3 - AMR profiling
+## Part 3 - AMR profiling of noma metagenomes
 
 *To be completed*
