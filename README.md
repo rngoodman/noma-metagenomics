@@ -28,3 +28,7 @@ The code used in the analysis is linked below for the **taxonomic based metageno
 ## Part 2 - Recovery and analysis of *Treponema* MAGs from Noma samples
 
 *To be completed*
+
+## Part 3 - AMR profiling
+
+*To be completed*
