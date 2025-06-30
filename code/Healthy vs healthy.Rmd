@@ -5,6 +5,14 @@ date: "`r Sys.Date()`"
 output: html_document
 ---
 
+This analysis was used in the short-read (Illumina) taxonomic based metagenomic analysis of healthy human saliva samples in R posted as a preprint on bioRxiv:
+
+**Shotgun metagenomic analysis of the oral microbiomes of children with noma reveals a novel disease-associated organism**
+
+Michael Olaleye, Angus M O'Ferrall, Richard N. Goodman, Deogracia W Kabila, Miriam Peters, Gregoire Falq, Joseph Samuel, Donal Doyle, Diana Gomez, Gbemisola Oloruntuyi, Shafiu Isah, Adeniyi S Adetunji, Elise N. Farley, Nicholas J Evans, Mark Sherlock, Adam P. Roberts, Mohana Amirtharajah, Stuart Ainsworth
+
+bioRxiv 2025.06.24.661267; doi: https://doi.org/10.1101/2025.06.24.661267
+
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 ```
