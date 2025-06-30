@@ -8,6 +8,8 @@ Michael Olaleye, Angus M O'Ferrall, Richard N. Goodman, Deogracia W Kabila, Miri
 
 *bioRxiv* 2025.06.24.661267; doi: [https://doi.org/10.1101/2025.06.24.661267](https://doi.org/10.1101/2025.06.24.661267)
 
+The code used in the analysis is linked below for the **Taxonomic based metagenomic analysis** of noma samples and healthy dataset (Table 1 and Figures 1-3) and the **recovery and analysis of MAGs from noma samples** (Figures 4-5).
+
 ## Part 1 - Taxonomic based metagenomic analysis
 
 ### Part 1.1 - [Within Noma dataset analysis](https://rngoodman.github.io/noma-metagenomics/code/Noma_swab_vs_saliva.html)
@@ -23,6 +25,6 @@ Michael Olaleye, Angus M O'Ferrall, Richard N. Goodman, Deogracia W Kabila, Miri
 * Differential analysis
 * Machine learning and multivariate statistical analyses
 
-## Part 2 - Recovery of MAGs from Noma samples
+## Part 2 - Recovery and analysis of MAGs from Noma samples
 
 *To be completed*
