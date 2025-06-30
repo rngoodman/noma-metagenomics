@@ -8,7 +8,7 @@ Michael Olaleye, Angus M O'Ferrall, Richard N. Goodman, Deogracia W Kabila, Miri
 
 *bioRxiv* 2025.06.24.661267; doi: [https://doi.org/10.1101/2025.06.24.661267](https://doi.org/10.1101/2025.06.24.661267)
 
-The code used in the analysis is linked below for the **taxonomic based metagenomic analysis** of noma samples and healthy dataset (Table 1 and Figures 1-3) and the **recovery and analysis of MAGs from noma samples** (Figures 4-5).
+The code used in the analysis is linked below for the **taxonomic based metagenomic analysis** of noma samples and healthy dataset (Table 1, Figures 1-3 and Supplementary Figures S1-S4) and the **recovery and analysis of MAGs from noma samples** (Figures 4-5).
 
 ## Part 1 - Taxonomic based metagenomic analysis
 
