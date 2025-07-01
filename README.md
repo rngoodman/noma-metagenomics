@@ -20,7 +20,7 @@ The code used in the analysis is linked below for the **taxonomic based metageno
 * Non-parametric statistical tests 
 
 ### Part 1.3 - [R markdown - Noma vs healthy dataset analysis (Table 1A, Figures 1B, 2 and 3, Figures S2-S4)](https://rngoodman.github.io/noma-metagenomics/code/Noma_vs_healthy.html)
-* non-parametric statistical tests 
+* Non-parametric statistical tests 
 * Relative abundance
 * Differential analysis
 * Machine learning and multivariate statistical analyses
