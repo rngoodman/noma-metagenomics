@@ -35,7 +35,7 @@ The code used in the analysis is linked below for the **taxonomic based metageno
 * Maxiumum-likelihood phylogenetic tree
 
 ### Part 2.3 - [Python script - Average nucleotide identity (ANI) matrices for novel *Treponema* MAGs (Figure 4C)](https://github.com/rngoodman/noma-metagenomics/blob/main/code/ANI_visualisation_multi.py)
-* ANI matrices for each novel species represented by more than one MAG
+* ANI visualisation for each novel species represented by more than one MAG
 
 ## Part 3 - Antimicrobial resistance (AMR) profiling
 
