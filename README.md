@@ -12,14 +12,14 @@ The code used in the analysis is linked below for the **taxonomic based metageno
 
 ## Part 1 - Taxonomic based metagenomic analysis
 
-### Part 1.1 - [Within noma dataset analysis](https://rngoodman.github.io/noma-metagenomics/code/Noma_swab_vs_saliva.html)
+### Part 1.1 - [R markdown - Within noma dataset analysis](https://rngoodman.github.io/noma-metagenomics/code/Noma_swab_vs_saliva.html)
 * Relative abundance
 * non-parametric statistical tests
 
-### Part 1.2 - [Within healthy dataset analysis](https://rngoodman.github.io/noma-metagenomics/code/Healthy_vs_healthy.html)
+### Part 1.2 - [R markdown - Within healthy dataset analysis](https://rngoodman.github.io/noma-metagenomics/code/Healthy_vs_healthy.html)
 * non-parametric statistical tests 
 
-### Part 1.3 - [Noma vs healthy dataset analysis](https://rngoodman.github.io/noma-metagenomics/code/Noma_vs_healthy.html)
+### Part 1.3 - [R markdown - Noma vs healthy dataset analysis](https://rngoodman.github.io/noma-metagenomics/code/Noma_vs_healthy.html)
 * non-parametric statistical tests 
 * Relative abundance
 * Differential analysis
