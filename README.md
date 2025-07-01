@@ -27,7 +27,9 @@ The code used in the analysis is linked below for the **taxonomic based metageno
 
 ## Part 2 - Recovery and analysis of *Treponema* MAGs from noma samples
 
-*To be completed*
+### Part 2.1 - [R script to generate Figure 4A (Decriptive plot of *Treponema* MAGs)] ()
+
+### Part
 
 ## Part 3 - AMR profiling of noma metagenomes
 
