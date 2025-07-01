@@ -1,0 +1,41 @@
+﻿MAG_ID,Species,Name,Completeness,Contamination,Quality,Novel,16S comment
+26742_A13_bin.60_H,Treponema lecithinolyticum,T. lec. i,95.45454545,0,High,No,No 16S in MAG
+26694_A30_bin.63_M,Treponema maltophilum,T. malt. i,53.58141858,0,Medium,No,No 16S in MAG
+26694_A30_bin.57_M,Treponema medium,T. med. i,63.64556645,1.411290323,Medium,No,No 16S in MAG
+26685_A26_bin.85_M,Treponema sp014334325,T. sp014334325 I,80.90423465,0.276806527,Medium,No,No 16S in MAG
+26686_A27_bin.15_H,Treponema sp905372235,T. sp905372235 i,91.4522977,0.024975025,High,No,1541 bp 16S rRNA gene (no match in GenBank db with >99% ID)
+26641_A1_bin.9_H,Treponema sp. A,Ai,95.8041958,0.024975025,High,Yes,No 16S in MAG
+26650_A2_bin.49_H,Treponema sp. A,Aii,95.49825175,0,High,Yes,No 16S in MAG
+26678_A25_bin.5_H,Treponema sp. A,Aiii,94.7985348,1.631701632,High,Yes,No 16S in MAG
+26685_A26_bin.136_M,Treponema sp. A,Aiv,77.7000777,0,Medium,Yes,No 16S in MAG
+26692_A28_bin.5_H,Treponema sp. A,Av,98.6013986,0,High,Yes,No 16S in MAG
+26694_A30_bin.22_M,Treponema sp. A,Avi,86.4024864,1.398601399,Medium,Yes,No 16S in MAG
+26742_A13_bin.20_H,Treponema sp. A,Avii,98.6013986,0,High,Yes,No 16S in MAG
+26783_A34_bin.20_H,Treponema sp. A,Aviii,96.5034965,0,High,Yes,No 16S in MAG
+26851_A35_bin.8_M,Treponema sp. A,Aix,62.34765235,0,Medium,Yes,926bp 16S rRNA gene (>99% ID to GESNOMA AM420013 - uncultured Treponema partial 16S)
+26868_A17_bin.3_H,Treponema sp. A,Ax,90.20979021,0.043706294,High,Yes,No 16S in MAG
+26913_A40_bin.76_H,Treponema sp. A,Axi,98.6013986,0,High,Yes,No 16S in MAG
+26641_A1_bin.57_M,Treponema sp. B,Bi,57.53021916,0,Medium,Yes,No 16S in MAG
+26678_A5_bin.20_M,Treponema sp. B,Bii,70.0338408,2.419354839,Medium,Yes,No 16S in MAG
+26783_A34_bin.13_H,Treponema sp. B,Biii,94.35483871,0,High,Yes,No 16S in MAG
+26868_A17_bin.5_H,Treponema sp. B,Biv,97.58064516,0.967741935,High,Yes,No 16S in MAG
+26900_A39_bin.17_H,Treponema sp. B,Bv,96.37096774,0,High,Yes,No 16S in MAG
+26641_A1_bin.76_H,Treponema sp. C,Ci,99.3006993,0,High,Yes,No 16S in MAG
+26650_A2_bin.71_M,Treponema sp. C,Cii,69.6040071,0.258075258,Medium,Yes,No 16S in MAG
+26685_A26_bin.100_H,Treponema sp. C,Ciii,97.9020979,2.097902098,High,Yes,No 16S in MAG
+26742_A13_bin.36_M,Treponema sp. C,Civ,52.75516151,0.699300699,Medium,Yes,No 16S in MAG
+26678_A25_bin.20_H,Treponema sp. D,Di,96.63978495,0.806451613,High,Yes,No 16S in MAG
+26783_A34_bin.6_H,Treponema sp. D,Dii,99.05913978,0.806451613,High,Yes,No 16S in MAG
+26900_A39_bin.8_H,Treponema sp. D,Diii,97.04301075,1.440092166,High,Yes,No 16S in MAG
+26678_A5_bin.9_H,Treponema sp. E,Ei,98.38709677,0.853889943,High,Yes,No 16S in MAG
+26783_A34_bin.15_M,Treponema sp. E,Eii,95.96774194,5.69259962,Medium,Yes,No 16S in MAG
+26650_A2_bin.12_M,Treponema sp. F,Fi,75.44224766,0.806451613,Medium,Yes,No 16S in MAG
+26685_A6_bin.14_M,Treponema sp. F,Fi,75.95300035,1.209677419,Medium,Yes,No 16S in MAG
+26685_A6_bin.40_H,Treponema sp. G,Gi,98.38709677,0,High,Yes,No 16S in MAG
+26783_A34_bin.12_H,Treponema sp. H,Hi,95.36713287,0,High,Yes,No 16S in MAG
+26678_A25_bin.19_H,Treponema sp. I,Ii,91.93548387,0.806451613,High,Yes,No 16S in MAG
+26783_A34_bin.1_H,Treponema sp. J,Ji,90.47285303,0.403225806,High,Yes,No 16S in MAG
+26678_A25_bin.7_M,Treponema sp. K,Ki,84.58205447,4.580094265,Medium,Yes,438 bp 16S rRNA gene (no match in GenBank db with >99% ID)
+26668_A3_bin.18_M,Treponema sp. L,Li,83.06954051,0,Medium,Yes,No 16S in MAG
+26742_A13_bin.39_M,Treponema sp. M,Mi,70.16528926,3.636363636,Medium,Yes,No 16S in MAG
+26685_A26_bin.64_M,Treponema sp. N,Ni,63.56449135,1.612903226,Medium,Yes,No 16S in MAG
