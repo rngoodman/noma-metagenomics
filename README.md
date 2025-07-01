@@ -12,14 +12,14 @@ The code used in the analysis is linked below for the **taxonomic based metageno
 
 ## Part 1 - Taxonomic based metagenomic analysis
 
-### Part 1.1 - [R markdown - Within noma dataset analysis](https://rngoodman.github.io/noma-metagenomics/code/Noma_swab_vs_saliva.html)
+### Part 1.1 - [R markdown - Within noma dataset analysis (Table 1B, Figure 1A, Figure S1)](https://rngoodman.github.io/noma-metagenomics/code/Noma_swab_vs_saliva.html)
 * Relative abundance
 * non-parametric statistical tests
 
 ### Part 1.2 - [R markdown - Within healthy dataset analysis](https://rngoodman.github.io/noma-metagenomics/code/Healthy_vs_healthy.html)
 * non-parametric statistical tests 
 
-### Part 1.3 - [R markdown - Noma vs healthy dataset analysis](https://rngoodman.github.io/noma-metagenomics/code/Noma_vs_healthy.html)
+### Part 1.3 - [R markdown - Noma vs healthy dataset analysis (Table 1A, Figures 1B, 2 and 3, Figures S2-S4)](https://rngoodman.github.io/noma-metagenomics/code/Noma_vs_healthy.html)
 * non-parametric statistical tests 
 * Relative abundance
 * Differential analysis
@@ -27,13 +27,12 @@ The code used in the analysis is linked below for the **taxonomic based metageno
 
 ## Part 2 - Recovery and analysis of *Treponema* MAGs from noma samples
 
-### Part 2.1 - [R script to generate Figure 4A (Decriptive plot of *Treponema* MAGs)](https://github.com/rngoodman/noma-metagenomics/blob/main/code/Treponema_MAGs.R)
+### Part 2.1 - [R script - Descriptive plot of *Treponema* MAGs (Figure 4A)](https://github.com/rngoodman/noma-metagenomics/blob/main/code/Treponema_MAGs.R)
 
-### Part 2.2 - [R script to generate Figure 4B (Tree of high-quality *Treponema* MAGs in context of previously characterised *Treponema* RefSeq genomes)](https://github.com/rngoodman/noma-metagenomics/blob/main/code/tree.R)
+### Part 2.2 - [R script - Tree of high-quality *Treponema* MAGs in context of previously characterised *Treponema* RefSeq genomes (Figure 4B)](https://github.com/rngoodman/noma-metagenomics/blob/main/code/tree.R)
 
-### Part 2.3 - [Python script to generate Figure 4C (ANI matrices for novel *Treponema* MAGs)](https://github.com/rngoodman/noma-metagenomics/blob/main/code/ANI_visualisation_multi.py)
-
+### Part 2.3 - [Python script - ANI matrices for novel *Treponema* MAGs (Figure 4C)](https://github.com/rngoodman/noma-metagenomics/blob/main/code/ANI_visualisation_multi.py)
 
 ## Part 3 - AMR profiling of noma metagenomes
 
-### Part 3.1 - [R script to generate Figure 5 (AMR plots)](https://github.com/rngoodman/noma-metagenomics/blob/main/code/ARGs.R)
+### Part 3.1 - [R script - AMR plots (Figure 5)](https://github.com/rngoodman/noma-metagenomics/blob/main/code/ARGs.R)
