@@ -33,6 +33,7 @@ library(pheatmap)
 library(dplyr)
 library(tidyr)
 library(tibble)
+library(purrr)
 library(RColorBrewer)
 library(miaViz)
 library(scater)
@@ -51,6 +52,8 @@ library(e1071)
 library(pROC)
 library(ROCR)
 library(caret) 
+library(scales)
+library(patchwork)
 ```
 
 # 2. Import and Clean Data
@@ -146,6 +149,7 @@ head(colData(tse_metaphlan))
 head(metadata(tse_metaphlan))
 
 ```
+
 ## 2.5 Converting TSE to other common data formats e.g. Phyloseq 
 
 ```{r}
@@ -248,7 +252,7 @@ vegan::mrpp(noma.bray, condition_group, permutations = 999,
 
 ```
 
-## 3.4 Outputting non paramteric tests into table
+## 3.4 Outputting non parametric tests into table
 
 ```{r}
 # Define the list of metadata variables you want to test
@@ -324,67 +328,6 @@ write.csv(final_results_table, file ="../tbls/Table_1A.csv")
 ```
 
 
-## 3.5 Permanova function for specific taxa
-
-```{r}
-
-# create a 
-tse_metaphlan_genus = altExp(tse_metaphlan, "Genus") 
-
-# Extract the counts and taxonomic table
-counts = assay(tse_metaphlan_genus, "counts")
-tax_table = rowData(tse_metaphlan_genus)$Genus  # Replace "Genus" with your taxonomic level of interest
-sample_data = colData(tse_metaphlan_genus)
-
-groups = as.data.frame(sample_data)
-
-# Aggregate counts by Genus
-aggregated_counts = rowsum(counts, tax_table)
-
-# Create a new aggregated TreeSummarizedExperiment object
-tse_aggregated = TreeSummarizedExperiment(assays = list(counts = aggregated_counts), 
-                                           colData = sample_data)
-
-# Calculate relative abundances
-relative_abundances = sweep(assay(tse_aggregated, "counts"), 2, colSums(assay(tse_aggregated, "counts")), FUN = "/") * 100
-
-# Convert to a data frame and group by Treatment
-relative_df = as.data.frame(t(relative_abundances))
-
-set.seed (123456)
-
-# Define the vector of genera names (without the "g__" prefix)
-genera = c("Prevotella", "Treponema", "Neisseria", "Bacteroides", 
-            "Filifactor", "Porphyromonas", "Fusobacterium", "Escherichia",
-            "Selenomonas", "Aggregatibacter", "Capnocytophaga")
-
-# Initialize an empty data frame to store the results
-permanova_taxa_results = data.frame(Genus = character(), pvalue = numeric(), stringsAsFactors = FALSE)
-
-# Loop over each genus
-for (genus in genera) {
-  set.seed (123456)
-  # Subset the data for the genus; adjust column selection as needed
-  subset_data = relative_df %>% select(paste0("g__", genus))
-  
-  # Calculate the Bray-Curtis distance
-  bray_dist = vegdist(subset_data, method = "bray")
-  
-  # Run PERMANOVA using adonis2
-  adonis_result = adonis2(bray_dist ~ condition, data = groups)
-  
-  # Extract the p-value for the sample_type factor (usually in the first row)
-  pval = adonis_result$`Pr(>F)`[1]
-  
-  # Append the result to the results data frame
-  permanova_taxa_results = rbind(permanova_taxa_results, data.frame(Genus = genus, pvalue = pval))
-}
-
-print(permanova_taxa_results)
-
-```
-
-
 # 4. Relative Abundance 
 
 The top 20 most abundant genera were selected from across the entire dataset and visualised with the plotAbundance function of miaViz.
@@ -405,7 +348,7 @@ The top 20 most abundant genera were selected from across the entire dataset and
   # make a dataframe of relative abundance 
   relabundance_df_Genus = as.data.frame(assay(altExp(tse_metaphlan, "Genus"), "relabundance"))
   
-  # make a matric of relative abundance 
+  # make a matrix of relative abundance 
   relabundance_matrix_Genus = assay(altExp(tse_metaphlan, "Genus"), "relabundance")
   
   # calculate the total relative abundance of each Genus (row sums)
@@ -506,141 +449,176 @@ p
 
 ggsave("../imgs/Supplementary_Figure_4.png", plot =  p, width = 28, height = 16, dpi = 400)
 ```
-## 4.3 Statistical differences in relative abundance of top 20 genera
 
+## 4.3 Statistical differences in relative abundance with wilcox-test and FDR
+```{r}
+
+# --- Step 1: Prepare your data ---
+# Make sure 'groups$condition' is a factor with the correct reference level
+# The reference level (e.g., "healthy") is important for the fold change calculation
+
+sample_data = colData(tse_metaphlan_noma_genus)
+
+groups = as.data.frame(sample_data)
+
+# make a dataframe of relative abundance of all genera for each sample
+relative_abundances = relabundance_df_Genus
+
+# Remove higher taxonomic names
+rownames(relative_abundances) = gsub(".*(g__*)", "\\1", rownames(relative_abundances))
+
+# Transpose the relative abundances matrix
+transposed_matrix = t(relative_abundances)
+
+# Convert the resulting matrix back into a data frame
+relative_df = as.data.frame(transposed_matrix)
+
+# Create factor at group level 
+groups$condition = factor(groups$condition, levels = c("healthy", "diseased"))
+
+# Combine abundance and metadata into one data frame for easy access
+full_data = cbind(relative_df, groups)
+
+# Define the list of all genera you want to test
+genera_to_test = c("g__Actinomyces", "g__Aggregatibacter", "g__Bacteroides", 
+                    "g__Campylobacter", "g__Capnocytophaga", "g__Dialister",
+                    "g__Escherichia", "g__Filifactor", "g__Fusobacterium",
+                    "g__Gemella", "g__Haemophilus", "g__Leptotrichia",
+                    "g__Neisseria", "g__Porphyromonas", "g__Prevotella",
+                    "g__Rothia", "g__Schaalia", "g__Selenomonas",
+                    "g__Streptococcus", "g__Tannerella", "g__Treponema", 
+                    "g__Veillonella")
+
+# Calculate a pseudocount
+# This is a small number to add before calculating fold change to avoid log(0) issues.
+# A good pseudocount is half of the smallest non-zero value in your abundance data.
+pseudocount = min(relative_df[relative_df > 0]) / 2
+
+# Loop, Test, and Calculate 
+# We will loop through each genus and perform all calculations
+results_table = map_dfr(genera_to_test, ~{
+  
+  # Define the current genus
+  current_genus = .x
+  
+  # 1. Perform the Wilcoxon Rank-Sum Test
+  test_result = wilcox.test(
+    as.formula(paste0("`", current_genus, "` ~ condition")), 
+    data = full_data
+  )
+  
+  # 2. Calculate Median Abundances for each group
+  medians = full_data %>%
+    group_by(condition) %>%
+    summarise(median_abund = median(.data[[current_genus]]))
+  
+  median_healthy = medians$median_abund[medians$condition == "healthy"]
+  median_diseased = medians$median_abund[medians$condition == "diseased"]
+  
+  # 3. Calculate Log2 Fold Change using medians and the pseudocount
+  log2_fc = log2((median_diseased + pseudocount) / (median_healthy + pseudocount))
+  
+  # 4. Return all results for this genus in a single row
+  tibble(
+    Genus = gsub("g__", "", current_genus),
+    p_value = test_result$p.value,
+    log2_fold_change = log2_fc
+  )
+})
+
+head(results_table)
+
+# Apply FDR Correction and sort 
+results_table = results_table %>%
+  mutate(
+    q_value_BH = p.adjust(p_value, method = "BH")
+  ) %>%
+  # Reorder columns and sort by significance
+  select(Genus, p_value, q_value_BH, log2_fold_change) %>%
+  arrange(q_value_BH)
+
+# View your final results table 
+print(results_table)
+```
+
+## 4.4 Plotting differences in relative abundance of top 20 genera as boxplots
 ```{r, warning=FALSE}
 
+# This new function takes q_val and lfc as arguments
+plot_relab_boxplot_with_stats = function(genus_name, abundance_data, metadata, q_val, lfc) {
   
-  plot_relab_boxplot = function(genus = relative_df$g__Prevotella,
-                                sample_data = sample_data,
-                                title = "Prevotella",
-                                ...) {  
-    rel_df = data.frame (
-      genus = genus,
-      condition = sample_data
-    )
-    
-    # Create the boxplot with significance
-    p = ggplot(rel_df, aes(x = condition, y = genus, fill = condition)) +
-      geom_boxplot() +
-      geom_signif(comparisons = list(c("healthy", "diseased")),
-                  map_signif_level = FALSE,
-                  test = wilcox.test) +
-      labs(title = title,
-           x = "condition",
-           y = "Relative Abundance") +
-      theme_minimal() +
-      scale_fill_manual(values = c("healthy" = "#4682B4", "diseased" = "#E41A1C")) +
-      theme(legend.position = "none")
-    
-    print(p)
-  }
+  # Prepare the data frame for this specific plot
+  plot_df = data.frame(
+    abundance = abundance_data[[paste0("g__", genus_name)]],
+    condition = metadata$condition # Assumes the condition column is named 'condition'
+  )
   
+  # Create the text for the annotation
+  # We format the numbers to look nice on the plot
+  annotation_text = paste0(
+    "q = ", scientific(q_val, digits = 2),
+    "\nLFC = ", round(lfc, 2) # "\n" creates a new line
+  )
   
-  Actinomyces_rel_bp = plot_relab_boxplot(genus = relative_df$g__Actinomyces,
-                                          sample_data = sample_data,
-                                          title = "Actinomyces")
+  # Create the boxplot
+  p = ggplot(plot_df, aes(x = condition, y = abundance, fill = condition)) +
+    geom_boxplot(outlier.shape = NA) + # Hide outliers to prevent overplotting
+    geom_jitter(shape = 16, width = 0.2, alpha = 0.7) + # Show all points
+    # Add the custom text annotation to the plot
+    annotate(
+      "text",
+      x = 1.5, # Position horizontally in the middle
+      y = Inf, # Position vertically at the top
+      vjust = 1.2, # Nudge it down from the very top
+      label = annotation_text,
+      size = 3.5
+    ) +
+    labs(
+      title = genus_name,
+      x = NULL, # Remove x-axis label for cleaner grid
+      y = "Relative Abundance (%)"
+    ) +
+    theme_minimal(base_size = 10) +
+    scale_fill_manual(values = c("healthy" = "#4682B4", "diseased" = "#E41A1C")) +
+    theme(legend.position = "none",
+          plot.title = element_text(face = "italic", hjust = 0.5))
   
-  Aggregatibacter_rel_bp = plot_relab_boxplot(genus = relative_df$g__Aggregatibacter,
-                                         sample_data = sample_data,
-                                         title = "Aggregatibacter")
-  
-  Bacteroides_rel_bp = plot_relab_boxplot(genus = relative_df$g__Bacteroides,
-                                         sample_data = sample_data,
-                                         title = "Bacteroides")
-  
-  Campylobacter_rel_bp = plot_relab_boxplot(genus = relative_df$g__Campylobacter,
-                                         sample_data = sample_data,
-                                         title = "Campylobacter")
+  # Return the plot object instead of printing it
+  return(p)
+}
 
-  Capnocytophaga_rel_bp = plot_relab_boxplot(genus = relative_df$g__Capnocytophaga,
-                                         sample_data = sample_data,
-                                         title = "Capnocytophaga")
+# Sort the results table by log2_fold_change 
+results_table_sorted = results_table %>%
+    arrange(desc(log2_fold_change))
 
-  Dialister_rel_bp = plot_relab_boxplot(genus = relative_df$g__Dialister,
-                                         sample_data = sample_data,
-                                         title = "Dialister")
+# This loop creates all the plots and stores them in 'plot_list'
+plot_list = map(results_table_sorted$Genus, ~{
   
-  Escherichia_rel_bp = plot_relab_boxplot(genus = relative_df$g__Escherichia,
-                                         sample_data = sample_data,
-                                         title = "Escherichia")
+  # Get the current genus name
+  current_genus = .x
   
-  Filifactor_rel_bp = plot_relab_boxplot(genus = relative_df$g__Filifactor,
-                                         sample_data = sample_data,
-                                         title = "Filifactor")
+  # Find the stats for this genus from your results_table
+  stats = results_table %>% filter(Genus == current_genus)
   
-  Fusobacterium_rel_bp = plot_relab_boxplot(genus = relative_df$g__Fusobacterium,
-                                         sample_data = sample_data,
-                                         title = " Fusobacterium")
-
-  Gemella_rel_bp = plot_relab_boxplot(genus = relative_df$g__Gemella,
-                                         sample_data = sample_data,
-                                         title = "Gemella")
-
-  Haemophilus_rel_bp = plot_relab_boxplot(genus = relative_df$g__Haemophilus,
-                                         sample_data = sample_data,
-                                         title = "Haemophilus")
-
-  Leptotrichia_rel_bp = plot_relab_boxplot(genus = relative_df$g__Leptotrichia,
-                                         sample_data = sample_data,
-                                         title = "Leptotrichia")
-
-  Neisseria_rel_bp = plot_relab_boxplot(genus = relative_df$g__Neisseria,
-                                         sample_data = sample_data,
-                                         title = "Neisseria")
-
-  Porphyromonas_rel_bp = plot_relab_boxplot(genus = relative_df$g__Porphyromonas,
-                                         sample_data = sample_data,
-                                         title = "Porphyromonas")
-  
-  Prevotella_rel_bp = plot_relab_boxplot(genus = relative_df$g__Prevotella,
-                                         sample_data = sample_data,
-                                         title = "Prevotella")
-  
-  Rothia_rel_bp = plot_relab_boxplot(genus = relative_df$g__Rothia,
-                                         sample_data = sample_data,
-                                         title = "Rothia")
-  
-  Schaalia_rel_bp = plot_relab_boxplot(genus = relative_df$g__Schaalia,
-                                         sample_data = sample_data,
-                                         title = "Schaalia")
-  
-  Selenomonas_rel_bp = plot_relab_boxplot(genus = relative_df$g__Selenomonas,
-                                         sample_data = sample_data,
-                                         title = "Selenomonas")
-  
-  Streptococcus_rel_bp = plot_relab_boxplot(genus = relative_df$g__Streptococcus,
-                                         sample_data = sample_data,
-                                         title = "Streptococcus")
-
-  Tannerella_rel_bp = plot_relab_boxplot(genus = relative_df$g__Tannerella,
-                                         sample_data = sample_data,
-                                         title = "Tannerella")
-
-  
-  Treponema_rel_bp = plot_relab_boxplot(genus = relative_df$g__Treponema,
-                                         sample_data = sample_data,
-                                         title = "Treponema")
-  
-  Veillonella_rel_bp = plot_relab_boxplot(genus = relative_df$g__Veillonella,
-                                         sample_data = sample_data,
-                                         title = "Veillonella")
-  
-  grid.arrange(Actinomyces_rel_bp, Gemella_rel_bp, Rothia_rel_bp, Schaalia_rel_bp, Streptococcus_rel_bp, Veillonella_rel_bp,
-               Aggregatibacter_rel_bp,Bacteroides_rel_bp, Capnocytophaga_rel_bp, Dialister_rel_bp, Escherichia_rel_bp, Filifactor_rel_bp, 
-               Neisseria_rel_bp, Porphyromonas_rel_bp, Prevotella_rel_bp, Selenomonas_rel_bp, Tannerella_rel_bp, Treponema_rel_bp,
-               ncol=6, top = "Relative Abundance")
+  # Call our new function, passing in the stats from the table
+  plot_relab_boxplot_with_stats(
+    genus_name = current_genus,
+    abundance_data = relative_df, # Your abundance data frame
+    metadata = groups,           # Your metadata/groups data frame
+    q_val = stats$q_value_BH,
+    lfc = stats$log2_fold_change
+  )
+})
 
 
+# Arrange all the plots in the list into a grid with 6 columns
+final_plot = wrap_plots(plot_list, ncol = 6)
 
-ggsave("../imgs/Supplementary_Figure_3.png", 
-arrangeGrob(Actinomyces_rel_bp, Gemella_rel_bp, Rothia_rel_bp, Schaalia_rel_bp, Streptococcus_rel_bp,
-Veillonella_rel_bp,
-               Aggregatibacter_rel_bp,Bacteroides_rel_bp, Capnocytophaga_rel_bp, Dialister_rel_bp, Escherichia_rel_bp, Filifactor_rel_bp, 
-               Neisseria_rel_bp, Porphyromonas_rel_bp, Prevotella_rel_bp, Selenomonas_rel_bp, Tannerella_rel_bp, Treponema_rel_bp,
-               ncol=6),
-width = 20,
-height = 10)
+# Add a main title to the entire grid
+final_plot + plot_annotation(title = "Relative Abundance of Differentially Abundant Genera")
+
+
+ggsave("../imgs/Supplementary_Figure_3.png", final_plot, width = 20, height = 10)
   
 ```
 
@@ -686,12 +664,13 @@ deseq2_metaphlan_genus = phyloseq_to_deseq2(phyloseq_metaphlan_genus, design = ~
 ## 5.2 Running differential analysis on diseased vs healthy 
 
 ```{r, message=FALSE}
-dds_genus = deseq2_metaphlan_genus
+dds_genus_data = deseq2_metaphlan_genus
 
-design(dds_genus) = ~ condition  # Replace with your column name for condition
+design(dds_genus_data) = ~ condition  # Replace with your column name for condition
 
 # Run DESeq2 analysis
-dds_genus = DESeq(dds_genus)
+dds_genus = DESeq(dds_genus_data)
+
 ```
 
 
@@ -805,7 +784,7 @@ head(as.data.frame(change_res_genus_less_thn_zero, n =15))
 ```
 
 
-## 5.6 Look for highly abundant significant ones
+## 5.6 Look for highly abundant significant genera
 
 ```{r}
 taxonomyRanks(tse_metaphlan)
@@ -862,6 +841,61 @@ head(as.data.frame(sig_res_genus_grtr_thn_zero, n=10))
 
 
 ```
+
+
+Creating a table of the highly abundant significant genera
+```{r}
+
+# Prepare and Filter the Data 
+# We'll convert the results to a clean data frame and filter for significance
+significant_results = res_ordered_genus %>%
+  as.data.frame() %>%
+  rownames_to_column(var = "Genus") %>%       # Convert row names to a column
+  filter(padj < 0.05) %>%                      # Filter for significant results
+  arrange(padj)                                # Ensure it's sorted by significance
+
+# Extract Key Numbers 
+# Total number of significant genera
+total_significant_count = nrow(significant_results)
+
+print(total_significant_count)
+
+# Separate into enriched (upregulated in diseased/noma) and depleted (downregulated)
+noma_enriched_genera = significant_results %>% filter(log2FoldChange > 0)
+noma_depleted_genera = significant_results %>% filter(log2FoldChange < 0)
+
+# Count each group
+enriched_count = nrow(noma_enriched_genera)
+depleted_count = nrow(noma_depleted_genera)
+
+# Filter the results table to keep only these genera
+# If you named it something else, just change it here.
+
+selected_results = significant_results %>%
+  filter(Genus %in% top_Genus_above_1)
+
+selected_results_noma_enriched = noma_enriched_genera %>%
+  filter(Genus %in% top_Genus_above_1)
+
+selected_results_noma_depleted = noma_depleted_genera %>%
+  filter(Genus %in% top_Genus_above_1)
+
+# View the new, filtered table 
+print(selected_results)
+print(selected_results_noma_enriched)
+print(selected_results_noma_depleted)
+
+
+# Count table
+selected_count = nrow(selected_results)
+print(selected_count)
+selected_enriched_count = nrow(selected_results_noma_enriched)
+print(selected_enriched_count)
+selected_depleted_count = nrow(selected_results_noma_depleted)
+print(selected_depleted_count)
+
+```
+
 
 ## 5.7 Plotting p-values 
 
@@ -934,11 +968,10 @@ ggsave("../imgs/Figure_2D.png", plot =  padj_plot_healthy, width = 28, height = 
 
 First we create a function 
 
-
 ```{r}
 plotCountsGGanysig = function(dds, gene, intgroup = "condition", normalized = TRUE,  
                          transform = TRUE, main, xlab = "group", returnData = FALSE,  
-                         replaced = FALSE, pc, plot = "point", text = TRUE, showSignificance = TRUE, ...) {  
+                         replaced = FALSE, pc, plot = "point", text = TRUE, showSignificance = TRUE, y_limits = NULL, ...) {  
   # Check input gene validity
   stopifnot(length(gene) == 1 & (is.character(gene) | (is.numeric(gene) &  
                                                          (gene >= 1 & gene <= nrow(dds)))))  
@@ -1005,7 +1038,7 @@ plotCountsGGanysig = function(dds, gene, intgroup = "condition", normalized = TR
   p = ggplot(data, aes(x = group, y = count, label = sample, color = condition)) +
     labs(x = xlab, y = ylab, title = main) +  # Labels and title
     theme_minimal() +  # Clean theme
-    scale_y_continuous(trans = ifelse(transform, "log10", "identity")) +  # Apply log transformation if needed
+    scale_y_continuous(trans = ifelse(transform, "log10", "identity"), limits = y_limits) +  # Apply log transformation if needed
     scale_color_brewer(palette = "Set1")  # Optional: use color brewer for nice color scheme
   
   # Select the type of plot based on the 'plot' argument
@@ -1044,37 +1077,57 @@ plotCountsGGanysig = function(dds, gene, intgroup = "condition", normalized = TR
 }
 ```
 
+```{r}
+
+# Define all the genera you are going to plot
+genera_to_plot = c("g__Treponema", "g__Streptococcus", "g__Porphyromonas", "g__Selenomonas")
+
+# Get all the normalized counts for those genera
+all_counts = counts(dds_genus, normalized = TRUE)[genera_to_plot, ]
+
+# Determine the maximum value for the y-axis (add 10% for buffer)
+# We add a pseudocount of 0.5 for the log transformation
+y_axis_max = max(all_counts) * 1.1
+y_axis_min = 0.5 # A good minimum for log transformed data
+
+# Store your final range
+overall_y_range = c(y_axis_min, y_axis_max)
+
+```
+
+
 Next we use the function to plot any highly abundant significantly associated with Noma 
 
 ```{r, warning=FALSE}
+
 # Significant highly abundant for Noma above 1%
-plot_1 = plotCountsGGanysig(dds_genus, gene="g__Treponema", intgroup = "condition", plot = "box", text = FALSE, showSignificance = TRUE)
-plot_2 = plotCountsGGanysig(dds_genus, gene="g__Porphyromonas", intgroup = "condition", plot = "box", text = FALSE, showSignificance = TRUE)
-plot_3 = plotCountsGGanysig(dds_genus, gene="g__Bacteroides", intgroup = "condition", plot = "box", text = FALSE, showSignificance = TRUE)
-plot_4 = plotCountsGGanysig(dds_genus, gene="g__Selenomonas", intgroup = "condition", plot = "box", text = FALSE, showSignificance = TRUE)
+plot_1 = plotCountsGGanysig(dds_genus, gene="g__Treponema", intgroup = "condition", plot = "box", text = FALSE, showSignificance = TRUE, y_limits = overall_y_range)
+plot_2 = plotCountsGGanysig(dds_genus, gene="g__Porphyromonas", intgroup = "condition", plot = "box", text = FALSE, showSignificance = TRUE, y_limits = overall_y_range)
+plot_3 = plotCountsGGanysig(dds_genus, gene="g__Bacteroides", intgroup = "condition", plot = "box", text = FALSE, showSignificance = TRUE, y_limits = overall_y_range)
+plot_4 = plotCountsGGanysig(dds_genus, gene="g__Selenomonas", intgroup = "condition", plot = "box", text = FALSE, showSignificance = TRUE, y_limits = overall_y_range)
 grid.arrange(plot_1, plot_2, plot_3, plot_4, ncol=2)
 
-ggsave("../imgs/Figure_2C.png", 
+ggsave("../imgs/Figure_2C.svg", 
        arrangeGrob(plot_1, plot_2, plot_3, plot_4, ncol=2),
-       width = 10,
-       height = 20)
+       width = 20,
+       height = 16)
 ```
 
 Then we use the function to plot any highly abundant signifcantly asscoiated with healthy global dataset
 
 ```{r, warning=FALSE}
 # Significant highly abundant for healthy above 1%
-plot_1 = plotCountsGGanysig(dds_genus, gene="g__Streptococcus", intgroup = "condition", plot = "box", text = FALSE, showSignificance = TRUE)
-plot_2 = plotCountsGGanysig(dds_genus, gene="g__Veillonella", intgroup = "condition", plot = "box", text = FALSE, showSignificance = TRUE)
-plot_3 = plotCountsGGanysig(dds_genus, gene="g__Gemella", intgroup = "condition", plot = "box", text = FALSE, showSignificance = TRUE)
-plot_4 = plotCountsGGanysig(dds_genus, gene="g__Schaalia", intgroup = "condition", plot = "box", text = FALSE, showSignificance = TRUE)
-plot_5 = plotCountsGGanysig(dds_genus, gene="g__Rothia", intgroup = "condition", plot = "box", text = FALSE, showSignificance = TRUE)
-plot_6 = plotCountsGGanysig(dds_genus, gene="g__Actinomyces", intgroup = "condition", plot = "box", text = FALSE, showSignificance = TRUE)
-plot_7 = plotCountsGGanysig(dds_genus, gene="g__Haemophilus", intgroup = "condition", plot = "box", text = FALSE, showSignificance = TRUE)
+plot_1 = plotCountsGGanysig(dds_genus, gene="g__Streptococcus", intgroup = "condition", plot = "box", text = FALSE, showSignificance = TRUE,  y_limits = overall_y_range)
+plot_2 = plotCountsGGanysig(dds_genus, gene="g__Veillonella", intgroup = "condition", plot = "box", text = FALSE, showSignificance = TRUE, y_limits = overall_y_range)
+plot_3 = plotCountsGGanysig(dds_genus, gene="g__Gemella", intgroup = "condition", plot = "box", text = FALSE, showSignificance = TRUE, y_limits = overall_y_range)
+plot_4 = plotCountsGGanysig(dds_genus, gene="g__Schaalia", intgroup = "condition", plot = "box", text = FALSE, showSignificance = TRUE, y_limits = overall_y_range)
+plot_5 = plotCountsGGanysig(dds_genus, gene="g__Rothia", intgroup = "condition", plot = "box", text = FALSE, showSignificance = TRUE, y_limits = overall_y_range)
+plot_6 = plotCountsGGanysig(dds_genus, gene="g__Actinomyces", intgroup = "condition", plot = "box", text = FALSE, showSignificance = TRUE, y_limits = overall_y_range)
+plot_7 = plotCountsGGanysig(dds_genus, gene="g__Haemophilus", intgroup = "condition", plot = "box", text = FALSE, showSignificance = TRUE, y_limits = overall_y_range)
 grid.arrange(plot_1, plot_2, plot_3, plot_4,
              plot_5, plot_6, plot_7, ncol=2)
 
-ggsave("../imgs/Figure_2B.png", 
+ggsave("../imgs/Figure_2B.svg", 
        arrangeGrob(plot_1, plot_2, plot_3, plot_4,
              plot_5, plot_6, plot_7, ncol=2),
        width = 10,
@@ -1823,7 +1876,7 @@ Now we will save all the plots together
 grid.arrange(PCoA_plot, NMDS_plot, RDA_plot, ncol=3)
 
 ggsave("../imgs/Figure_3D.png", 
-       arrangeGrob(PCoA_plot, NMDS_plot, RDA_plot, ncol=3),
+       PCoA_plot,
        width = 20,
        height = 10)
 

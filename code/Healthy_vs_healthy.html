@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="author" content="Richard Goodman">
-<meta name="dcterms.date" content="2025-06-30">
+<meta name="dcterms.date" content="2025-10-01">
 
 <title>Healthy Global Dataset Metagenomics: Short-read taxonomic based metagenomic analysis of healthy human saliva samples in R</title>
 <style>
@@ -59,16 +59,16 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </style>
 
 
-<script src="Healthy vs healthy_files/libs/clipboard/clipboard.min.js"></script>
-<script src="Healthy vs healthy_files/libs/quarto-html/quarto.js"></script>
-<script src="Healthy vs healthy_files/libs/quarto-html/popper.min.js"></script>
-<script src="Healthy vs healthy_files/libs/quarto-html/tippy.umd.min.js"></script>
-<script src="Healthy vs healthy_files/libs/quarto-html/anchor.min.js"></script>
-<link href="Healthy vs healthy_files/libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="Healthy vs healthy_files/libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
-<script src="Healthy vs healthy_files/libs/bootstrap/bootstrap.min.js"></script>
-<link href="Healthy vs healthy_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="Healthy vs healthy_files/libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script src="Healthy_vs_healthy_files/libs/clipboard/clipboard.min.js"></script>
+<script src="Healthy_vs_healthy_files/libs/quarto-html/quarto.js"></script>
+<script src="Healthy_vs_healthy_files/libs/quarto-html/popper.min.js"></script>
+<script src="Healthy_vs_healthy_files/libs/quarto-html/tippy.umd.min.js"></script>
+<script src="Healthy_vs_healthy_files/libs/quarto-html/anchor.min.js"></script>
+<link href="Healthy_vs_healthy_files/libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="Healthy_vs_healthy_files/libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="Healthy_vs_healthy_files/libs/bootstrap/bootstrap.min.js"></script>
+<link href="Healthy_vs_healthy_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="Healthy_vs_healthy_files/libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
 
 
 </head>
@@ -98,7 +98,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <div>
     <div class="quarto-title-meta-heading">Published</div>
     <div class="quarto-title-meta-contents">
-      <p class="date">June 30, 2025</p>
+      <p class="date">October 1, 2025</p>
     </div>
   </div>
   
@@ -126,20 +126,21 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(readxl)</span>
 <span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(pheatmap)</span>
 <span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span>
-<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyr)</span>
-<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tibble)</span>
-<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(RColorBrewer)</span>
-<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(miaViz)</span>
-<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(scater)</span>
-<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(mia)</span>
-<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(TreeSummarizedExperiment)</span>
-<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(here)</span>
-<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(readr)</span>
-<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(phyloseq)</span>
-<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(DESeq2)</span>
-<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggrepel)</span>
-<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(gridExtra)</span>
-<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(vegan)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(purrr)</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyr)</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tibble)</span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(RColorBrewer)</span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(miaViz)</span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(scater)</span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(mia)</span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(TreeSummarizedExperiment)</span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(here)</span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(readr)</span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(phyloseq)</span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(DESeq2)</span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggrepel)</span>
+<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(gridExtra)</span>
+<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(vegan)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <section id="import-and-clean-data" class="level2">
 <h2 class="anchored" data-anchor-id="import-and-clean-data">2. Import and Clean Data</h2>
@@ -433,111 +434,118 @@ Number of permutations: 999</code></pre>
 </div>
 </div>
 </section>
-<section id="permanova-function-for-specific-taxa" class="level1">
-<h1>3.4 Permanova function for specific taxa</h1>
+<section id="kruskall-wallis" class="level1">
+<h1>Kruskall Wallis</h1>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Extract the counts and taxonomic table</span></span>
-<span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a>counts <span class="ot">=</span> <span class="fu">assay</span>(tse_metaphlan_genus, <span class="st">"counts"</span>)</span>
-<span id="cb32-3"><a href="#cb32-3" aria-hidden="true" tabindex="-1"></a>tax_table <span class="ot">=</span> <span class="fu">rowData</span>(tse_metaphlan_genus)<span class="sc">$</span>Genus  <span class="co"># Replace "Genus" with your taxonomic level of interest</span></span>
-<span id="cb32-4"><a href="#cb32-4" aria-hidden="true" tabindex="-1"></a>sample_data <span class="ot">=</span> <span class="fu">colData</span>(tse_metaphlan_genus)</span>
-<span id="cb32-5"><a href="#cb32-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb32-6"><a href="#cb32-6" aria-hidden="true" tabindex="-1"></a>groups <span class="ot">=</span> <span class="fu">as.data.frame</span>(sample_data)</span>
-<span id="cb32-7"><a href="#cb32-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb32-8"><a href="#cb32-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Aggregate counts by Genus</span></span>
-<span id="cb32-9"><a href="#cb32-9" aria-hidden="true" tabindex="-1"></a>aggregated_counts <span class="ot">=</span> <span class="fu">rowsum</span>(counts, tax_table)</span>
-<span id="cb32-10"><a href="#cb32-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb32-11"><a href="#cb32-11" aria-hidden="true" tabindex="-1"></a><span class="co"># Create a new aggregated TreeSummarizedExperiment object</span></span>
-<span id="cb32-12"><a href="#cb32-12" aria-hidden="true" tabindex="-1"></a>tse_aggregated <span class="ot">=</span> <span class="fu">TreeSummarizedExperiment</span>(<span class="at">assays =</span> <span class="fu">list</span>(<span class="at">counts =</span> aggregated_counts), </span>
-<span id="cb32-13"><a href="#cb32-13" aria-hidden="true" tabindex="-1"></a>                                           <span class="at">colData =</span> sample_data)</span>
-<span id="cb32-14"><a href="#cb32-14" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb32-15"><a href="#cb32-15" aria-hidden="true" tabindex="-1"></a><span class="co"># Calculate relative abundances</span></span>
-<span id="cb32-16"><a href="#cb32-16" aria-hidden="true" tabindex="-1"></a>relative_abundances <span class="ot">=</span> <span class="fu">sweep</span>(<span class="fu">assay</span>(tse_aggregated, <span class="st">"counts"</span>), <span class="dv">2</span>, <span class="fu">colSums</span>(<span class="fu">assay</span>(tse_aggregated, <span class="st">"counts"</span>)), <span class="at">FUN =</span> <span class="st">"/"</span>) <span class="sc">*</span> <span class="dv">100</span></span>
-<span id="cb32-17"><a href="#cb32-17" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb32-18"><a href="#cb32-18" aria-hidden="true" tabindex="-1"></a><span class="co"># Convert to a data frame and group by Treatment</span></span>
-<span id="cb32-19"><a href="#cb32-19" aria-hidden="true" tabindex="-1"></a>relative_df <span class="ot">=</span> <span class="fu">as.data.frame</span>(<span class="fu">t</span>(relative_abundances))</span>
-<span id="cb32-20"><a href="#cb32-20" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb32-21"><a href="#cb32-21" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span> (<span class="dv">123456</span>)</span>
-<span id="cb32-22"><a href="#cb32-22" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb32-23"><a href="#cb32-23" aria-hidden="true" tabindex="-1"></a><span class="co"># Define the vector of genera names (without the "g__" prefix)</span></span>
-<span id="cb32-24"><a href="#cb32-24" aria-hidden="true" tabindex="-1"></a>genera <span class="ot">=</span> <span class="fu">c</span>(<span class="st">"Prevotella"</span>, <span class="st">"Treponema"</span>, <span class="st">"Neisseria"</span>, <span class="st">"Bacteroides"</span>, </span>
-<span id="cb32-25"><a href="#cb32-25" aria-hidden="true" tabindex="-1"></a>            <span class="st">"Filifactor"</span>, <span class="st">"Porphyromonas"</span>, <span class="st">"Fusobacterium"</span>, <span class="st">"Escherichia"</span>,</span>
-<span id="cb32-26"><a href="#cb32-26" aria-hidden="true" tabindex="-1"></a>            <span class="st">"Selenomonas"</span>, <span class="st">"Aggregatibacter"</span>, <span class="st">"Capnocytophaga"</span>,</span>
-<span id="cb32-27"><a href="#cb32-27" aria-hidden="true" tabindex="-1"></a>            <span class="st">"Streptococcus"</span>, <span class="st">"Actinomyces"</span>, <span class="st">"Campylobacter"</span>, <span class="st">"Dialister"</span>, <span class="st">"Gemella"</span>,</span>
-<span id="cb32-28"><a href="#cb32-28" aria-hidden="true" tabindex="-1"></a>            <span class="st">"Haemophilus"</span>, <span class="st">"Leptotrichia"</span>, <span class="st">"Rothia"</span>, <span class="st">"Schaalia"</span>, <span class="st">"Tannerella"</span>, <span class="st">"Veillonella"</span>)</span>
-<span id="cb32-29"><a href="#cb32-29" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb32-30"><a href="#cb32-30" aria-hidden="true" tabindex="-1"></a><span class="co"># Initialize an empty data frame to store the results</span></span>
-<span id="cb32-31"><a href="#cb32-31" aria-hidden="true" tabindex="-1"></a>permanova_taxa_results <span class="ot">=</span> <span class="fu">data.frame</span>(<span class="at">Genus =</span> <span class="fu">character</span>(), <span class="at">pvalue =</span> <span class="fu">numeric</span>(), <span class="at">stringsAsFactors =</span> <span class="cn">FALSE</span>)</span>
-<span id="cb32-32"><a href="#cb32-32" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb32-33"><a href="#cb32-33" aria-hidden="true" tabindex="-1"></a><span class="co"># Loop over each genus</span></span>
-<span id="cb32-34"><a href="#cb32-34" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (genus <span class="cf">in</span> genera) {</span>
-<span id="cb32-35"><a href="#cb32-35" aria-hidden="true" tabindex="-1"></a>  <span class="fu">set.seed</span> (<span class="dv">123456</span>)</span>
-<span id="cb32-36"><a href="#cb32-36" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Subset the data for the genus; adjust column selection as needed</span></span>
-<span id="cb32-37"><a href="#cb32-37" aria-hidden="true" tabindex="-1"></a>  subset_data <span class="ot">=</span> relative_df <span class="sc">%&gt;%</span> <span class="fu">select</span>(<span class="fu">paste0</span>(<span class="st">"g__"</span>, genus))</span>
-<span id="cb32-38"><a href="#cb32-38" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb32-39"><a href="#cb32-39" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Calculate the Bray-Curtis distance</span></span>
-<span id="cb32-40"><a href="#cb32-40" aria-hidden="true" tabindex="-1"></a>  bray_dist <span class="ot">=</span> <span class="fu">vegdist</span>(subset_data, <span class="at">method =</span> <span class="st">"bray"</span>)</span>
-<span id="cb32-41"><a href="#cb32-41" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb32-42"><a href="#cb32-42" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Run PERMANOVA using adonis2</span></span>
-<span id="cb32-43"><a href="#cb32-43" aria-hidden="true" tabindex="-1"></a>  adonis_result <span class="ot">=</span> <span class="fu">adonis2</span>(bray_dist <span class="sc">~</span> accession, <span class="at">data =</span> groups)</span>
-<span id="cb32-44"><a href="#cb32-44" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb32-45"><a href="#cb32-45" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Extract the p-value for the sample_type factor (usually in the first row)</span></span>
-<span id="cb32-46"><a href="#cb32-46" aria-hidden="true" tabindex="-1"></a>  pval <span class="ot">=</span> adonis_result<span class="sc">$</span><span class="st">`</span><span class="at">Pr(&gt;F)</span><span class="st">`</span>[<span class="dv">1</span>]</span>
-<span id="cb32-47"><a href="#cb32-47" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb32-48"><a href="#cb32-48" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Append the result to the results data frame</span></span>
-<span id="cb32-49"><a href="#cb32-49" aria-hidden="true" tabindex="-1"></a>  permanova_taxa_results <span class="ot">=</span> <span class="fu">rbind</span>(permanova_taxa_results, <span class="fu">data.frame</span>(<span class="at">Genus =</span> genus, <span class="at">pvalue =</span> pval))</span>
-<span id="cb32-50"><a href="#cb32-50" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb32-51"><a href="#cb32-51" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb32-52"><a href="#cb32-52" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(permanova_taxa_results)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>             Genus pvalue
-1       Prevotella  0.070
-2        Treponema  0.001
-3        Neisseria  0.085
-4      Bacteroides  0.019
-5       Filifactor  0.081
-6    Porphyromonas  0.004
-7    Fusobacterium  0.001
-8      Escherichia  0.115
-9      Selenomonas  0.533
-10 Aggregatibacter  0.001
-11  Capnocytophaga  0.002
-12   Streptococcus  0.001
-13     Actinomyces  0.002
-14   Campylobacter  0.001
-15       Dialister  0.001
-16         Gemella  0.283
-17     Haemophilus  0.001
-18    Leptotrichia  0.497
-19          Rothia  0.001
-20        Schaalia  0.001
-21      Tannerella  0.060
-22     Veillonella  0.002</code></pre>
+<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(rstatix)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>
+Attaching package: 'rstatix'</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb34"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a>ptr <span class="ot">=</span> <span class="fu">print</span>(permanova_taxa_results)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>The following object is masked from 'package:IRanges':
+
+    desc</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>The following object is masked from 'package:stats':
+
+    filter</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb36"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Extract the counts and taxonomic table</span></span>
+<span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a>counts <span class="ot">=</span> <span class="fu">assay</span>(tse_metaphlan_genus, <span class="st">"counts"</span>)</span>
+<span id="cb36-3"><a href="#cb36-3" aria-hidden="true" tabindex="-1"></a>tax_table <span class="ot">=</span> <span class="fu">rowData</span>(tse_metaphlan_genus)<span class="sc">$</span>Genus  <span class="co"># Replace "Genus" with your taxonomic level of interest</span></span>
+<span id="cb36-4"><a href="#cb36-4" aria-hidden="true" tabindex="-1"></a>sample_data <span class="ot">=</span> <span class="fu">colData</span>(tse_metaphlan_genus)</span>
+<span id="cb36-5"><a href="#cb36-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-6"><a href="#cb36-6" aria-hidden="true" tabindex="-1"></a>groups <span class="ot">=</span> <span class="fu">as.data.frame</span>(sample_data)</span>
+<span id="cb36-7"><a href="#cb36-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-8"><a href="#cb36-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Aggregate counts by Genus</span></span>
+<span id="cb36-9"><a href="#cb36-9" aria-hidden="true" tabindex="-1"></a>aggregated_counts <span class="ot">=</span> <span class="fu">rowsum</span>(counts, tax_table)</span>
+<span id="cb36-10"><a href="#cb36-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-11"><a href="#cb36-11" aria-hidden="true" tabindex="-1"></a><span class="co"># Create a new aggregated TreeSummarizedExperiment object</span></span>
+<span id="cb36-12"><a href="#cb36-12" aria-hidden="true" tabindex="-1"></a>tse_aggregated <span class="ot">=</span> <span class="fu">TreeSummarizedExperiment</span>(<span class="at">assays =</span> <span class="fu">list</span>(<span class="at">counts =</span> aggregated_counts), </span>
+<span id="cb36-13"><a href="#cb36-13" aria-hidden="true" tabindex="-1"></a>                                           <span class="at">colData =</span> sample_data)</span>
+<span id="cb36-14"><a href="#cb36-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-15"><a href="#cb36-15" aria-hidden="true" tabindex="-1"></a><span class="co"># Calculate relative abundances</span></span>
+<span id="cb36-16"><a href="#cb36-16" aria-hidden="true" tabindex="-1"></a>relative_abundances <span class="ot">=</span> <span class="fu">sweep</span>(<span class="fu">assay</span>(tse_aggregated, <span class="st">"counts"</span>), <span class="dv">2</span>, <span class="fu">colSums</span>(<span class="fu">assay</span>(tse_aggregated, <span class="st">"counts"</span>)), <span class="at">FUN =</span> <span class="st">"/"</span>) <span class="sc">*</span> <span class="dv">100</span></span>
+<span id="cb36-17"><a href="#cb36-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-18"><a href="#cb36-18" aria-hidden="true" tabindex="-1"></a><span class="co"># Convert to a data frame and group by Treatment</span></span>
+<span id="cb36-19"><a href="#cb36-19" aria-hidden="true" tabindex="-1"></a>relative_df <span class="ot">=</span> <span class="fu">as.data.frame</span>(<span class="fu">t</span>(relative_abundances))</span>
+<span id="cb36-20"><a href="#cb36-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-21"><a href="#cb36-21" aria-hidden="true" tabindex="-1"></a><span class="co"># Define the vector of genera names (without the "g__" prefix)</span></span>
+<span id="cb36-22"><a href="#cb36-22" aria-hidden="true" tabindex="-1"></a>genera <span class="ot">=</span> <span class="fu">c</span>(<span class="st">"Prevotella"</span>, <span class="st">"Treponema"</span>, <span class="st">"Neisseria"</span>, <span class="st">"Bacteroides"</span>, </span>
+<span id="cb36-23"><a href="#cb36-23" aria-hidden="true" tabindex="-1"></a>            <span class="st">"Filifactor"</span>, <span class="st">"Porphyromonas"</span>, <span class="st">"Fusobacterium"</span>, <span class="st">"Escherichia"</span>,</span>
+<span id="cb36-24"><a href="#cb36-24" aria-hidden="true" tabindex="-1"></a>            <span class="st">"Selenomonas"</span>, <span class="st">"Aggregatibacter"</span>, <span class="st">"Capnocytophaga"</span>,</span>
+<span id="cb36-25"><a href="#cb36-25" aria-hidden="true" tabindex="-1"></a>            <span class="st">"Streptococcus"</span>, <span class="st">"Actinomyces"</span>, <span class="st">"Campylobacter"</span>, <span class="st">"Dialister"</span>, <span class="st">"Gemella"</span>,</span>
+<span id="cb36-26"><a href="#cb36-26" aria-hidden="true" tabindex="-1"></a>            <span class="st">"Haemophilus"</span>, <span class="st">"Leptotrichia"</span>, <span class="st">"Rothia"</span>, <span class="st">"Schaalia"</span>, <span class="st">"Tannerella"</span>, <span class="st">"Veillonella"</span>)</span>
+<span id="cb36-27"><a href="#cb36-27" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-28"><a href="#cb36-28" aria-hidden="true" tabindex="-1"></a><span class="co"># Combine your abundance and metadata into one data frame for easy formula use</span></span>
+<span id="cb36-29"><a href="#cb36-29" aria-hidden="true" tabindex="-1"></a>test_data <span class="ot">&lt;-</span> <span class="fu">cbind</span>(relative_df, groups)</span>
+<span id="cb36-30"><a href="#cb36-30" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-31"><a href="#cb36-31" aria-hidden="true" tabindex="-1"></a><span class="co"># Loop through each genus, run the test, calculate effect size, and return results</span></span>
+<span id="cb36-32"><a href="#cb36-32" aria-hidden="true" tabindex="-1"></a>univariate_results <span class="ot">&lt;-</span> <span class="fu">map_dfr</span>(genera, <span class="sc">~</span>{</span>
+<span id="cb36-33"><a href="#cb36-33" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb36-34"><a href="#cb36-34" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Create the formula for the test dynamically</span></span>
+<span id="cb36-35"><a href="#cb36-35" aria-hidden="true" tabindex="-1"></a>  formula_str <span class="ot">&lt;-</span> <span class="fu">paste0</span>(<span class="st">"`g__"</span>, .x, <span class="st">"` ~ accession"</span>)</span>
+<span id="cb36-36"><a href="#cb36-36" aria-hidden="true" tabindex="-1"></a>  formula_obj <span class="ot">&lt;-</span> <span class="fu">as.formula</span>(formula_str)</span>
+<span id="cb36-37"><a href="#cb36-37" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb36-38"><a href="#cb36-38" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Run the Kruskal-Wallis test to get the p-value</span></span>
+<span id="cb36-39"><a href="#cb36-39" aria-hidden="true" tabindex="-1"></a>  kw_test <span class="ot">&lt;-</span> <span class="fu">kruskal.test</span>(formula_obj, <span class="at">data =</span> test_data)</span>
+<span id="cb36-40"><a href="#cb36-40" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb36-41"><a href="#cb36-41" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Calculate the eta-squared effect size ---</span></span>
+<span id="cb36-42"><a href="#cb36-42" aria-hidden="true" tabindex="-1"></a>  effect_size <span class="ot">&lt;-</span> <span class="fu">kruskal_effsize</span>(formula_obj, <span class="at">data =</span> test_data)</span>
+<span id="cb36-43"><a href="#cb36-43" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb36-44"><a href="#cb36-44" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Return a single-row data frame with all results</span></span>
+<span id="cb36-45"><a href="#cb36-45" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tibble</span>(</span>
+<span id="cb36-46"><a href="#cb36-46" aria-hidden="true" tabindex="-1"></a>    <span class="at">Genus =</span> .x,</span>
+<span id="cb36-47"><a href="#cb36-47" aria-hidden="true" tabindex="-1"></a>    <span class="at">p_value =</span> kw_test<span class="sc">$</span>p.value,</span>
+<span id="cb36-48"><a href="#cb36-48" aria-hidden="true" tabindex="-1"></a>    <span class="at">eta_squared =</span> effect_size<span class="sc">$</span>effsize, <span class="co"># The effect size value</span></span>
+<span id="cb36-49"><a href="#cb36-49" aria-hidden="true" tabindex="-1"></a>    <span class="at">magnitude =</span> effect_size<span class="sc">$</span>magnitude    <span class="co"># e.g., "large", "moderate"</span></span>
+<span id="cb36-50"><a href="#cb36-50" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb36-51"><a href="#cb36-51" aria-hidden="true" tabindex="-1"></a>})</span>
+<span id="cb36-52"><a href="#cb36-52" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-53"><a href="#cb36-53" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-54"><a href="#cb36-54" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(univariate_results)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>             Genus pvalue
-1       Prevotella  0.070
-2        Treponema  0.001
-3        Neisseria  0.085
-4      Bacteroides  0.019
-5       Filifactor  0.081
-6    Porphyromonas  0.004
-7    Fusobacterium  0.001
-8      Escherichia  0.115
-9      Selenomonas  0.533
-10 Aggregatibacter  0.001
-11  Capnocytophaga  0.002
-12   Streptococcus  0.001
-13     Actinomyces  0.002
-14   Campylobacter  0.001
-15       Dialister  0.001
-16         Gemella  0.283
-17     Haemophilus  0.001
-18    Leptotrichia  0.497
-19          Rothia  0.001
-20        Schaalia  0.001
-21      Tannerella  0.060
-22     Veillonella  0.002</code></pre>
+<pre><code># A tibble: 22 × 4
+   Genus           p_value eta_squared magnitude
+   &lt;chr&gt;             &lt;dbl&gt;       &lt;dbl&gt; &lt;ord&gt;    
+ 1 Prevotella      0.116        0.135  moderate 
+ 2 Treponema       0.00341      0.551  large    
+ 3 Neisseria       0.448       -0.0232 small    
+ 4 Bacteroides     0.0586       0.216  large    
+ 5 Filifactor      0.0586       0.216  large    
+ 6 Porphyromonas   0.0151       0.376  large    
+ 7 Fusobacterium   0.00469      0.513  large    
+ 8 Escherichia     0.157        0.100  moderate 
+ 9 Selenomonas     0.551       -0.0476 small    
+10 Aggregatibacter 0.00172      0.631  large    
+# ℹ 12 more rows</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb38"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a><span class="co"># IMPORTANT: Correct for multiple testing using the Benjamini-Hochberg (FDR) method</span></span>
+<span id="cb38-2"><a href="#cb38-2" aria-hidden="true" tabindex="-1"></a>FDR_corr_univariate_results <span class="ot">&lt;-</span> univariate_results <span class="sc">%&gt;%</span></span>
+<span id="cb38-3"><a href="#cb38-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">q_value_BH =</span> <span class="fu">p.adjust</span>(p_value, <span class="at">method =</span> <span class="st">"BH"</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb38-4"><a href="#cb38-4" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Reorder columns for clarity and sort by significance</span></span>
+<span id="cb38-5"><a href="#cb38-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(Genus, p_value, q_value_BH, eta_squared, magnitude) <span class="sc">%&gt;%</span></span>
+<span id="cb38-6"><a href="#cb38-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(q_value_BH)</span>
+<span id="cb38-7"><a href="#cb38-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb38-8"><a href="#cb38-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Print the final results, now with effect size!</span></span>
+<span id="cb38-9"><a href="#cb38-9" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(FDR_corr_univariate_results)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 22 × 5
+   Genus            p_value q_value_BH eta_squared magnitude
+   &lt;chr&gt;              &lt;dbl&gt;      &lt;dbl&gt;       &lt;dbl&gt; &lt;ord&gt;    
+ 1 Treponema       0.00341      0.0113       0.551 large    
+ 2 Aggregatibacter 0.00172      0.0113       0.631 large    
+ 3 Capnocytophaga  0.00327      0.0113       0.556 large    
+ 4 Streptococcus   0.00360      0.0113       0.544 large    
+ 5 Campylobacter   0.00333      0.0113       0.553 large    
+ 6 Dialister       0.000849     0.0113       0.714 large    
+ 7 Haemophilus     0.00180      0.0113       0.626 large    
+ 8 Fusobacterium   0.00469      0.0129       0.513 large    
+ 9 Actinomyces     0.00953      0.0200       0.430 large    
+10 Rothia          0.00998      0.0200       0.424 large    
+# ℹ 12 more rows</code></pre>
 </div>
 </div>
 <section id="principal-components-analysis" class="level2">
@@ -547,46 +555,46 @@ Number of permutations: 999</code></pre>
 <section id="pca-with-prcomp" class="level1">
 <h1>4.1 PCA with prcomp</h1>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb36"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Assume `tse` is your TreeSummarizedExperiment object</span></span>
-<span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Extract the assay data (e.g., expression matrix)</span></span>
-<span id="cb36-3"><a href="#cb36-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb36-4"><a href="#cb36-4" aria-hidden="true" tabindex="-1"></a>expr_data <span class="ot">=</span> <span class="fu">assay</span>(tse_metaphlan_genus)</span>
-<span id="cb36-5"><a href="#cb36-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb36-6"><a href="#cb36-6" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>(tse_metaphlan)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb40"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Assume `tse` is your TreeSummarizedExperiment object</span></span>
+<span id="cb40-2"><a href="#cb40-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Extract the assay data (e.g., expression matrix)</span></span>
+<span id="cb40-3"><a href="#cb40-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb40-4"><a href="#cb40-4" aria-hidden="true" tabindex="-1"></a>expr_data <span class="ot">=</span> <span class="fu">assay</span>(tse_metaphlan_genus)</span>
+<span id="cb40-5"><a href="#cb40-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb40-6"><a href="#cb40-6" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>(tse_metaphlan)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code> [1] "SRS013942"  "SRS014468"  "SRS014692"  "SRS015055"  "SRS019120" 
  [6] "SRR5892208" "SRR5892209" "SRR5892210" "SRR5892211" "SRR5892212"
 [11] "SRR5892213" "SRR5892214" "SRR5892215" "SRR5892216" "SRR5892217"
 [16] "DRR214959"  "DRR214960"  "DRR214961"  "DRR214962"  "DRR241310" </code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb38"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a>expr_data_df <span class="ot">=</span> <span class="fu">as.data.frame</span>(expr_data)</span>
-<span id="cb38-2"><a href="#cb38-2" aria-hidden="true" tabindex="-1"></a><span class="fu">ncol</span>(expr_data_df)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb42"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a>expr_data_df <span class="ot">=</span> <span class="fu">as.data.frame</span>(expr_data)</span>
+<span id="cb42-2"><a href="#cb42-2" aria-hidden="true" tabindex="-1"></a><span class="fu">ncol</span>(expr_data_df)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 20</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb40"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a>t_expr_data_df <span class="ot">=</span> <span class="fu">t</span>(expr_data_df)</span>
-<span id="cb40-2"><a href="#cb40-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb40-3"><a href="#cb40-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Identify constant columns (zero variance)</span></span>
-<span id="cb40-4"><a href="#cb40-4" aria-hidden="true" tabindex="-1"></a>zero_var_cols <span class="ot">=</span> <span class="fu">apply</span>(t_expr_data_df, <span class="dv">2</span>, <span class="cf">function</span>(col) <span class="fu">var</span>(col) <span class="sc">==</span> <span class="dv">0</span>)</span>
-<span id="cb40-5"><a href="#cb40-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Display columns with zero variance</span></span>
-<span id="cb40-6"><a href="#cb40-6" aria-hidden="true" tabindex="-1"></a><span class="fu">names</span>(t_expr_data_df)[zero_var_cols]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb44"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb44-1"><a href="#cb44-1" aria-hidden="true" tabindex="-1"></a>t_expr_data_df <span class="ot">=</span> <span class="fu">t</span>(expr_data_df)</span>
+<span id="cb44-2"><a href="#cb44-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb44-3"><a href="#cb44-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Identify constant columns (zero variance)</span></span>
+<span id="cb44-4"><a href="#cb44-4" aria-hidden="true" tabindex="-1"></a>zero_var_cols <span class="ot">=</span> <span class="fu">apply</span>(t_expr_data_df, <span class="dv">2</span>, <span class="cf">function</span>(col) <span class="fu">var</span>(col) <span class="sc">==</span> <span class="dv">0</span>)</span>
+<span id="cb44-5"><a href="#cb44-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Display columns with zero variance</span></span>
+<span id="cb44-6"><a href="#cb44-6" aria-hidden="true" tabindex="-1"></a><span class="fu">names</span>(t_expr_data_df)[zero_var_cols]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>NULL</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb42"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Remove constant columns</span></span>
-<span id="cb42-2"><a href="#cb42-2" aria-hidden="true" tabindex="-1"></a>t_expr_data_df_filtered <span class="ot">=</span> t_expr_data_df[, <span class="sc">!</span>zero_var_cols]</span>
-<span id="cb42-3"><a href="#cb42-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb42-4"><a href="#cb42-4" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>(t_expr_data_df_filtered) <span class="ot">=</span> <span class="fu">gsub</span>(<span class="st">".*(g__*)"</span>, <span class="st">"</span><span class="sc">\\</span><span class="st">1"</span>, <span class="fu">colnames</span>(t_expr_data_df_filtered))</span>
-<span id="cb42-5"><a href="#cb42-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb42-6"><a href="#cb42-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Optionally scale and center the data (depends on your data)</span></span>
-<span id="cb42-7"><a href="#cb42-7" aria-hidden="true" tabindex="-1"></a><span class="co">#expr_data_scaled = scale(t_expr_data_df)</span></span>
-<span id="cb42-8"><a href="#cb42-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb42-9"><a href="#cb42-9" aria-hidden="true" tabindex="-1"></a><span class="co"># Run PCA using the prcomp function</span></span>
-<span id="cb42-10"><a href="#cb42-10" aria-hidden="true" tabindex="-1"></a>pca_result <span class="ot">=</span> <span class="fu">prcomp</span>(t_expr_data_df_filtered, <span class="at">center =</span> <span class="cn">TRUE</span>, <span class="at">scale. =</span> <span class="cn">TRUE</span>)</span>
-<span id="cb42-11"><a href="#cb42-11" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb42-12"><a href="#cb42-12" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb42-13"><a href="#cb42-13" aria-hidden="true" tabindex="-1"></a><span class="co"># View the summary of the PCA result</span></span>
-<span id="cb42-14"><a href="#cb42-14" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(pca_result)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb46"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb46-1"><a href="#cb46-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Remove constant columns</span></span>
+<span id="cb46-2"><a href="#cb46-2" aria-hidden="true" tabindex="-1"></a>t_expr_data_df_filtered <span class="ot">=</span> t_expr_data_df[, <span class="sc">!</span>zero_var_cols]</span>
+<span id="cb46-3"><a href="#cb46-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb46-4"><a href="#cb46-4" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>(t_expr_data_df_filtered) <span class="ot">=</span> <span class="fu">gsub</span>(<span class="st">".*(g__*)"</span>, <span class="st">"</span><span class="sc">\\</span><span class="st">1"</span>, <span class="fu">colnames</span>(t_expr_data_df_filtered))</span>
+<span id="cb46-5"><a href="#cb46-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb46-6"><a href="#cb46-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Optionally scale and center the data (depends on your data)</span></span>
+<span id="cb46-7"><a href="#cb46-7" aria-hidden="true" tabindex="-1"></a><span class="co">#expr_data_scaled = scale(t_expr_data_df)</span></span>
+<span id="cb46-8"><a href="#cb46-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb46-9"><a href="#cb46-9" aria-hidden="true" tabindex="-1"></a><span class="co"># Run PCA using the prcomp function</span></span>
+<span id="cb46-10"><a href="#cb46-10" aria-hidden="true" tabindex="-1"></a>pca_result <span class="ot">=</span> <span class="fu">prcomp</span>(t_expr_data_df_filtered, <span class="at">center =</span> <span class="cn">TRUE</span>, <span class="at">scale. =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb46-11"><a href="#cb46-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb46-12"><a href="#cb46-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb46-13"><a href="#cb46-13" aria-hidden="true" tabindex="-1"></a><span class="co"># View the summary of the PCA result</span></span>
+<span id="cb46-14"><a href="#cb46-14" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(pca_result)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>Importance of components:
                            PC1     PC2     PC3     PC4     PC5     PC6    PC7
@@ -602,19 +610,19 @@ Standard deviation     2.95908 2.57030 2.32659 2.19166 2.15529 9.14e-14
 Proportion of Variance 0.00514 0.00388 0.00318 0.00282 0.00273 0.00e+00
 Cumulative Proportion  0.98739 0.99127 0.99445 0.99727 1.00000 1.00e+00</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb44"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb44-1"><a href="#cb44-1" aria-hidden="true" tabindex="-1"></a><span class="co">#dev.off()</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb48"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb48-1"><a href="#cb48-1" aria-hidden="true" tabindex="-1"></a><span class="co">#dev.off()</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="plot-pca-with-base-r" class="level1">
 <h1>4.2 plot PCA with base R</h1>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb45"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb45-1"><a href="#cb45-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot the PCA results (e.g., using ggplot2 or base R plotting)</span></span>
-<span id="cb45-2"><a href="#cb45-2" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(pca_result<span class="sc">$</span>x[,<span class="dv">1</span>], pca_result<span class="sc">$</span>x[,<span class="dv">2</span>], </span>
-<span id="cb45-3"><a href="#cb45-3" aria-hidden="true" tabindex="-1"></a>     <span class="at">xlab =</span> <span class="st">"PC1"</span>, <span class="at">ylab =</span> <span class="st">"PC2"</span>, <span class="at">main =</span> <span class="st">"PCA Plot"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb49"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb49-1"><a href="#cb49-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot the PCA results (e.g., using ggplot2 or base R plotting)</span></span>
+<span id="cb49-2"><a href="#cb49-2" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(pca_result<span class="sc">$</span>x[,<span class="dv">1</span>], pca_result<span class="sc">$</span>x[,<span class="dv">2</span>], </span>
+<span id="cb49-3"><a href="#cb49-3" aria-hidden="true" tabindex="-1"></a>     <span class="at">xlab =</span> <span class="st">"PC1"</span>, <span class="at">ylab =</span> <span class="st">"PC2"</span>, <span class="at">main =</span> <span class="st">"PCA Plot"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="Healthy-vs-healthy_files/figure-html/unnamed-chunk-12-1.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="Healthy_vs_healthy_files/figure-html/unnamed-chunk-12-1.png" class="img-fluid figure-img" width="672"></p>
 </figure>
 </div>
 </div>
@@ -623,20 +631,20 @@ Cumulative Proportion  0.98739 0.99127 0.99445 0.99727 1.00000 1.00e+00</code></
 <section id="plot-pca-with-ggplot" class="level1">
 <h1>4.3 plot PCA with ggplot</h1>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb46"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb46-1"><a href="#cb46-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Optionally, visualize PCA with ggplot2 for more customized plotting</span></span>
-<span id="cb46-2"><a href="#cb46-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
-<span id="cb46-3"><a href="#cb46-3" aria-hidden="true" tabindex="-1"></a>pca_df <span class="ot">=</span> <span class="fu">as.data.frame</span>(pca_result<span class="sc">$</span>x)</span>
-<span id="cb46-4"><a href="#cb46-4" aria-hidden="true" tabindex="-1"></a>pca_df<span class="sc">$</span>sample <span class="ot">=</span> <span class="fu">rownames</span>(pca_result<span class="sc">$</span>x)</span>
-<span id="cb46-5"><a href="#cb46-5" aria-hidden="true" tabindex="-1"></a>pca_df<span class="sc">$</span>sample2 <span class="ot">=</span> <span class="fu">colnames</span>(expr_data)</span>
-<span id="cb46-6"><a href="#cb46-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb46-7"><a href="#cb46-7" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(pca_df, <span class="fu">aes</span>(<span class="at">x =</span> PC1, <span class="at">y =</span> PC2, <span class="at">label =</span> sample, <span class="at">col =</span> sample)) <span class="sc">+</span></span>
-<span id="cb46-8"><a href="#cb46-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span></span>
-<span id="cb46-9"><a href="#cb46-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_text</span>(<span class="at">vjust =</span> <span class="sc">-</span><span class="fl">0.5</span>) <span class="sc">+</span></span>
-<span id="cb46-10"><a href="#cb46-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggtitle</span>(<span class="st">"PCA of TreeSummarizedExperiment Data"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb50"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb50-1"><a href="#cb50-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Optionally, visualize PCA with ggplot2 for more customized plotting</span></span>
+<span id="cb50-2"><a href="#cb50-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
+<span id="cb50-3"><a href="#cb50-3" aria-hidden="true" tabindex="-1"></a>pca_df <span class="ot">=</span> <span class="fu">as.data.frame</span>(pca_result<span class="sc">$</span>x)</span>
+<span id="cb50-4"><a href="#cb50-4" aria-hidden="true" tabindex="-1"></a>pca_df<span class="sc">$</span>sample <span class="ot">=</span> <span class="fu">rownames</span>(pca_result<span class="sc">$</span>x)</span>
+<span id="cb50-5"><a href="#cb50-5" aria-hidden="true" tabindex="-1"></a>pca_df<span class="sc">$</span>sample2 <span class="ot">=</span> <span class="fu">colnames</span>(expr_data)</span>
+<span id="cb50-6"><a href="#cb50-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-7"><a href="#cb50-7" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(pca_df, <span class="fu">aes</span>(<span class="at">x =</span> PC1, <span class="at">y =</span> PC2, <span class="at">label =</span> sample, <span class="at">col =</span> sample)) <span class="sc">+</span></span>
+<span id="cb50-8"><a href="#cb50-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span></span>
+<span id="cb50-9"><a href="#cb50-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_text</span>(<span class="at">vjust =</span> <span class="sc">-</span><span class="fl">0.5</span>) <span class="sc">+</span></span>
+<span id="cb50-10"><a href="#cb50-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggtitle</span>(<span class="st">"PCA of TreeSummarizedExperiment Data"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="Healthy-vs-healthy_files/figure-html/unnamed-chunk-13-1.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="Healthy_vs_healthy_files/figure-html/unnamed-chunk-13-1.png" class="img-fluid figure-img" width="672"></p>
 </figure>
 </div>
 </div>
@@ -646,44 +654,44 @@ Cumulative Proportion  0.98739 0.99127 0.99445 0.99727 1.00000 1.00e+00</code></
 <h1>4.3 plot PCA without DRR accessions</h1>
 <p>Now we will remove the DRR accession</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb47"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb47-1"><a href="#cb47-1" aria-hidden="true" tabindex="-1"></a>drops <span class="ot">=</span> <span class="fu">c</span>(<span class="st">"DRR214959"</span>, <span class="st">"DRR214960"</span>, <span class="st">"DRR214961"</span>, <span class="st">"DRR214962"</span>, <span class="st">"DRR241310"</span>)</span>
-<span id="cb47-2"><a href="#cb47-2" aria-hidden="true" tabindex="-1"></a>expr_data_df <span class="ot">=</span>  expr_data_df[ , <span class="sc">!</span>(<span class="fu">names</span>(expr_data_df) <span class="sc">%in%</span> drops)]</span>
-<span id="cb47-3"><a href="#cb47-3" aria-hidden="true" tabindex="-1"></a><span class="fu">ncol</span>(expr_data_df)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb51"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb51-1"><a href="#cb51-1" aria-hidden="true" tabindex="-1"></a>drops <span class="ot">=</span> <span class="fu">c</span>(<span class="st">"DRR214959"</span>, <span class="st">"DRR214960"</span>, <span class="st">"DRR214961"</span>, <span class="st">"DRR214962"</span>, <span class="st">"DRR241310"</span>)</span>
+<span id="cb51-2"><a href="#cb51-2" aria-hidden="true" tabindex="-1"></a>expr_data_df <span class="ot">=</span>  expr_data_df[ , <span class="sc">!</span>(<span class="fu">names</span>(expr_data_df) <span class="sc">%in%</span> drops)]</span>
+<span id="cb51-3"><a href="#cb51-3" aria-hidden="true" tabindex="-1"></a><span class="fu">ncol</span>(expr_data_df)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 15</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb49"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb49-1"><a href="#cb49-1" aria-hidden="true" tabindex="-1"></a>t_expr_data_df <span class="ot">=</span> <span class="fu">t</span>(expr_data_df)</span>
-<span id="cb49-2"><a href="#cb49-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb49-3"><a href="#cb49-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Identify constant columns (zero variance)</span></span>
-<span id="cb49-4"><a href="#cb49-4" aria-hidden="true" tabindex="-1"></a>zero_var_cols <span class="ot">=</span> <span class="fu">apply</span>(t_expr_data_df, <span class="dv">2</span>, <span class="cf">function</span>(col) <span class="fu">var</span>(col) <span class="sc">==</span> <span class="dv">0</span>)</span>
-<span id="cb49-5"><a href="#cb49-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Display columns with zero variance</span></span>
-<span id="cb49-6"><a href="#cb49-6" aria-hidden="true" tabindex="-1"></a><span class="fu">names</span>(t_expr_data_df)[zero_var_cols]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb53"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb53-1"><a href="#cb53-1" aria-hidden="true" tabindex="-1"></a>t_expr_data_df <span class="ot">=</span> <span class="fu">t</span>(expr_data_df)</span>
+<span id="cb53-2"><a href="#cb53-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb53-3"><a href="#cb53-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Identify constant columns (zero variance)</span></span>
+<span id="cb53-4"><a href="#cb53-4" aria-hidden="true" tabindex="-1"></a>zero_var_cols <span class="ot">=</span> <span class="fu">apply</span>(t_expr_data_df, <span class="dv">2</span>, <span class="cf">function</span>(col) <span class="fu">var</span>(col) <span class="sc">==</span> <span class="dv">0</span>)</span>
+<span id="cb53-5"><a href="#cb53-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Display columns with zero variance</span></span>
+<span id="cb53-6"><a href="#cb53-6" aria-hidden="true" tabindex="-1"></a><span class="fu">names</span>(t_expr_data_df)[zero_var_cols]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>NULL</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb51"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb51-1"><a href="#cb51-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Remove constant columns</span></span>
-<span id="cb51-2"><a href="#cb51-2" aria-hidden="true" tabindex="-1"></a>t_expr_data_df_filtered <span class="ot">=</span> t_expr_data_df[, <span class="sc">!</span>zero_var_cols]</span>
-<span id="cb51-3"><a href="#cb51-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb51-4"><a href="#cb51-4" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>(t_expr_data_df_filtered) <span class="ot">=</span> <span class="fu">gsub</span>(<span class="st">".*(g__*)"</span>, <span class="st">"</span><span class="sc">\\</span><span class="st">1"</span>, <span class="fu">colnames</span>(t_expr_data_df_filtered))</span>
-<span id="cb51-5"><a href="#cb51-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb51-6"><a href="#cb51-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Run PCA using the prcomp function</span></span>
-<span id="cb51-7"><a href="#cb51-7" aria-hidden="true" tabindex="-1"></a>pca_result <span class="ot">=</span> <span class="fu">prcomp</span>(t_expr_data_df_filtered, <span class="at">center =</span> <span class="cn">TRUE</span>, <span class="at">scale. =</span> <span class="cn">TRUE</span>)</span>
-<span id="cb51-8"><a href="#cb51-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb51-9"><a href="#cb51-9" aria-hidden="true" tabindex="-1"></a><span class="co">#dev.off()</span></span>
-<span id="cb51-10"><a href="#cb51-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb51-11"><a href="#cb51-11" aria-hidden="true" tabindex="-1"></a><span class="co"># Optionally, visualize PCA with ggplot2 for more customized plotting</span></span>
-<span id="cb51-12"><a href="#cb51-12" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
-<span id="cb51-13"><a href="#cb51-13" aria-hidden="true" tabindex="-1"></a>pca_df <span class="ot">=</span> <span class="fu">as.data.frame</span>(pca_result<span class="sc">$</span>x)</span>
-<span id="cb51-14"><a href="#cb51-14" aria-hidden="true" tabindex="-1"></a>pca_df<span class="sc">$</span>sample <span class="ot">=</span> <span class="fu">rownames</span>(pca_result<span class="sc">$</span>x)</span>
-<span id="cb51-15"><a href="#cb51-15" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb51-16"><a href="#cb51-16" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(pca_df, <span class="fu">aes</span>(<span class="at">x =</span> PC1, <span class="at">y =</span> PC2, <span class="at">label =</span> sample, <span class="at">col =</span> sample)) <span class="sc">+</span></span>
-<span id="cb51-17"><a href="#cb51-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span></span>
-<span id="cb51-18"><a href="#cb51-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_text</span>(<span class="at">vjust =</span> <span class="sc">-</span><span class="fl">0.5</span>) <span class="sc">+</span></span>
-<span id="cb51-19"><a href="#cb51-19" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggtitle</span>(<span class="st">"PCA of TreeSummarizedExperiment Data"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb55"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb55-1"><a href="#cb55-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Remove constant columns</span></span>
+<span id="cb55-2"><a href="#cb55-2" aria-hidden="true" tabindex="-1"></a>t_expr_data_df_filtered <span class="ot">=</span> t_expr_data_df[, <span class="sc">!</span>zero_var_cols]</span>
+<span id="cb55-3"><a href="#cb55-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb55-4"><a href="#cb55-4" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>(t_expr_data_df_filtered) <span class="ot">=</span> <span class="fu">gsub</span>(<span class="st">".*(g__*)"</span>, <span class="st">"</span><span class="sc">\\</span><span class="st">1"</span>, <span class="fu">colnames</span>(t_expr_data_df_filtered))</span>
+<span id="cb55-5"><a href="#cb55-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb55-6"><a href="#cb55-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Run PCA using the prcomp function</span></span>
+<span id="cb55-7"><a href="#cb55-7" aria-hidden="true" tabindex="-1"></a>pca_result <span class="ot">=</span> <span class="fu">prcomp</span>(t_expr_data_df_filtered, <span class="at">center =</span> <span class="cn">TRUE</span>, <span class="at">scale. =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb55-8"><a href="#cb55-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb55-9"><a href="#cb55-9" aria-hidden="true" tabindex="-1"></a><span class="co">#dev.off()</span></span>
+<span id="cb55-10"><a href="#cb55-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb55-11"><a href="#cb55-11" aria-hidden="true" tabindex="-1"></a><span class="co"># Optionally, visualize PCA with ggplot2 for more customized plotting</span></span>
+<span id="cb55-12"><a href="#cb55-12" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
+<span id="cb55-13"><a href="#cb55-13" aria-hidden="true" tabindex="-1"></a>pca_df <span class="ot">=</span> <span class="fu">as.data.frame</span>(pca_result<span class="sc">$</span>x)</span>
+<span id="cb55-14"><a href="#cb55-14" aria-hidden="true" tabindex="-1"></a>pca_df<span class="sc">$</span>sample <span class="ot">=</span> <span class="fu">rownames</span>(pca_result<span class="sc">$</span>x)</span>
+<span id="cb55-15"><a href="#cb55-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb55-16"><a href="#cb55-16" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(pca_df, <span class="fu">aes</span>(<span class="at">x =</span> PC1, <span class="at">y =</span> PC2, <span class="at">label =</span> sample, <span class="at">col =</span> sample)) <span class="sc">+</span></span>
+<span id="cb55-17"><a href="#cb55-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span></span>
+<span id="cb55-18"><a href="#cb55-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_text</span>(<span class="at">vjust =</span> <span class="sc">-</span><span class="fl">0.5</span>) <span class="sc">+</span></span>
+<span id="cb55-19"><a href="#cb55-19" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggtitle</span>(<span class="st">"PCA of TreeSummarizedExperiment Data"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="Healthy-vs-healthy_files/figure-html/unnamed-chunk-14-1.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="Healthy_vs_healthy_files/figure-html/unnamed-chunk-14-1.png" class="img-fluid figure-img" width="672"></p>
 </figure>
 </div>
 </div>
