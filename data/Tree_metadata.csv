@@ -1,0 +1,40 @@
+﻿ID,Species,Genome
+26641_A1_bin.9_H,Treponema sp. A,Ai
+26650_A2_bin.49_H,Treponema sp. A,Aii
+26678_A25_bin.5_H,Treponema sp. A,Aiii
+26692_A28_bin.5_H,Treponema sp. A,Av
+26742_A13_bin.20_H,Treponema sp. A,Avii
+26783_A34_bin.20_H,Treponema sp. A,Aviii
+26868_A17_bin.3_H,Treponema sp. A,Ax
+26913_A40_bin.76_H,Treponema sp. A,Axi
+26783_A34_bin.13_H,Treponema sp. B,Biii
+26868_A17_bin.5_H,Treponema sp. B,Biv
+26900_A39_bin.17_H,Treponema sp. B,Bv
+26641_A1_bin.76_H,Treponema sp. C,Ci
+26685_A26_bin.100_H,Treponema sp. C,Ciii
+26678_A25_bin.20_H,Treponema sp. D,Di
+26783_A34_bin.6_H,Treponema sp. D,Dii
+26900_A39_bin.8_H,Treponema sp. D,Diii
+26678_A5_bin.9_H,Treponema sp. E,Ei
+26685_A6_bin.40_H,Treponema sp. G,Gi
+26783_A34_bin.12_H,Treponema sp. H,Hi
+26678_A25_bin.19_H,Treponema sp. I,Ii
+26783_A34_bin.1_H,Treponema sp. J,Ji
+26742_A13_bin.60_H,Treponema lecithinolyticum,T. lec.
+26686_A27_bin.15_H,Treponema sp905372235,T. sp905372235
+GCF_000008185.1_T_denticola,Treponema denticola,T. dent. (RefSeq) [GCF_000008185.1]
+GCF_000184345.1_Spirochaeta_thermophila,Spirochaeta thermophila,"S. therm. (RefSeq, root) [GCF_000184345.1]"
+GCF_000195275.1_T_succinifaciens,Treponema succinifaciens,T. suc. (RefSeq) [GCF_000195275.1]
+GCF_000212415.1_T_brennaborense,Treponema brennaborense,T. bren. (RefSeq) [GCF_000212415.1]
+GCF_000410535.2_T_pallidum_subsp_pallidum,Treponema pallidum,T. pal. (RefSeq) [GCF_000410535.2]
+GCF_000412995.1_T_vincentii,Treponema vincentii,T. vin. (RefSeq) [GCF_000412995.1]
+GCF_000413055.1_T_maltophilum,Treponema maltophilum,T. malt. (RefSeq) [GCF_000413055.1]
+GCF_000447675.1_T_pedis,Treponema pedis,T. ped. (RefSeq) [GCF_000447675.1]
+GCF_000468055.1_T_lecithinolyticum,Treponema lecithinolyticum,T. lec. (RefSeq) [GCF_000468055.1]
+GCF_008153345.1_T_phagedenis,Treponema phagedenis,T. phag. (RefSeq) [GCF_008153345.1]
+GCF_014201975.1_T_ruminis,Treponema ruminis,T. rum. (RefSeq) [GCF_014201975.1]
+GCF_016117655.1_T_peruense,Treponema peruense,T. per. (RefSeq) [GCF_016117655.1]
+GCF_017161265.1_T_medium,Treponema medium,T. med. (RefSeq) [GCF_017161265.1]
+GCF_017893965.1_T_parvum,Treponema parvum,T. parv. (RefSeq) [GCF_017893965.1]
+GCF_024181585.1_T_socranskii,Treponema socranskii,T. soc. (RefSeq) [GCF_024181585.1]
+GCF_024401155.1_T_putidum,Treponema putidum,T. put. (RefSeq) [GCF_024401155.1]

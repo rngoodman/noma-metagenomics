@@ -1,0 +1,22 @@
+﻿File,Sequence,Genus,Species,ARG,Coverage,Idenity,AMR_determinant
+A1_bin.77.fa,NODE_25_length_142297_cov_20.943259,Peptostreptococcus,Peptostreptococcus stomatis,lsa(C)_1,100,93.92,Lsa(C)
+A1_bin.77.fa,NODE_25_length_142297_cov_20.943259,Peptostreptococcus,Peptostreptococcus stomatis,tet(M)_7,100,99.06,Tet(M)
+A2_bin.13.fa,NODE_1938_length_9295_cov_5.137662,Peptostreptococcus,Peptostreptococcus anaerobius,lnu(C)_1,100,99.19,Lnu(C)
+A2_bin.34.fa,NODE_9023_length_2761_cov_5.295639,Parvimonas,Parvimonas micra,blaOXA-85_1,100,99.49,OXA-85
+A2_bin.7.fa,NODE_853_length_18740_cov_10.598555,Prevotella,Prevotella fusca,cfxA3_1,100,99.9,CfxA3
+A6_bin.37.fa,NODE_250_length_43280_cov_10.233661,Prevotella,Prevotella baroniae,nimI_1,99.4,98.99,NimI
+A6_bin.50.fa,NODE_3120_length_6566_cov_5.311319,Prevotella,Prevotella fusca,cfxA3_1,100,99.9,CfxA3
+A8_bin.10.fa,NODE_1503_length_3092_cov_3.415871,Prevotella,Prevotella baroniae,nimI_1,99.4,97.78,NimI
+A8_bin.17.fa,NODE_548_length_5917_cov_8.206244,Spirochaetaceae (unclassified),Spirochaetaceae (unclassified),tet(32)_1,100,99.84,Tet(32)
+A10_bin.15.fa,NODE_4365_length_2613_cov_5.039875,Allisonella,Allisonella pneumosintes,tet(M)_4,100,98.75,Tet(M)
+A10_bin.1.fa,NODE_226_length_26707_cov_20.247711,Prevotella,Prevotella baroniae,nimI_1,99.4,98.99,NimI
+A14_bin.1.fa,NODE_1036_length_4867_cov_4.065254,Haemophilus,Haemophilus (unclassified),tet(B)_1,100,99.92,Tet(B)
+A14_bin.8.fa,NODE_28_length_26084_cov_6.369857,Catonella,Catonella (unclassified),tet(M)_7,100,99.01,Tet(M)
+A16_bin.8.fa,NODE_353_length_7217_cov_4.678163,Haemophilus,Haemophilus parahaemolyticus,tet(M)_8,100,99.32,Tet(M)
+A24_bin.4.fa,NODE_1328_length_19827_cov_376.535505,Prevotella,Prevotella intermedia,cfxA3_1,100,99.9,CfxA3
+A25_bin.16.fa,NODE_3862_length_3280_cov_7.437209,Catonella,Catonella (unclassified),cfxA3_1,100,99.9,CfxA3
+A27_bin.21.fa,NODE_127_length_67496_cov_6.415326,Prevotella,Prevotella baroniae,nimI_1,99.4,99.19,NimI
+A35_bin.11.fa,NODE_2418_length_3108_cov_8.379954,Streptococcus,Streptococcus (unclassified),tet(Q)_3,99.85,99.75,Tet(Q)
+A40_bin.41.fa,NODE_2063_length_13003_cov_3.754325,Proteus,Proteus mirabilis,tet(J)_1,100,99.42,Tet(J)
+A40_bin.41.fa,NODE_7733_length_3831_cov_3.142214,Proteus,Proteus mirabilis,cat_1,99.85,98.47,Cat
+A40_bin.79.fa,NODE_2_length_666818_cov_30.435516,Fimenecus,Fimenecus (unclassified),lsa(C)_1,100,91.48,Lsa(C)
